@@ -25,7 +25,7 @@ header("Access-Control-Allow-Method: GET:POST,OPTIONS");
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://10.0.3.33/bill';
+$config['base_url'] = 'http://localhost/bill';
 $config['jwtsecrateKey'] = 'bill_2022';
 
 /*

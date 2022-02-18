@@ -4,31 +4,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 
 class Auth extends REST_Controller {
-	
+
 	function __construct() {
         parent::__construct();
 		$this->load->database();
 		$this->load->model('Auth_model');
+		$this->load->library('my_lib');
 		$this->jwt = new JWT();
     }
 
-	function index_get(){
-		$data = array(
-			'userid' => 145,
-			'email' => 'asd'
-		);
-		$token = $this->jwt->encode($data,$this->config->item('jwtsecrateKey'),'HS256');
-		
-		 $this->response(array('data'=>$token), 200);
+	function index_post(){
+		$header = ($this->input->request_headers());
+		echo $this->my_lib->is_valid($header['token']);
+
+		// $data = array(
+		// 	'userid' => 145,
+		// 	'email' => 'asd'
+		// );
+		// $token = $this->jwt->encode($data,$this->config->item('jwtsecrateKey'),'HS256');
+		// $this->response(array('data'=>$token), 200);
 	}
 	function index_put(){
 		 $this->response(array('data'=>'put request'), 200);
 	}
 	function login_post(){
-		
+
 		$data['identity'] = trim($this->post('identity'));
 		$data['password'] = trim($this->post('password'));
-		
+
 		$result = $this->Auth_model->login($data);
 		if(!is_null($result)){
 			$response = array(
