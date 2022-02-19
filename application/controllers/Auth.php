@@ -9,28 +9,35 @@ class Auth extends REST_Controller {
         parent::__construct();
 		$this->load->database();
 		$this->load->model('Auth_model');
-		$this->load->library('my_lib');
 		$this->jwt = new JWT();
     }
 
+		function index_get(){
+			$this->db->select('*');
+			$result = $this->db->get_where('users',array('status'=>1))->result_array();
+			$this->response($result,200);
+		}
+
 	function index_post(){
 		$header = ($this->input->request_headers());
-		echo $this->my_lib->is_valid($header['token']);
+		if(isset($header['token']) &&  $header['token'] != null){
+			$udata = $this->my_lib->is_valid($header['token']);
+			if(!is_null($udata)){
+					$this->db->select('*');
+					$result = $this->db->get_where('users',array('status'=>1))->result_array();
+					$this->response($result,200);
+			}
+			else {
+				$this->response(array('msg'=>'Invalid token.','status'=>'401'),401);
+			}
+		} else { //token not set
+			$this->response(array('msg'=>'Token not set.','status'=>'400'),400);
+		}
+	}
 
-		// $data = array(
-		// 	'userid' => 145,
-		// 	'email' => 'asd'
-		// );
-		// $token = $this->jwt->encode($data,$this->config->item('jwtsecrateKey'),'HS256');
-		// $this->response(array('data'=>$token), 200);
-	}
-	function index_put(){
-		 $this->response(array('data'=>'put request'), 200);
-	}
 	function login_post(){
-
 		$data['identity'] = trim($this->post('identity'));
-		$data['password'] = trim($this->post('password'));
+		$data['password'] = sha1(trim($this->post('password')));
 
 		$result = $this->Auth_model->login($data);
 		if(!is_null($result)){
@@ -45,7 +52,5 @@ class Auth extends REST_Controller {
 		else {
 			$this->response(array('msg'=>'Login failed.','status'=>'500'),500);
 		}
-		//$token = $this->jwt->decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjE0NSwiZW1haWwiOiJhc2QifQ.gfHGugyAYWZGEkN2GBNJIbNRxXAujVtUFx3VYXEdygs','rahul');
-		//$this->response(array('data'=>$token), 200);
 	}
 }

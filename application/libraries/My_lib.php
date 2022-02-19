@@ -12,12 +12,9 @@ class My_lib{
 
   function is_valid($jwt) {
     $valid = $this->CI->jwt->decode($jwt,$this->CI->config->item('jwtsecrateKey'),'HS256');
-    if(is_null($valid)){
-      echo "sdf";
-    } else {
-      echo "sdfd";
+    if(!is_null($valid)){
+      return $valid;
     }
-    //return $this->CI->jwt->encode('abc',$this->CI->config->item('jwtsecrateKey'),'HS256');
+    return null;
   }
-
 }

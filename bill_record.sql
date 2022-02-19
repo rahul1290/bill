@@ -1,14 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 18, 2022 at 10:20 AM
--- Server version: 10.1.30-MariaDB
--- PHP Version: 5.6.33
+-- Host: localhost
+-- Generation Time: Feb 19, 2022 at 12:55 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -70,7 +70,7 @@ CREATE TABLE `bill` (
   `task_id` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -84,11 +84,21 @@ CREATE TABLE `company_master` (
   `name` varchar(300) NOT NULL,
   `address` varchar(500) NOT NULL,
   `contact_no` varchar(15) NOT NULL,
-  `alternet_no` varchar(15) NOT NULL,
-  `created_at` datetime NOT NULL,
+  `alternet_no` varchar(15) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  `created_at` date NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `company_master`
+--
+
+INSERT INTO `company_master` (`cid`, `name`, `address`, `contact_no`, `alternet_no`, `email`, `created_at`, `created_by`, `status`) VALUES
+(4, 'vnr', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
+(5, 'vnr 2', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
+(6, 'vnr 2', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -101,9 +111,18 @@ CREATE TABLE `cost_center_master` (
   `company_id` int(255) NOT NULL,
   `name` varchar(50) NOT NULL,
   `created_by` int(255) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `created_at` date NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cost_center_master`
+--
+
+INSERT INTO `cost_center_master` (`costc_id`, `company_id`, `name`, `created_by`, `created_at`, `status`) VALUES
+(4, 4, 'rahul123', 1, '2022-02-19', 0),
+(5, 4, 'rahul', 1, '2022-02-19', 1),
+(6, 4, 'rahul543', 1, '2022-02-19', 1);
 
 -- --------------------------------------------------------
 
@@ -117,8 +136,16 @@ CREATE TABLE `location_master` (
   `name` varchar(200) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `location_master`
+--
+
+INSERT INTO `location_master` (`loc_id`, `cost_center_id`, `name`, `created_by`, `created_at`, `status`) VALUES
+(1, 4, 'rahul1234', 1, '2022-02-19 00:00:00', 0),
+(2, 4, 'rahul123', 1, '2022-02-19 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -147,7 +174,7 @@ CREATE TABLE `serviceno_master` (
   `security_deposit` float(10,2) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -162,7 +189,7 @@ CREATE TABLE `submeter_master` (
   `service_no` int(255) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -177,10 +204,10 @@ CREATE TABLE `task_assign` (
   `sno_id` int(255) NOT NULL,
   `sub_meter_id` int(255) NOT NULL,
   `user_id` int(255) NOT NULL,
-  `frequency` int(11) NOT NULL DEFAULT '1',
+  `frequency` int(11) NOT NULL DEFAULT 1,
   `created_by` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -196,11 +223,11 @@ CREATE TABLE `users` (
   `lname` varchar(50) NOT NULL,
   `email` varchar(200) NOT NULL,
   `contact_no` varchar(15) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `password` varchar(500) NOT NULL,
   `sex` enum('male','female') NOT NULL,
   `created_by` int(255) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `created_at` date NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -208,7 +235,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `password`, `sex`, `created_by`, `created_at`, `status`) VALUES
-(1, 1, 'rahul', 'sinha', 'rahul@gmail.com', '9770866241', '123', 'male', NULL, '2022-02-17 04:10:35', 1);
+(1, 1, 'rahul', 'sinha', 'rahul@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', NULL, '2022-02-17', 1),
+(2, 2, 'manoj', 'sinha21', 'manoj@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', 1, '2022-02-19', 1);
 
 -- --------------------------------------------------------
 
@@ -219,7 +247,7 @@ INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `p
 CREATE TABLE `user_type` (
   `utype_id` int(255) NOT NULL,
   `type_name` varchar(100) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -321,19 +349,19 @@ ALTER TABLE `bill`
 -- AUTO_INCREMENT for table `company_master`
 --
 ALTER TABLE `company_master`
-  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cost_center_master`
 --
 ALTER TABLE `cost_center_master`
-  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `location_master`
 --
 ALTER TABLE `location_master`
-  MODIFY `loc_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `loc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `serviceno_master`
@@ -357,7 +385,7 @@ ALTER TABLE `task_assign`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_type`
@@ -425,6 +453,7 @@ ALTER TABLE `task_assign`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`utype`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
