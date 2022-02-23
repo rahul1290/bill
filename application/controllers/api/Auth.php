@@ -50,7 +50,7 @@ class Auth extends REST_Controller {
 			$this->response(array('data'=>array('token'=>$token),'msg'=>'login successfully.','status'=>'200'),200);
 		}
 		else {
-			$this->response(array('msg'=>'Login failed.','status'=>'500'),500);
+			$this->response(array('msg'=>'Login failed.','status'=>'400'),400);
 		}
 	}
 }

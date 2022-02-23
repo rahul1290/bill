@@ -28,6 +28,7 @@ header("Access-Control-Allow-Method: GET:POST,OPTIONS");
 $config['base_url'] = 'http://localhost/bill';
 $config['jwtsecrateKey'] = 'bill_2022';
 $config['cur_date'] = date('Y-m-d H:i:s');
+$config['project_name'] = 'Electricity Bill';
 
 /*
 |--------------------------------------------------------------------------
