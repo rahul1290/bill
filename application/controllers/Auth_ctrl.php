@@ -7,6 +7,9 @@ class Auth_ctrl extends CI_Controller {
     parent::__construct();
 		$this->load->database();
     $this->load->model('Auth_model');
+    if($this->session->userdata('user_id') != null){
+      redirect('/Company_ctrl');
+    }
   }
 
   function login(){
