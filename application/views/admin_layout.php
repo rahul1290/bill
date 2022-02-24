@@ -24,7 +24,7 @@
 </head>
 
 <body>
-
+    <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>">
     <!-- Top Bar -->
     <header class="top-bar">
         <button type="button" class="menu-toggler la la-bars" data-toggle="menu"></button>
@@ -182,7 +182,7 @@
             <a href="#no-link" class="link" data-target="[data-menu=pages]" data-toggle="tooltip-menu"
                 data-tippy-content="Pages">
                 <span class="icon la la-file-alt"></span>
-                <span class="title">Pages</span>
+                <span class="title">Masters</span>
             </a>
             <a href="#no-link" class="link" data-target="[data-menu=applications]" data-toggle="tooltip-menu"
                 data-tippy-content="Applications">
@@ -214,18 +214,22 @@
         <!-- Pages -->
         <div class="menu-detail" data-menu="pages">
             <div class="menu-detail-wrapper">
-                <h6 class="uppercase">Authentication</h6>
-                <a href="auth-login.html">
+                <h6 class="uppercase">Pages</h6>
+                <a href="<?php echo base_url('Company_ctrl'); ?>">
                     <span class="la la-user"></span>
-                    Login
+                    Company
                 </a>
-                <a href="auth-forgot-password.html">
+                <a href="<?php echo base_url('Costcenter_ctrl'); ?>">
                     <span class="la la-user-lock"></span>
-                    Forgot Password
+                    Cost-center
                 </a>
-                <a href="auth-register.html">
+                <a href="<?php echo base_url('Location_ctrl'); ?>">
                     <span class="la la-user-plus"></span>
-                    Register
+                    Location
+                </a>
+                <a href="<?php echo base_url('User_ctrl'); ?>">
+                    <span class="la la-user-plus"></span>
+                    Users
                 </a>
                 <hr>
                 <h6 class="uppercase">Blog</h6>

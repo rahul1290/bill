@@ -24,7 +24,7 @@ class User_model extends CI_Model {
 	}
 
 	function user_list($uid=null){
-		$this->db->select('u.uid,u.fname,u.lname,u.email,u.contact_no,u.sex,ut.type_name as role');
+		$this->db->select('u.uid,u.fname,u.lname,u.email,u.contact_no,u.sex,ut.type_name as role,u.utype');
 		$this->db->join('user_type ut','ut.utype_id = u.utype');
 		if(!is_null($uid)){
 			$this->db->where('u.uid',$uid);

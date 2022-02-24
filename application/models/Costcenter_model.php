@@ -25,11 +25,13 @@ class Costcenter_model extends CI_Model {
 	}
 
 	function costcenter_list($cid=null){
-		$this->db->select('ccm.*,cm.name as company_name');
+		$this->db->select('ccm.*,u.fname,u.lname,ut.type_name,cm.name as company_name');
 		if(!is_null($cid)){
 			$this->db->where('ccm.costc_id',$cid);
 		}
-		$this->db->join('company_master cm','cm.cid = ccm.company_id');
+		$this->db->join('company_master cm','cm.cid = ccm.company_id AND cm.status = 1');
+		$this->db->join('users u','u.uid = cm.created_by');
+		$this->db->join('user_type ut','ut.utype_id = u.utype');
 		$result = $this->db->get_where('cost_center_master ccm',array('ccm.status'=>1))->result_array();
 		if(count($result)>0){
 			return  $result;

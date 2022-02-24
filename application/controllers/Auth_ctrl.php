@@ -30,7 +30,7 @@ class Auth_ctrl extends CI_Controller {
           redirect('/Company_ctrl');
         }
       } else {
-        $this->form_validation->set_error_delimiters('<div class="text-red-500">', '</div>');
+        $this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
         $this->load->view('login');
       }
     }

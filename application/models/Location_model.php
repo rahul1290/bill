@@ -24,12 +24,16 @@ class Location_model extends CI_Model {
 	}
 
 	function location_list($lid=null){
-		$this->db->select('l.*,ccm.name as cost_center,ccm.costc_id');
-		$this->db->join('cost_center_master ccm','ccm.costc_id = l.cost_center_id');
+		$this->db->select('l.*,ccm.name as cost_center,ccm.costc_id,cm.cid,cm.name as company_name,u.uid,u.fname,u.lname');
+		$this->db->join('cost_center_master ccm','ccm.costc_id = l.cost_center_id AND ccm.status = 1');
 		if(!is_null($lid)){
 			$this->db->where('l.loc_id',$lid);
 		}
+		$this->db->join('company_master cm','cm.cid = ccm.company_id AND cm.status = 1');
+		$this->db->join('users u','u.uid = l.created_by');
 		$result = $this->db->get_where('location_master l',array('l.status'=>1))->result_array();
+
+		
 		if(count($result)>0){
 			return  $result;
 		} else {
