@@ -28,7 +28,7 @@
                         <select id="costc_id" name="costc_id" class="form-control">
                             <option value="" selected>Select cost-center</option>
                         </select>
-                        <?php echo form_error('cid'); ?>
+                        <?php echo form_error('costc_id'); ?>
                     </div>
 
                     <div class="mb-5">
@@ -39,6 +39,15 @@
                         <?php echo form_error('loc_id'); ?>
                     </div>
                     
+                    <div class="mb-5 xl:w-2/2">
+                        <label class="label block mb-2" for="title">Meter Type<label class="text-red-500">*</label></label>
+                        <select id="mtype" name="mtype" class="form-control">
+                            <option value="">Select Meter type</option>
+                            <option value="main-meter">Main</option>
+                            <option value="sub-meter">Sub meter</option>
+                        </select>
+                        <?php echo form_error('mtype'); ?>
+                    </div>
 
                     <div class="mb-5 xl:w-2/2">
                         <label class="label block mb-2" for="title">BP No.<label class="text-red-500">*</label></label>
@@ -70,6 +79,7 @@
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
                                     <th class="text-center uppercase">BP No.</th>
+                                    <th class="text-center uppercase">Meter Type</th>
                                     <th class="text-center uppercase">Company Name</th>
                                     <th class="text-center uppercase">Cost-Center</th>
                                     <th class="text-center uppercase">Location</th>
@@ -83,14 +93,15 @@
                                     <tr>
                                         <td class="text-center"><?= $c++; ?></td>
                                         <td class="text-center"><?= $meter['bpno']; ?></td>
+                                        <td class="text-center"><?= $meter['mtype']; ?></td>
                                         <td class="text-center"><?= $meter['company_name']; ?></td>
                                         <td class="text-center"><?= $meter['cost_center']; ?></td>
                                         <td class="text-center"><?= $meter['location_name']; ?></td>
                                         <td class="text-center"><?= $meter['created_at']; ?></td>
                                         <td class="text-center"><?= $meter['fname'].' '.$meter['lname']; ?></td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0);" class="meter_edit" data-id="<?= $meter['loc_id']; ?>"><i class="la la-pencil"></i></a>
-                                            <a href="javascript:void(0);" class="meter_delete" data-id="<?= $meter['loc_id']; ?>"><i class="la la-trash"></i></a>
+                                            <a href="javascript:void(0);" class="meter_edit" data-id="<?= $meter['mid']; ?>"><i class="la la-pencil"></i></a>
+                                            <a href="javascript:void(0);" class="meter_delete" data-id="<?= $meter['mid']; ?>"><i class="la la-trash"></i></a>
                                         </td>
                                     </tr>
                                 <?php } } else {  echo "<tr><td class='text-center' colspan='8'>No record found.</td></tr>"; } ?>
@@ -106,13 +117,55 @@
 
     <script>
     const baseUrl = $('#base_url').val();
+
+
+      $(document).on('change','#cid',function(){
+        let cid = $(this).val();
+        $.ajax({
+            url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
+            method: "GET",
+            dataType: "json",
+            beforeSend(){},
+            success(response){
+                console.log(response);
+                if(response.status == 200){
+                    var x = '<option value="">Select cost-center</option>';
+                    $.each(response.data,function(key,value){
+                        x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+                    });
+                    $('#costc_id').html(x);
+                }
+            }
+        });
+      });
+
+
+      $(document).on('change','#costc_id',function(){
+        let costc_id = $(this).val();
+        $.ajax({
+            url: `${baseUrl}Location_ctrl/getLocationByCostcenterId/${costc_id}`,
+            method: "GET",
+            dataType: "json",
+            beforeSend(){},
+            success(response){
+                if(response.status == 200){
+                    var x = '<option value="">Select location</option>';
+                    $.each(response.data,function(key,value){
+                        x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
+                    });
+                    $('#loc_id').html(x);
+                }
+            }
+        });
+      });
+
     
       $(document).on('click','.meter_edit',function(){
         var request = $.ajax({
                 url: `${baseUrl}Meter_ctrl/getMeterById`,
                 method: "POST",
                 data: { lid : $(this).data('id') },
-                dataType: "json"
+                dataType: "json",
                 });    
             request.done(function( response ) {
                 console.log(response);
@@ -123,9 +176,46 @@
                     $('#reset-btn').hide();
 
                     $('#mid').val(response.data['mid']);
-                    $('#cid').val(response.data['c_id']);
+                    $('#cid').val(response.data['cid']);
+
+                    //////////
+                    $.ajax({
+                        url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${response.data['cid']}`,
+                        method: "GET",
+                        dataType: "json",
+                        async : false,
+                        beforeSend(){},
+                        success(response1){
+                            if(response1.status == 200){
+                                var x = '<option value="">Select location</option>';
+                                $.each(response1.data,function(key,value){
+                                    x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+                                });
+                                $('#costc_id').html(x);
+                            }
+                        }
+                    });
                     $('#costc_id').val(response.data['costc_id']);
+                    /////////////
+                    $.ajax({
+                        url: `${baseUrl}Location_ctrl/getLocationByCostcenterId/${response.data['costc_id']}`,
+                        method: "GET",
+                        dataType: "json",
+                        async: false,
+                        beforeSend(){},
+                        success(response){
+                            if(response.status == 200){
+                                var x = '<option value="">Select location</option>';
+                                $.each(response.data,function(key,value){
+                                    x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
+                                });
+                                $('#loc_id').html(x);
+                            }
+                        }
+                    });
                     $('#loc_id').val(response.data['loc_id']);
+                    //////////////////
+                    $('#mtype').val(response.data['mtype']);
                     $('#bpno').val(response.data['bpno']);
                 }
             });
@@ -148,7 +238,7 @@
             method: "POST",
             dataType: "json",
             data : {
-                lid : $(this).data('id')
+                mid : $(this).data('id')
             },
             beforeSend(){
                 $('#meterList').html('<tr><td colspan="8"><p class="text-center">Loading..</p></td></tr>');
@@ -180,14 +270,15 @@
                         x = x + '<tr>'+
                                         '<td class="text-center"><?= $c++; ?></td>'+
                                         '<td class="text-center">'+ value.bpno +'</td>'+
+                                        '<td class="text-center">'+ value.mtype +'</td>'+
                                         '<td class="text-center">'+ value.company_name +'</td>'+
                                         '<td class="text-center">'+ value.cost_center +'</td>'+
                                         '<td class="text-center">'+ value.location_name +'</td>'+
                                         '<td class="text-center">'+ value.created_at +'</td>'+
                                         '<td class="text-center">'+ value.fname +' '+ value.lname +'</td>'+
                                         '<td class="text-center">'+
-                                            '<a href="javascript:void(0);" class="meter_edit" data-id="'+ value.loc_id +'"><i class="la la-pencil"></i></a>'+
-                                            '<a href="javascript:void(0);" class="meter_delete" data-id="'+ value.loc_id +'"><i class="la la-trash"></i></a>'+
+                                            '<a href="javascript:void(0);" class="meter_edit" data-id="'+ value.mid +'"><i class="la la-pencil"></i></a>'+
+                                            '<a href="javascript:void(0);" class="meter_delete" data-id="'+ value.mid +'"><i class="la la-trash"></i></a>'+
                                         '</td>'+
                                     '</tr>';
 

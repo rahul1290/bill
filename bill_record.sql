@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 25, 2022 at 02:17 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.3.23
+-- Host: localhost
+-- Generation Time: Feb 25, 2022 at 01:19 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -120,9 +120,9 @@ CREATE TABLE `cost_center_master` (
 --
 
 INSERT INTO `cost_center_master` (`costc_id`, `company_id`, `name`, `created_by`, `created_at`, `status`) VALUES
-(4, 4, 'rahul123', 1, '2022-02-19', 0),
-(5, 4, 'rahul', 1, '2022-02-19', 1),
-(6, 4, 'rahul543', 1, '2022-02-19', 1);
+(4, 4, 'durg', 1, '2022-02-19', 0),
+(5, 4, 'raipur', 1, '2022-02-19', 1),
+(6, 4, 'dhamdha', 1, '2022-02-19', 1);
 
 -- --------------------------------------------------------
 
@@ -144,8 +144,8 @@ CREATE TABLE `location_master` (
 --
 
 INSERT INTO `location_master` (`loc_id`, `cost_center_id`, `name`, `created_by`, `created_at`, `status`) VALUES
-(1, 4, 'rahul1234', 1, '2022-02-19 00:00:00', 0),
-(2, 4, 'rahul123', 1, '2022-02-19 00:00:00', 1);
+(1, 5, 'bhilai', 1, '2022-02-19 00:00:00', 0),
+(2, 5, 'sarona', 1, '2022-02-19 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -155,6 +155,7 @@ INSERT INTO `location_master` (`loc_id`, `cost_center_id`, `name`, `created_by`,
 
 CREATE TABLE `meter_master` (
   `mid` int(255) NOT NULL,
+  `parent_meter` int(255) DEFAULT NULL,
   `bpno` varchar(100) NOT NULL,
   `mtype` enum('main-meter','sub-meter') NOT NULL DEFAULT 'main-meter',
   `cid` int(255) NOT NULL,
@@ -169,53 +170,14 @@ CREATE TABLE `meter_master` (
 -- Dumping data for table `meter_master`
 --
 
-INSERT INTO `meter_master` (`mid`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
-(1, '123456', 'main-meter', 4, 5, 2, 2, '2022-02-25', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `serviceno_master`
---
-
-CREATE TABLE `serviceno_master` (
-  `sno_id` int(255) NOT NULL,
-  `consumer_name` varchar(200) NOT NULL,
-  `address` text NOT NULL,
-  `contact_no` varchar(15) NOT NULL,
-  `location` int(255) NOT NULL,
-  `company_id` int(255) NOT NULL,
-  `connection_type` enum('parmanent','temporary') NOT NULL,
-  `renewal_date` datetime DEFAULT NULL,
-  `meter_no` varchar(30) NOT NULL,
-  `pole_no` varchar(30) NOT NULL,
-  `zone` varchar(50) NOT NULL,
-  `zone_address` text NOT NULL,
-  `zone_contact` varchar(20) NOT NULL,
-  `purpose` text NOT NULL,
-  `tarrif_category` enum('one') NOT NULL,
-  `phase` int(11) NOT NULL,
-  `connected_load` varchar(10) NOT NULL,
-  `security_deposit` float(10,2) NOT NULL,
-  `created_by` int(255) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `submeter_master`
---
-
-CREATE TABLE `submeter_master` (
-  `sub_meter_id` int(255) NOT NULL,
-  `purpose` varchar(50) NOT NULL,
-  `service_no` int(255) NOT NULL,
-  `created_by` int(255) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `meter_master` (`mid`, `parent_meter`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
+(1, NULL, 'bp0', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(2, 1, 'bp01', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(3, 1, 'bp012', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(4, NULL, 'bp4', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(5, 4, 'bp41', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(6, NULL, 'bp6', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(7, 1, 'bp012', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1);
 
 -- --------------------------------------------------------
 
@@ -225,15 +187,26 @@ CREATE TABLE `submeter_master` (
 
 CREATE TABLE `task_assign` (
   `task_id` int(255) NOT NULL,
-  `task_type` enum('meter reading','bill upload') NOT NULL,
   `sno_id` int(255) NOT NULL,
-  `sub_meter_id` int(255) NOT NULL,
+  `sub_meter_id` int(255) DEFAULT NULL,
   `user_id` int(255) NOT NULL,
-  `frequency` int(11) NOT NULL DEFAULT 1,
+  `meter_reading` tinyint(1) NOT NULL DEFAULT 0,
+  `reading_frq` int(11) DEFAULT NULL,
+  `bill_upload` tinyint(1) NOT NULL DEFAULT 0,
+  `upload_frq` int(11) DEFAULT NULL,
   `created_by` int(255) NOT NULL,
-  `created_at` datetime NOT NULL,
+  `created_at` date NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `task_assign`
+--
+
+INSERT INTO `task_assign` (`task_id`, `sno_id`, `sub_meter_id`, `user_id`, `meter_reading`, `reading_frq`, `bill_upload`, `upload_frq`, `created_by`, `created_at`, `status`) VALUES
+(4, 1, 2, 1, 1, 1, 1, 1, 1, '2022-02-25', 1),
+(5, 1, NULL, 1, 0, NULL, 1, 1, 1, '2022-02-25', 1),
+(6, 1, NULL, 2, 1, 1, 0, NULL, 1, '2022-02-25', 1);
 
 -- --------------------------------------------------------
 
@@ -331,23 +304,6 @@ ALTER TABLE `meter_master`
   ADD KEY `created_by` (`created_by`);
 
 --
--- Indexes for table `serviceno_master`
---
-ALTER TABLE `serviceno_master`
-  ADD PRIMARY KEY (`sno_id`),
-  ADD KEY `location` (`location`),
-  ADD KEY `company_id` (`company_id`),
-  ADD KEY `created_by` (`created_by`);
-
---
--- Indexes for table `submeter_master`
---
-ALTER TABLE `submeter_master`
-  ADD PRIMARY KEY (`sub_meter_id`),
-  ADD KEY `service_no` (`service_no`),
-  ADD KEY `created_by` (`created_by`);
-
---
 -- Indexes for table `task_assign`
 --
 ALTER TABLE `task_assign`
@@ -402,25 +358,13 @@ ALTER TABLE `location_master`
 -- AUTO_INCREMENT for table `meter_master`
 --
 ALTER TABLE `meter_master`
-  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `serviceno_master`
---
-ALTER TABLE `serviceno_master`
-  MODIFY `sno_id` int(255) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `submeter_master`
---
-ALTER TABLE `submeter_master`
-  MODIFY `sub_meter_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `task_assign`
 --
 ALTER TABLE `task_assign`
-  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -477,26 +421,11 @@ ALTER TABLE `meter_master`
   ADD CONSTRAINT `meter_master_ibfk_4` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `serviceno_master`
---
-ALTER TABLE `serviceno_master`
-  ADD CONSTRAINT `serviceno_master_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `company_master` (`cid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `serviceno_master_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `serviceno_master_ibfk_3` FOREIGN KEY (`location`) REFERENCES `location_master` (`loc_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `submeter_master`
---
-ALTER TABLE `submeter_master`
-  ADD CONSTRAINT `submeter_master_ibfk_1` FOREIGN KEY (`service_no`) REFERENCES `serviceno_master` (`sno_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `task_assign`
 --
 ALTER TABLE `task_assign`
-  ADD CONSTRAINT `task_assign_ibfk_1` FOREIGN KEY (`sno_id`) REFERENCES `serviceno_master` (`sno_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `task_assign_ibfk_2` FOREIGN KEY (`sub_meter_id`) REFERENCES `submeter_master` (`sub_meter_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `task_assign_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `task_assign_ibfk_1` FOREIGN KEY (`sno_id`) REFERENCES `meter_master` (`mid`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `task_assign_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`uid`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`

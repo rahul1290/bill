@@ -29,6 +29,26 @@ class Meter_ctrl extends CI_Controller {
 		}
 	}
 
+	function getMeterByLocationId($lid){
+		$result = $this->Meter_model->getMeterByLocationId($lid);
+		
+		if(!is_null($result) && count($result)>0){
+			echo json_encode(array('data'=>$result,'status'=>200));
+		} else {
+			echo json_encode(array('msg'=>'No record found.','status'=>500));
+		}
+	}
+
+	function getSubMeters($mid){
+		$result = $this->Meter_model->getSubMeters($mid);
+		
+		if(!is_null($result) && count($result)>0){
+			echo json_encode(array('data'=>$result,'status'=>200));
+		} else {
+			echo json_encode(array('msg'=>'No record found.','status'=>500));
+		}
+	}
+
   function index(){
 	  	$data['meters'] = $this->Meter_model->meter_list();
 	  	$data['locations'] = $this->Location_model->location_list();
@@ -39,14 +59,15 @@ class Meter_ctrl extends CI_Controller {
 			$data['main_content'] = $this->load->view('master/meter',$data,true);
 	  		$this->load->view('admin_layout',$data);
 		} else {
+			print_r($this->input->post());
 			$this->form_validation->set_rules('bpno', 'BP no.', 'required|trim');
 			$this->form_validation->set_rules('mtype', 'Meter type', 'required|trim');
 			$this->form_validation->set_rules('cid', 'Company', 'required|trim');
-			$this->form_validation->set_rules('costc_id ', 'Cost-center', 'required|trim');
-			$this->form_validation->set_rules('loc_id ', 'Location', 'required|trim');
+			$this->form_validation->set_rules('costc_id', 'Cost-center', 'required|trim');
+			$this->form_validation->set_rules('loc_id', 'Location', 'required|trim');
 			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
 			if ($this->form_validation->run()){
-				$lid = $this->input->post('mid');
+				$mid = $this->input->post('mid');
 				$db_data['bpno'] = $this->input->post('bpno');
 				$db_data['mtype'] = $this->input->post('mtype');
 				$db_data['cid'] = $this->input->post('cid');
@@ -54,14 +75,14 @@ class Meter_ctrl extends CI_Controller {
 				$db_data['loc_id'] = $this->input->post('loc_id');
 				$db_data['created_by'] = $this->session->userdata('user_id');
 				$db_data['created_at'] = date('Y-m-d');
-				if($lid == ''){
+				if($mid == ''){
 					$result = $this->Meter_model->create_meter($db_data);
 				} else {
-					$result = $this->Meter_model->update_meter($db_data,$lid);
+					$result = $this->Meter_model->update_meter($db_data,$mid);
 				}
 				if($result){
 					$data['companies'] = $this->Meter_model->meter_list();
-					if($lid == ''){
+					if($mid == ''){
 						$this->session->set_flashdata('msg','Meter created successfully.');
 					} else {
 						$this->session->set_flashdata('msg','Meter updated successfully.');

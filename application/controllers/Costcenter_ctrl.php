@@ -29,6 +29,16 @@ class Costcenter_ctrl extends CI_Controller {
 		}
 	}
 
+	function getCostcenterByCompnayId($cid){
+		$result = $this->Costcenter_model->getCostcenterByCompnayId($cid);
+		
+		if(!is_null($result) && count($result)>0){
+			echo json_encode(array('data'=>$result,'status'=>200));
+		} else {
+			echo json_encode(array('msg'=>'No record found.','status'=>500));
+		}
+	}
+
   function index(){
 		$data['costceners'] = $this->Costcenter_model->costcenter_list();
 		$data['companies'] = $this->Company_model->Company_list();

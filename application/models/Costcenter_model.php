@@ -50,4 +50,10 @@ class Costcenter_model extends CI_Model {
 			return null;
 		}
 	}
+
+	function getCostcenterByCompnayId($cid){
+		$this->db->select('*');
+		$result = $this->db->get_where('cost_center_master',array('company_id'=>$cid,'status'=>1))->result_array();
+		return $result;
+	}
 }

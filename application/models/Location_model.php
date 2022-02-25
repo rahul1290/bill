@@ -41,6 +41,16 @@ class Location_model extends CI_Model {
 		}
 	}
 
+	function getLocationByCostcenterId($costc_id){
+		$this->db->select('*');
+		$result = $this->db->get_where('location_master',array('cost_center_id'=>$costc_id,'status'=>1))->result_array();
+		if(count($result)>0){
+			return  $result;
+		} else {
+			return  null;
+		}
+	}
+
 	function location_delete($lid){
 		$this->db->where('loc_id',$lid);
 		$result = $this->db->update('location_master',array('status'=>0));

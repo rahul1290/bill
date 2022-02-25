@@ -14,13 +14,23 @@ class Meter_model extends CI_Model {
 
 	function update_meter($data,$mid){
 		$this->db->where('mid',$mid);
-		$result = $this->db->update('location_master',$data);
+		$result = $this->db->update('meter_master',$data);
 
 		if($result){
 			return true;
 		} else {
 			return null;
 		}
+	}
+
+	function getMeterByLocationId($lid){
+		$this->db->select('*');
+		return $result = $this->db->get_where('meter_master',array('loc_id'=>$lid,'parent_meter'=>null,'status'=>1))->result_array();
+	}
+
+	function getSubMeters($mid){
+		$this->db->select('*');
+		return $result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
 	}
 
 	function meter_list($mid=null){

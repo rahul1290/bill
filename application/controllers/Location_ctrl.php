@@ -19,6 +19,15 @@ class Location_ctrl extends CI_Controller {
 		}
 	}
 
+	function getLocationByCostcenterId($costc_id){
+		$result = $this->Location_model->getLocationByCostcenterId($costc_id);
+		if(!is_null($result) && count($result)>0){
+			echo json_encode(array('data'=>$result,'status'=>200));
+		} else {
+			echo json_encode(array('msg'=>'No record found.','status'=>500));
+		}
+	}
+
 	function getLocations(){
 		$result = $this->Location_model->location_list();
 		

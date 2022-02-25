@@ -236,10 +236,10 @@
                     Users
                 </a>
                 <hr>
-                <h6 class="uppercase">User Privileges</h6>
-                <a href="blog-list.html">
+                <h6 class="uppercase">Assign Task</h6>
+                <a href="<?php echo base_url('Assigntask_ctrl')?>">
                     <span class="la la-list"></span>
-                    List
+                    Assign Task to user
                 </a>
                 <a href="blog-list-card-rows.html">
                     <span class="la la-list"></span>
