@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 19, 2022 at 12:55 PM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.8
+-- Host: 127.0.0.1
+-- Generation Time: Feb 25, 2022 at 02:17 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.3.23
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -146,6 +146,31 @@ CREATE TABLE `location_master` (
 INSERT INTO `location_master` (`loc_id`, `cost_center_id`, `name`, `created_by`, `created_at`, `status`) VALUES
 (1, 4, 'rahul1234', 1, '2022-02-19 00:00:00', 0),
 (2, 4, 'rahul123', 1, '2022-02-19 00:00:00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `meter_master`
+--
+
+CREATE TABLE `meter_master` (
+  `mid` int(255) NOT NULL,
+  `bpno` varchar(100) NOT NULL,
+  `mtype` enum('main-meter','sub-meter') NOT NULL DEFAULT 'main-meter',
+  `cid` int(255) NOT NULL,
+  `costc_id` int(255) NOT NULL,
+  `loc_id` int(255) NOT NULL,
+  `created_by` int(255) NOT NULL,
+  `created_at` date NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `meter_master`
+--
+
+INSERT INTO `meter_master` (`mid`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
+(1, '123456', 'main-meter', 4, 5, 2, 2, '2022-02-25', 1);
 
 -- --------------------------------------------------------
 
@@ -296,6 +321,16 @@ ALTER TABLE `location_master`
   ADD KEY `cost_center_id` (`cost_center_id`);
 
 --
+-- Indexes for table `meter_master`
+--
+ALTER TABLE `meter_master`
+  ADD PRIMARY KEY (`mid`),
+  ADD KEY `cid` (`cid`),
+  ADD KEY `costc_id` (`costc_id`),
+  ADD KEY `loc_id` (`loc_id`),
+  ADD KEY `created_by` (`created_by`);
+
+--
 -- Indexes for table `serviceno_master`
 --
 ALTER TABLE `serviceno_master`
@@ -364,6 +399,12 @@ ALTER TABLE `location_master`
   MODIFY `loc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `meter_master`
+--
+ALTER TABLE `meter_master`
+  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `serviceno_master`
 --
 ALTER TABLE `serviceno_master`
@@ -425,6 +466,15 @@ ALTER TABLE `cost_center_master`
 ALTER TABLE `location_master`
   ADD CONSTRAINT `location_master_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `location_master_ibfk_2` FOREIGN KEY (`cost_center_id`) REFERENCES `cost_center_master` (`costc_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `meter_master`
+--
+ALTER TABLE `meter_master`
+  ADD CONSTRAINT `meter_master_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `company_master` (`cid`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `meter_master_ibfk_2` FOREIGN KEY (`costc_id`) REFERENCES `cost_center_master` (`costc_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `meter_master_ibfk_3` FOREIGN KEY (`loc_id`) REFERENCES `location_master` (`loc_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `meter_master_ibfk_4` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `serviceno_master`

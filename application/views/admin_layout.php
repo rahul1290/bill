@@ -227,12 +227,16 @@
                     <span class="la la-user-plus"></span>
                     Location
                 </a>
+                <a href="<?php echo base_url('Meter_ctrl'); ?>">
+                    <span class="la la-user-plus"></span>
+                    Meter
+                </a>
                 <a href="<?php echo base_url('User_ctrl'); ?>">
                     <span class="la la-user-plus"></span>
                     Users
                 </a>
                 <hr>
-                <h6 class="uppercase">Blog</h6>
+                <h6 class="uppercase">User Privileges</h6>
                 <a href="blog-list.html">
                     <span class="la la-list"></span>
                     List
@@ -244,7 +248,7 @@
                 <a href="blog-list-card-columns.html">
                     <span class="la la-list"></span>
                     List - Card Columns
-                </a>
+                </a>    
                 <a href="blog-add.html">
                     <span class="la la-layer-group"></span>
                     Add Post
