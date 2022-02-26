@@ -6,7 +6,7 @@ class Assigntask_ctrl extends CI_Controller {
 	function __construct() {
     parent::__construct();
 		$this->load->database();
-		$this->load->model(array('Costcenter_model','Company_model','Location_model','User_model','Assigntask_model'));
+		$this->load->model(array('Costcenter_model','Company_model','Location_model','User_model','Assigntask_model','Meter_model'));
   }
 
 	function getUserById(){
@@ -32,9 +32,40 @@ class Assigntask_ctrl extends CI_Controller {
   function index(){
 		$data['companies'] = $this->Company_model->Company_list();
 		$data['users'] = $this->User_model->user_list();
+
 		$data['tasks'] = $this->Assigntask_model->task_list();
+		$data['meters'] = $this->Meter_model->meter_list();
 		
-		
+		$finalRecord = array();
+		foreach($data['meters'] as $meter){
+			$temp = array();
+			$temp['bpno'] = $meter['bpno'];
+			$temp['mtype'] = $meter['mtype'];
+			$temp['location'] = $meter['location_name'];
+			$temp['company'] = $meter['company_name'];
+
+
+			foreach($data['tasks'] as $task){
+				if($meter['bpno'] == $task['bpno'] && $task['meter_reading'] == 'yes'){
+					$temp['meter_reading'] = $task['meter_reading'];
+					$temp['reading_freq'] = $task['reading_frq'];
+				}
+
+				if($meter['bpno'] == $task['bpno'] && $task['bill_upload'] == 'yes'){
+					$temp['bill_upload'] = $task['bill_upload'];
+					$temp['upload_freq'] = $task['upload_frq'];
+				}
+
+				if($meter['bpno'] == $task['bpno']){
+					$temp['employee'] = $task['user_name'];
+				}
+			}
+			$finalRecord[] = $temp;
+		}
+
+
+		//print_r($finalRecord); die;
+
 		if ($this->input->server('REQUEST_METHOD') === 'GET') {
 			$data['main_content'] = $this->load->view('assigntask',$data,true);
 	  		$this->load->view('admin_layout',$data);

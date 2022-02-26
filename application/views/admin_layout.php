@@ -540,7 +540,12 @@
     </aside>
 
     <!-- main content -->
-    <?php print_r($main_content); ?>
+    
+    <?php 
+        if(isset($main_content)){ 
+            print_r($main_content);
+        } 
+    ?>
 
     <footer class="mt-auto">
         <div class="footer">

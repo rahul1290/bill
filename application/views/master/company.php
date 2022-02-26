@@ -6,9 +6,10 @@
             <li class="divider la la-arrow-right"></li>
             <li>Company</li>
         </ul>
+    </section>
 
-        <div class="lg:flex lg:-mx-4 mt-4">
-            <div class="lg:w-1/2 xl:w-1/4 lg:px-4">
+        <div class="lg:flex lg:-mx-4">
+            <div class="lg:w-1/2 xl:w-1/4 lg:px-4 pt-5 lg:pt-0">
                 <div class="card p-5">
                     <form method="POST" action="<?php echo base_url();?>Company_ctrl">
                         <div class="mb-5 xl:w-2/2">
@@ -51,7 +52,7 @@
             </div>
 
             <!-- Recent -->
-            <div class="lg:w-1/2 xl:w-3/4 lg:px-4 pt-0 lg:pt-0">
+            <div class="lg:w-1/2 xl:w-3/4 lg:px-4">
                 <div class="relative card p-0">
                     <div class="lg:w-2/2">
                       <div class="card p-5">
@@ -88,7 +89,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    
 
 
     <script>
@@ -181,6 +182,4 @@
             }
         });
       }
-
-
     </script>

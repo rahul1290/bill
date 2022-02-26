@@ -15,15 +15,15 @@
 
                     <div class="mb-5">
                         <label class="label block mb-2" for="company">Company</label>
-                        <div class="custom-select">
+                        <!-- <div class="custom-select"> -->
                             <select id="company" name="company" class="form-control">
                             <option value="" selected>Select company</option>
                                 <?php foreach($companies as $company){ ?>
                                     <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
                                 <?php } ?>
                             </select>
-                            <div class="custom-select-icon la la-caret-down"></div>
-                        </div>
+                            <!-- <div class="custom-select-icon la la-caret-down"></div> -->
+                        <!-- </div> -->
                         <?php echo form_error('company'); ?>
                     </div>
 
@@ -97,8 +97,8 @@
 
                     <div class="mt-12 text-center">
                         <input type="submit" class="btn btn_success mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="assign-create" value="Assign">
-                        <button class="btn btn_secondary mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="assign-update" style="display:none;">Update</button>
-
+                        <input type="submit" class="btn btn_success mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="assign-update" style="display:none;" value="Update">
+                        
                         <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="cancel-btn" style="display:none;" value="Cancel">
                         <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="reset-btn" value="Reset">
                     </div>

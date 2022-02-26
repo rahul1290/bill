@@ -111,4 +111,11 @@ class Meter_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+
+
+  function merter_reading(){
+	$data['companies'] = $this->Company_model->company_list();
+	$data['main_content'] = $this->load->view('meter_reading',$data,true);
+	$this->load->view('admin_layout',$data);
+  }
 }
