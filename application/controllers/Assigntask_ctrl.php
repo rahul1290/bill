@@ -105,4 +105,180 @@ class Assigntask_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+
+  function assign_user_list(){
+	$data['records'] = $this->db->query("SELECT mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
+								cm.name as company,ccm.name as cost_center_name,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
+								ta.bill_upload,ta.upload_frq
+								FROM meter_master mm
+								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid
+								JOIN company_master cm on cm.cid = mm.cid
+								JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id
+								JOIN location_master lm on lm.loc_id = mm.loc_id
+								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
+								group by mm.bpno
+								order by mm.mid")->result_array();
+	$json = '[
+		{
+			"mid": "1",
+			"mtype": "main-meter",
+			"bpno": "bpno-123",
+			"parent_meter": null,
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": "5",
+			"meter_reading": "1",
+			"reading_frq": "1",
+			"bill_upload": "1",
+			"upload_frq": "1"
+		},
+		{
+			"mid": "2",
+			"mtype": "sub-meter",
+			"bpno": "bpno-124",
+			"parent_meter": "1",
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "3",
+			"mtype": "sub-meter",
+			"bpno": "bpno-101",
+			"parent_meter": "1",
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "4",
+			"mtype": "main-meter",
+			"bpno": "bpno-102",
+			"parent_meter": null,
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": "5",
+			"meter_reading": "1",
+			"reading_frq": "1",
+			"bill_upload": "1",
+			"upload_frq": "1"
+		},
+		{
+			"mid": "5",
+			"mtype": "sub-meter",
+			"bpno": "bpno-103",
+			"parent_meter": "4",
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": "5",
+			"meter_reading": "1",
+			"reading_frq": "1",
+			"bill_upload": "1",
+			"upload_frq": "1"
+		},
+		{
+			"mid": "6",
+			"mtype": "main-meter",
+			"bpno": "bpno-104",
+			"parent_meter": null,
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "7",
+			"mtype": "sub-meter",
+			"bpno": "bpno-105",
+			"parent_meter": "1",
+			"company": "vnr-corporate",
+			"cost_center_name": "raipur",
+			"location": "sarona",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "8",
+			"mtype": "main-meter",
+			"bpno": "bpno-106",
+			"parent_meter": null,
+			"company": "vnr-plant",
+			"cost_center_name": "123",
+			"location": "asd2",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "10",
+			"mtype": "sub-meter",
+			"bpno": "bpno-107",
+			"parent_meter": "0",
+			"company": "vnr-plant",
+			"cost_center_name": "123",
+			"location": "asd2",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "11",
+			"mtype": "sub-meter",
+			"bpno": "bpno-108",
+			"parent_meter": "0",
+			"company": "vnr-plant",
+			"cost_center_name": "123",
+			"location": "asd2",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		},
+		{
+			"mid": "12",
+			"mtype": "sub-meter",
+			"bpno": "bpno-109",
+			"parent_meter": "8",
+			"company": "vnr-plant",
+			"cost_center_name": "123",
+			"location": "asd2",
+			"user_id": null,
+			"meter_reading": null,
+			"reading_frq": null,
+			"bill_upload": null,
+			"upload_frq": null
+		}
+	]'; 
+
+	$jsons = json_decode($json,true); 
+	print_r($jsons); die;
+	
+	$data['main_content'] = $this->load->view('assigntask-show',$data,true);
+	$this->load->view('admin_layout',$data);
+  }
 }
