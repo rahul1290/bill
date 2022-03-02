@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 02, 2022 at 02:08 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.3.23
+-- Host: localhost
+-- Generation Time: Mar 02, 2022 at 10:07 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -71,13 +71,6 @@ CREATE TABLE `bill` (
   `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `bill`
---
-
-INSERT INTO `bill` (`bill_id`, `sno_id`, `from_date`, `to_date`, `bill_no`, `date_of_bill`, `due_date`, `reading`, `reading_date`, `power_consumption`, `power_factor`, `total_consumption`, `highest_demand_reading`, `je_ae_name`, `je_ae_contact_no`, `ae_ee_name`, `ae_ee_contact_no`, `fixed_demand_charges`, `minimum_charges`, `energy_charges`, `total_charges`, `electricity_duty`, `cess`, `welding_capacitor_overload`, `meter_fare`, `vca_charge`, `security_deposit`, `concession_amount`, `total_bill`, `deviation_adjustment`, `past_dues`, `security_fund_outstanding`, `payable_amount`, `extra`, `gross_amount`, `overload`, `image`, `created_at`, `created_by`, `status`) VALUES
-(3, 2, '2022-03-01', '2022-03-15', 'tutk', '2022-03-02', '2022-03-08', 2300.00, '2022-03-09', 350.00, '2022-03-02', 5600.00, 2022.00, 'sandha', '9770866241', 'rahul', '9770866241', 345.00, 0.00, 453.00, 123.00, 0.00, 6780.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '', '2022-03-01 00:00:00', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -101,11 +94,8 @@ CREATE TABLE `company_master` (
 --
 
 INSERT INTO `company_master` (`cid`, `name`, `address`, `contact_no`, `alternet_no`, `email`, `created_at`, `created_by`, `status`) VALUES
-(4, 'vnr', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
-(5, 'vnr 2', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
-(6, 'vnr 2', 'raipur', '9770866241', '', '', '2022-02-26', 1, 1),
-(7, '123', '123', '9770866241', '', 'rahul@gmail.com', '2022-02-26', 1, 1),
-(8, '123', 'welcome', '9770866241', '9770866243', 'rahul@gmail.com', '2022-02-26', 1, 0);
+(4, 'vnr-corporate', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
+(5, 'vnr-plant', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -130,8 +120,7 @@ INSERT INTO `cost_center_master` (`costc_id`, `company_id`, `name`, `created_by`
 (4, 4, 'durg', 1, '2022-02-19', 0),
 (5, 4, 'raipur', 1, '2022-02-19', 1),
 (6, 4, 'dhamdha', 1, '2022-02-19', 1),
-(7, 5, '123', 1, '2022-02-26', 1),
-(8, 7, 'sdf', 1, '2022-02-26', 0);
+(7, 5, '123', 1, '2022-02-26', 1);
 
 -- --------------------------------------------------------
 
@@ -181,18 +170,17 @@ CREATE TABLE `meter_master` (
 --
 
 INSERT INTO `meter_master` (`mid`, `parent_meter`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
-(1, NULL, 'bp0', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(2, 1, 'bp01', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(3, 1, 'bp012', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(4, NULL, 'bp4', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(5, 4, 'bp41', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(6, NULL, 'bp6', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(7, 1, 'bp012', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(8, NULL, '345ade', 'main-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(9, NULL, '345adg', 'main-meter', 5, 7, 3, 1, '2022-02-26', 0),
-(10, 0, 'sdf', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(11, 0, 'asdf', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(12, 8, 'dfg3f', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1);
+(1, NULL, 'bpno-123', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(2, 1, 'bpno-124', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(3, 1, 'bpno-101', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(4, NULL, 'bpno-102', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(5, 4, 'bpno-103', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(6, NULL, 'bpno-104', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(7, 1, 'bpno-105', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
+(8, NULL, 'bpno-106', 'main-meter', 5, 7, 3, 1, '2022-02-26', 1),
+(10, 0, 'bpno-107', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
+(11, 0, 'bpno-108', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
+(12, 8, 'bpno-109', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1);
 
 -- --------------------------------------------------------
 
@@ -210,6 +198,13 @@ CREATE TABLE `meter_reading` (
   `created_by` int(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `meter_reading`
+--
+
+INSERT INTO `meter_reading` (`mr_id`, `bpno`, `user_id`, `reading_date`, `reading_value`, `created_at`, `created_by`, `status`) VALUES
+(1, 1, 5, '2022-03-02', '3450', '2022-03-02', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -236,10 +231,9 @@ CREATE TABLE `task_assign` (
 --
 
 INSERT INTO `task_assign` (`task_id`, `sno_id`, `sub_meter_id`, `user_id`, `meter_reading`, `reading_frq`, `bill_upload`, `upload_frq`, `created_by`, `created_at`, `status`) VALUES
-(4, 1, 2, 1, 1, 1, 1, 1, 1, '2022-02-25', 1),
-(5, 1, NULL, 1, 0, NULL, 1, 1, 1, '2022-02-25', 1),
-(6, 1, NULL, 2, 1, 1, 0, NULL, 1, '2022-02-25', 1),
-(7, 8, 12, 2, 1, 1, 1, 1, 1, '2022-02-28', 1);
+(6, 1, NULL, 5, 1, 1, 1, 1, 1, '2022-03-02', 1),
+(7, 4, 5, 5, 1, 1, 1, 1, 1, '2022-03-02', 1),
+(8, 4, NULL, 5, 1, 1, 1, 1, 1, '2022-03-02', 1);
 
 -- --------------------------------------------------------
 
@@ -266,7 +260,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `password`, `sex`, `created_by`, `created_at`, `status`) VALUES
-(1, 1, 'rahul', 'sinha', 'rahul@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', NULL, '2022-02-17', 1),
+(1, 1, 'rahul', 'sinha', 'admin@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', NULL, '2022-02-17', 1),
 (2, 2, 'manoj', 'sinha21', 'manoj@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', 1, '2022-02-19', 1),
 (5, 3, 'manoj', 'kumar', 'manoj@gmail.com', '9770866241', '50a12dd50d40e23444069e97d689c74f3a39a787', 'male', 1, '2022-02-28', 1);
 
@@ -376,7 +370,7 @@ ALTER TABLE `user_type`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `bill_id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `company_master`
@@ -406,13 +400,13 @@ ALTER TABLE `meter_master`
 -- AUTO_INCREMENT for table `meter_reading`
 --
 ALTER TABLE `meter_reading`
-  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `task_assign`
 --
 ALTER TABLE `task_assign`
-  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
