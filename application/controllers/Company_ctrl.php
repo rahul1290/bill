@@ -87,4 +87,9 @@ class Company_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+
+  function logout(){
+	session_destroy();
+	redirect('/');
+  }
 }

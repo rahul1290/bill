@@ -59,7 +59,7 @@ class Meter_model extends CI_Model {
                             join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
 	    } else {
 	       $result = $this->db->query("SELECT * from meter_master m
-                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE user_id = 1 and status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
+                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE user_id = $uid and status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
 	    }
 	    
 	    if(count($result)>0){
@@ -67,6 +67,19 @@ class Meter_model extends CI_Model {
 	    } else {
 	        return  null;
 	    }
+	}
+
+	function show_meter_readings($uid=null){
+
+		$this->db->select('mr.*,u.fname,u.lname,mm.bpno,ta.upload_frq,ta.bill_upload');
+		$this->db->join('users u','u.uid = mr.user_id');
+		if(!is_null($uid)){
+			$this->db->where('mr.user_id',$uid);
+		}
+		$this->db->join("(SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as bpno,upload_frq,bill_upload FROM task_assign) as ta",'ta.bpno = mr.bpno');
+		$this->db->join('meter_master mm','mm.mid = mr.bpno AND mm.status = 1');
+		$result = $this->db->get_where('meter_reading mr',array('mr.status'=>1))->result_array();
+		return $result;
 	}
 
 	function meter_delete($mid){
@@ -87,6 +100,29 @@ class Meter_model extends CI_Model {
 	     return $result;   
 	    } else{
 	        return null;
+	    }
+	}
+
+	function meter_reading($data){
+		$this->db->select('*');
+		$records = $this->db->get_where('meter_reading',array('bpno'=>$data['bpno'],'reading_date'=>$data['reading_date'],'status'=>1))->result_array();
+
+		if(count($records)>0){
+			$this->db->where('mr_id',$records[0]['mr_id']);
+			$result = $this->db->update('meter_reading',array(
+				'bpno' => $data['bpno'],
+				'user_id' => $data['user_id'],
+				'reading_value' => $data['reading_value'],
+				'created_at' => date('Y-m-d'),
+				'created_by' => $this->session->userdata('user_id')
+			));
+		} else {
+			$result = $this->db->insert('meter_reading',$data);
+		}
+	    if($result){
+	     return true;   
+	    } else{
+	        return false;
 	    }
 	}
 }

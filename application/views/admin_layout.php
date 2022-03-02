@@ -191,6 +191,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+          <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
           <li class="nav-item <?php if($this->uri->segment('1') == 'master'){
               echo "menu-is-opening menu-open";
           }?>">
@@ -245,6 +246,8 @@
               </li>
             </ul>
           </li>
+          <?php } ?>
+          <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url('Assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter'){
                     echo 'active';
@@ -256,6 +259,7 @@
               </p>
             </a>
           </li>
+          <?php } ?>
           
           <li class="nav-item">
             <a href="<?php echo base_url('Bill-upload'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Bill-upload'){

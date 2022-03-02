@@ -4,7 +4,7 @@
         <div class="card-body">
           <div class="row">
           	<div class="col-12">
-          		<h5 class="text-warning" id="page-heading">Create User</h5>
+          		<h5 class="text-warning" id="page-heading">Assign User</h5>
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>Assign-meter">
           		
@@ -54,7 +54,7 @@
                         </div>
                        
                         <div class="col row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label">Submeter No.<label class="text-danger">*</label></label>
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Submeter No.</label>
                             <div class="col-sm-8">
                               <select id="sub-meter" name="sub-meter" class="form-control">
                                 <option value="" selected>Select sub-meter</option>

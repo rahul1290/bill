@@ -24,6 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/bill';
+//$config['base_url'] = 'http://10.0.4.194/bill';
 $config['cur_date'] = date('Y-m-d H:i:s');
 $config['project_name'] = 'Electricity Bill';
 

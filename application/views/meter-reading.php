@@ -3,7 +3,10 @@
       <div class="card">
         <div class="card-body">
           	<div class="offset-sm-1 col-10">
-          		<h5 class="text-warning" id="page-heading">Meter Reading</h5>
+          		<span class="text-warning" id="page-heading">Meter Reading</span>
+              <span class="pull-right" style="float: right;">
+                <a class="btn btn-sm btn-primary" href="<?php echo base_url('Show-Meter-Reading'); ?>">Show-previous-Readings</a>
+              </span>
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>Meter-Reading">
                     <div class="form-group row">

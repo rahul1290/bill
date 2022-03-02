@@ -51,14 +51,14 @@ class Assigntask_ctrl extends CI_Controller {
 			$this->form_validation->set_rules('costc_id', 'Cost Center', 'required|trim');
 			$this->form_validation->set_rules('loc_id', 'Location', 'required|trim');
 			$this->form_validation->set_rules('meter', 'Service No', 'required|trim|is_natural');
-			$this->form_validation->set_rules('sub-meter', 'Sub Meter', 'trim|is_natural');
+			$this->form_validation->set_rules('sub-meter', 'Sub Meter', 'trim');
 			$this->form_validation->set_rules('user', 'Employee', 'required|trim|is_natural');
 			
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$utid = $this->input->post('utid');
 				$db_data['sno_id'] = $this->input->post('meter');
-				$db_data['sub_meter_id'] = $this->input->post('sub-meter');
+				$db_data['sub_meter_id'] = $this->input->post('sub-meter') == '' ? null : $this->input->post('sub-meter');
 				$db_data['user_id'] = $this->input->post('user');
 				$db_data['meter_reading'] = $this->input->post('meter_reading') == 'on' ? '1' : '0';
 				$db_data['reading_frq'] = $this->input->post('reading_frq');
@@ -88,7 +88,7 @@ class Assigntask_ctrl extends CI_Controller {
 	  				$this->load->view('admin_layout',$data);
 				}
 			} else {
-				echo validation_errors(); die;
+				//echo validation_errors(); die;
 				$data['main_content'] = $this->load->view('assigntask',$data,true);
 	  			$this->load->view('admin_layout',$data);
 			}

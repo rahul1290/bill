@@ -118,7 +118,7 @@ class Meter_ctrl extends CI_Controller {
   
   function bill_upload(){
       $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
-      
+      //print_r($this->db->last_query()); die;
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -213,11 +213,31 @@ class Meter_ctrl extends CI_Controller {
           
           $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
           if ($this->form_validation->run()){
-              
+              $db_data['bpno'] = $this->input->post('serviceno');
+              $db_data['user_id'] = $this->session->userdata('user_id');
+              $db_data['reading_date'] = $this->input->post('reading_date');
+              $db_data['reading_value'] = $this->input->post('reading_value');
+              $db_data['created_at'] = date('Y-m-d');
+              $db_data['created_by'] = $this->session->userdata('user_id');
+              if($this->Meter_model->meter_reading($db_data)){
+                redirect(current_url());
+              }
           } else {
               $data['main_content'] = $this->load->view('meter-reading',$data,true);
               $this->load->view('admin_layout',$data);
           }
       }
+  }
+
+  function show_meter_readings(){
+      $user_id = $this->session->userdata('user_id');
+      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
+        $data['readings'] = $this->Meter_model->show_meter_readings();
+      } else {
+        $data['readings'] = $this->Meter_model->show_meter_readings($user_id);
+      }
+
+      $data['main_content'] = $this->load->view('meter-reading-show',$data,true);
+      $this->load->view('admin_layout',$data);
   }
 }
