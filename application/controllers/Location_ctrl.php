@@ -49,7 +49,7 @@ class Location_ctrl extends CI_Controller {
 		} else {
 			$this->form_validation->set_rules('lname', 'Location name', 'required|trim');
 			$this->form_validation->set_rules('cost_center', 'Cost center', 'required|trim');
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$lid = $this->input->post('lid');
 				$db_data['name'] = $this->input->post('lname');

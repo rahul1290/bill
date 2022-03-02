@@ -2,25 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-$route['default_controller'] = 'Auth_ctrl/login';
-
-$route['admin/user'] = 'api/User_ctrl';
-$route['admin/user/(:num)'] = 'api/User_ctrl/index/$1';
-
-$route['admin/company'] = 'api/Company_ctrl';
-$route['admin/company/(:num)'] = 'api/Company_ctrl/index/$1';
-
-$route['admin/cost-center'] = 'api/Costcenter_ctrl';
-$route['admin/cost-center/(:num)'] = 'api/Costcenter_ctrl/index/$1';
-
-$route['admin/location'] = 'api/Location_ctrl';
-$route['admin/location/(:num)'] = 'api/Location_ctrl/index/$1';
-
-$route['admin/meter'] = 'api/Service_ctrl';
-$route['admin/meter/(:num)'] = 'api/Service_ctrl/index/$1';
-
-$route['user'] = 'api/User_ctrl';
-$route['user/(:num)'] = 'api/User_ctrl/user/$1';
-
+$route['default_controller'] = 'auth';
+$route['master/Company'] = 'company_ctrl';
+$route['master/Cost-Center'] = 'costcenter_ctrl';
+$route['master/Location'] = 'location_ctrl';
+$route['master/Meter'] = 'meter_ctrl';
+$route['master/User'] = 'user_ctrl';
+$route['Assign-meter'] = 'Assigntask_ctrl';
+$route['Bill-upload'] = 'Meter_ctrl/bill_upload';
+$route['Meter-Reading'] = 'Meter_ctrl/meter_reading';
+$route['Log-Out'] = 'Auth/logout';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

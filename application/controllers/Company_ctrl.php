@@ -30,7 +30,7 @@ class Company_ctrl extends CI_Controller {
 	}
 
   function index(){
-		$data['companies'] = $this->Company_model->company_list();
+		$data['companies'] = $this->Company_model->company_list();	
 		if ($this->input->server('REQUEST_METHOD') === 'GET') {
 			$data['main_content'] = $this->load->view('master/company',$data,true);
 	  		$this->load->view('admin_layout',$data);
@@ -40,7 +40,7 @@ class Company_ctrl extends CI_Controller {
 			$this->form_validation->set_rules('email', 'Email', 'valid_email|trim');
 			$this->form_validation->set_rules('contact', 'Contact No', 'required|min_length[10]|max_length[13]|trim|is_natural');
 			$this->form_validation->set_rules('alternet_no', 'Alternet Contact No', 'min_length[10]|max_length[13]|trim|is_natural');
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$cid = $this->input->post('cid');
 				$db_data['name'] = $this->input->post('cname');
@@ -70,6 +70,7 @@ class Company_ctrl extends CI_Controller {
 	  				$this->load->view('admin_layout',$data);
 				}
 			} else {
+			    //echo validation_errors(); die; 
 				$data['main_content'] = $this->load->view('master/company',$data,true);
 	  			$this->load->view('admin_layout',$data);
 			}

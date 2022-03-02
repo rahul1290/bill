@@ -1,160 +1,156 @@
-<main class="workspace">
-    <section class="breadcrumb">
-        <ul>
-            <li><a href="#">Master</a></li>
-            <li class="divider la la-arrow-right"></li>
-            <li>User Assign</li>
-        </ul>
-
-        
-        <div class="lg:flex lg:-mx-4 mt-4">
-            <div class="lg:w-1/2 xl:w-1/4 lg:px-4">
-                <div class="card p-5">
-                    <form method="POST" action="<?php echo base_url();?>Assigntask_ctrl">
-                    <input type="hidden" name="utid" id="utid"/>
-
-                    <div class="mb-5">
-                        <label class="label block mb-2" for="company">Company</label>
-                        <!-- <div class="custom-select"> -->
-                            <select id="company" name="company" class="form-control">
-                            <option value="" selected>Select company</option>
-                                <?php foreach($companies as $company){ ?>
-                                    <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
-                                <?php } ?>
+    <section class="content mt-2">
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+          	<div class="col-12">
+          		<h5 class="text-warning" id="page-heading">Create User</h5>
+          		<hr/>
+          		<form name="f1" method="POST" action="<?php echo base_url();?>Assign-meter">
+          		
+                    <div class="form-group row">
+                    	<div class="col row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Company<label class="text-danger">*</label></label>
+                            <div class="col-sm-8">
+                              <input id="uid" name="uid" type="hidden" class="form-control" value="<?php echo set_value('uid'); ?>">
+                              <select id="company" name="company" class="form-control">
+                                <option value="" selected>Select company</option>
+                                    <?php foreach($companies as $company){ ?>
+                                        <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                              <?php echo form_error('company'); ?>
+                            </div>
+                        </div>
+                    	<div class="col row">
+                            <label for="inputEmail3" class="col-sm-5 col-form-label">Costcenter<label class="text-danger">*</label></label>
+                            <div class="col-sm-7">
+                              <select id="costc_id" name="costc_id" class="form-control">
+                                <option value="">Select cost-center</option>
                             </select>
-                            <!-- <div class="custom-select-icon la la-caret-down"></div> -->
-                        <!-- </div> -->
-                        <?php echo form_error('company'); ?>
+                            <?php echo form_error('costc_id'); ?>
+                            </div>
+                        </div>
+                        <div class="col row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Location<label class="text-danger">*</label></label>
+                            <div class="col-sm-8">
+                              <select id="loc_id" name="loc_id" class="form-control">
+                                <option value="">Select Location</option>
+                              </select>
+                              <?php echo form_error('loc_id'); ?>
+                            </div>
+                        </div>
                     </div>
-
-
                     
-
-                    <div class="flex-1">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="mb-5 xl:w-2/2">
-                                <label class="label block mb-2" for="title">Costcenter</label>
-                                <select id="costc_id" name="costc_id" class="form-control">
-                                    <option value="">Select cost-center</option>
-                                </select>
-                                <?php echo form_error('costc_id'); ?>
+                    <div class="form-group row">
+                        <div class="col row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Service No.<label class="text-danger">*</label></label>
+                            <div class="col-sm-8">
+                              <select id="meter" name="meter" class="form-control">
+                                <option value="" selected>Select meter</option>
+                              </select>
+                              <?php echo form_error('meter'); ?>
                             </div>
-
-                            <div class="mb-5 xl:w-2/2">
-                                <label class="label block mb-2" for="title">Location</label>
-                                <select id="loc_id" name="loc_id" class="form-control">
-                                    <option value="">Select Location</option>
-                                </select>
-                                <?php echo form_error('loc_id'); ?>
+                        </div>
+                       
+                        <div class="col row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Submeter No.<label class="text-danger">*</label></label>
+                            <div class="col-sm-8">
+                              <select id="sub-meter" name="sub-meter" class="form-control">
+                                <option value="" selected>Select sub-meter</option>
+                              </select>
+                              <?php echo form_error('sub-meter'); ?>
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="flex-1">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="mb-5">
-                                <label class="label block mb-2" for="alternet_no">Service No.</label>
-                                <select id="meter" name="meter" class="form-control">
-                                    <option value="" selected>Select meter</option>
-                                </select>
-                                <?php echo form_error('meter'); ?>
-                            </div>
-
-                            <div class="mb-5">
-                                <label class="label block mb-2" for="alternet_no">Submeter No.</label>
-                                <select id="sub-meter" name="sub-meter" class="form-control">
-                                    <option value="" selected>Select sub-meter</option>
-                                </select>
-                                <?php echo form_error('sub-meter'); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <label class="label block mb-2" for="company">Employee</label>
-                        <select id="user" name="user" class="form-control">
-                        <option value="" selected>Select Employee</option>
-                            <?php foreach($users as $user){ ?>
-                                <option value="<?php echo $user['uid']; ?>"><?php echo $user['fname'].' '.$user['lname'].' {['. $user["role"] .']}'; ?></option>
-                            <?php } ?>
-                        </select>
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Employee<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <select id="user" name="user" class="form-control">
+                            <option value="" selected>Select Employee</option>
+                                <?php foreach($users as $user){ ?>
+                                    <option value="<?php echo $user['uid']; ?>"><?php echo $user['fname'].' '.$user['lname'].' {['. $user["role"] .']}'; ?></option>
+                                <?php } ?>
+                          </select>
                         <?php echo form_error('user'); ?>
-                    </div>
-
-                    <div class="mb-5 p-2" style="border:solid 0.5px black;border-radius:6px;padding:4px;">
-                        <label class="label block mb-2" for="company">Task</label>
-                        <div class="mb-2">
-                            <input type="checkbox" name="meter_reading"> Meter Reading
-                            <input name="reading_frq" type="number" value="1" class="w-1/3" style="border:solid 0.5px black;border-radius:6px;"> in Days
-                        </div>
-                        <hr/>
-                        <div>
-                            <input type="checkbox" name="bill_upload"> Bill Upload
-                            <input name="upload_frq" type="number" value="1" class="w-1/3" style="border:solid 0.5px black;border-radius:6px;"> in Month
                         </div>
                     </div>
-
-                    <div class="mt-12 text-center">
-                        <input type="submit" class="btn btn_success mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="assign-create" value="Assign">
-                        <input type="submit" class="btn btn_success mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="assign-update" style="display:none;" value="Update">
-                        
-                        <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                        <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="reset-btn" value="Reset">
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Task<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <div class="row">
+                          	<input class="" type="checkbox" name="meter_reading" style="margin-top:7px;"> Meter Reading
+                          	<input name="reading_frq" width="20" type="number" value="1" class="col-2 ml-2 mr-1">Days
+                          </div>
+                          
+                          <div class="row mt-2">
+                          	<input class="mr-2" type="checkbox" name="bill_upload" style="margin-top:6px;">Bill Upload
+                          	<input name="upload_frq" width="20" type="number" value="1" class="col-2 ml-2 mr-1"> Months
+                          </div>
+                        </div>
                     </div>
-
-                    </form>
-                </div>
-            </div>
-
-            <!-- Recent -->
-            <div class="lg:w-1/2 xl:w-3/4 lg:px-4 pt-0 lg:pt-0">
-                <div class="relative card p-0">
-                    <div class="lg:w-2/2">
-                      <div class="card p-5">
-                          <h3>User Assign</h3>
-                          <table class="table w-full mt-3">
-                              <thead>
+                    
+                    <div class="text-center">
+                      <input type="submit" class="btn btn-outline-success uppercase" id="assign-create" value="Assign">
+                      <button class="btn btn-outline-warning uppercase" id="assign-update" style="display:none;">Update</button>
+    	
+                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                    </div>
+                </form>
+          	</div>
+          	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8" style="display:none;">
+          		<div class="table-responsive">
+                    <table class="table table-bordered">
+                          <thead>
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
-                                    <th class="text-center uppercase">Service No.</th>
-                                    <th class="text-center uppercase">Sub-Meter No.</th>
-                                    <th class="text-center uppercase">Location</th>
-                                    <th class="text-center uppercase">Company</th>
-                                    <th class="text-center uppercase">Task</th>
-                                    <th class="text-center uppercase">Assign Employee</th>
-                                    <th class="text-center uppercase">Frequency</th>
+                                    <th class="text-center uppercase">Name</th>
+                                    <th class="text-center uppercase">Email</th>
+                                    <th class="text-center uppercase">Contact No.</th>
+                                    <th class="text-center uppercase">Sex</th>
+                                    <th class="text-center uppercase">Role</th>
+                                    <th class="text-center uppercase">Action</th>
                                   </tr>
                               </thead>
-                              <tbody id="costcenterList">
-                                <?php if(isset($tasks)){ $c=1; foreach($tasks as $task){ ?>
+                              <tbody id="userList">
+                                <?php if(isset($users)){ $c=1; foreach($users as $user){ ?>
                                     <tr>
                                         <td class="text-center"><?= $c++; ?></td>
-                                        <td class="text-center"><?= $task['bpno']; ?></td>
-                                        <td class="text-center"><?= $task['company_name']; ?></td>
-                                        <td class="text-center"><?= $task['created_at']; ?></td>
-                                        <td class="text-center"><?= $task['fname'].' '.$costcener['lname']; ?></td>
+                                        <td class="text-center"><?= $user['fname'] .' '.$user['lname'] ?></td>
+                                        <td class="text-center"><?= $user['email'] ?></td>
+                                        <td class="text-center"><?= $user['contact_no']; ?></td>
+                                        <td class="text-center"><?= $user['sex']; ?></td>
+                                        <td class="text-center"><?= $user['role']; ?></td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0);" class="costcenter_edit" data-id="<?= $costcener['costc_id']; ?>"><i class="la la-pencil"></i></a>
-                                            <a href="javascript:void(0);" class="costcenter_delete" data-id="<?= $costcener['costc_id']; ?>"><i class="la la-trash"></i></a>
+                                            <a href="javascript:void(0);" class="user_edit" data-id="<?= $user['uid']; ?>"><i class="fas fa-edit"></i></a>
+                                            <a href="javascript:void(0);" class="user_delete" data-id="<?= $user['uid']; ?>"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 <?php } } else {  echo "<tr><td class='text-center' colspan='6'>No record found.</td></tr>"; } ?>
                               </tbody>
                           </table>
-                      </div>
                   </div>
-                </div>
-            </div>
+          	</div>
+          </div>
+          
         </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
     </section>
-
+    
 
     <script>
     const baseUrl = $('#base_url').val();
-/////////
-
-function getCostCenter(cid){
+    
+       function getCostCenter(cid){
     $.ajax({
         url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
         method: "POST",

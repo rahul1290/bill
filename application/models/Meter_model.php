@@ -50,6 +50,24 @@ class Meter_model extends CI_Model {
 			return  null;
 		}
 	}
+	
+	
+	function meterlistUserWise($uid=null){
+	    $result = array();
+	    if(is_null($uid)){
+	        $result = $this->db->query("SELECT * from meter_master m
+                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
+	    } else {
+	       $result = $this->db->query("SELECT * from meter_master m
+                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE user_id = 1 and status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
+	    }
+	    
+	    if(count($result)>0){
+	        return  $result;
+	    } else {
+	        return  null;
+	    }
+	}
 
 	function meter_delete($mid){
 		$this->db->where('mid',$mid);
@@ -61,5 +79,14 @@ class Meter_model extends CI_Model {
 		} else {
 			return null;
 		}
+	}
+	
+	function bill_entry($data){
+	    $result = $this->db->insert('bill',$data);
+	    if($result){
+	     return $result;   
+	    } else{
+	        return null;
+	    }
 	}
 }

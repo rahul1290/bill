@@ -29,43 +29,20 @@ class Assigntask_ctrl extends CI_Controller {
 		}
 	}
 
+	function getSubMeterDetail($mid){
+		$this->db->select('*');
+		return $result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+	}
+
   function index(){
 		$data['companies'] = $this->Company_model->Company_list();
 		$data['users'] = $this->User_model->user_list();
+		$data['meters'] = $this->Meter_model->Meter_list();
+	
+		$totalLength = count($data['meters']);
 
-		$data['tasks'] = $this->Assigntask_model->task_list();
-		$data['meters'] = $this->Meter_model->meter_list();
+		$main_meters = array();
 		
-		$finalRecord = array();
-		foreach($data['meters'] as $meter){
-			$temp = array();
-			$temp['bpno'] = $meter['bpno'];
-			$temp['mtype'] = $meter['mtype'];
-			$temp['location'] = $meter['location_name'];
-			$temp['company'] = $meter['company_name'];
-
-
-			foreach($data['tasks'] as $task){
-				if($meter['bpno'] == $task['bpno'] && $task['meter_reading'] == 'yes'){
-					$temp['meter_reading'] = $task['meter_reading'];
-					$temp['reading_freq'] = $task['reading_frq'];
-				}
-
-				if($meter['bpno'] == $task['bpno'] && $task['bill_upload'] == 'yes'){
-					$temp['bill_upload'] = $task['bill_upload'];
-					$temp['upload_freq'] = $task['upload_frq'];
-				}
-
-				if($meter['bpno'] == $task['bpno']){
-					$temp['employee'] = $task['user_name'];
-				}
-			}
-			$finalRecord[] = $temp;
-		}
-
-
-		//print_r($finalRecord); die;
-
 		if ($this->input->server('REQUEST_METHOD') === 'GET') {
 			$data['main_content'] = $this->load->view('assigntask',$data,true);
 	  		$this->load->view('admin_layout',$data);

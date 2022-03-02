@@ -1,96 +1,105 @@
-<main class="workspace">
-    <section class="breadcrumb">
-        <h1>Company</h1>
-        <ul>
-            <li><a href="#">Master</a></li>
-            <li class="divider la la-arrow-right"></li>
-            <li>Company</li>
-        </ul>
-    </section>
-
-        <div class="lg:flex lg:-mx-4">
-            <div class="lg:w-1/2 xl:w-1/4 lg:px-4 pt-5 lg:pt-0">
-                <div class="card p-5">
-                    <form method="POST" action="<?php echo base_url();?>Company_ctrl">
-                        <div class="mb-5 xl:w-2/2">
-                            <label class="label block mb-2" for="title">Company Name<label class="text-red-500">*</label></label>
-                            <input id="cid" name="cid" type="hidden" class="form-control" value="<?php echo set_value('cid'); ?>">
-                            <input id="cname" name="cname" type="text" class="form-control" value="<?php echo set_value('cname'); ?>">
-                            <?php echo form_error('cname'); ?>
+    <section class="content mt-2">
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+          	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+          		<h5 class="text-warning" id="page-heading">Create Company</h5>
+          		<hr/>
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Name<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="cid" name="cid" type="hidden" class="form-control" value="<?php echo set_value('cid'); ?>">
+                          <input id="cname" name="cname" type="text" class="form-control" value="<?php echo set_value('cname'); ?>">
+                          <?php echo form_error('cname'); ?>
                         </div>
-                        <div class="mb-5">
-                            <label class="label block mb-2" for="address">Address<label class="text-red-500">*</label></label>
-                            <textarea id="address" class="form-control" name="address" rows="3"><?php echo set_value('address'); ?></textarea>
-                            <?php echo form_error('address'); ?>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Address<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <textarea id="address" class="form-control" name="address" rows="3"><?php echo set_value('address'); ?></textarea>
+                          <?php echo form_error('address'); ?>
                         </div>
-                        <div class="mb-5">
-                            <label class="label block mb-2" for="email">Email</label>
-                            <input id="email" name="email" type="email" class="form-control" value="<?php echo set_value('email'); ?>">
-                            <?php echo form_error('email'); ?>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">EMail<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="email" name="email" type="email" class="form-control" value="<?php echo set_value('email'); ?>">
+                          <?php echo form_error('email'); ?>
                         </div>
-                        <div class="mb-5">
-                            <label class="label block mb-2" for="contact">Contact<label class="text-red-500">*</label></label>
-                            <input id="contact" name="contact" type="number" class="form-control" value="<?php echo set_value('number'); ?>">
-                            <?php echo form_error('contact'); ?>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="contact" name="contact" type="number" class="form-control" value="<?php echo set_value('contact'); ?>">
+                          <?php echo form_error('contact'); ?>
                         </div>
-                        <div class="mb-5">
-                            <label class="label block mb-2" for="alternet_no">Alternet No.</label>
-                            <input id="alternet_no" name="alternet_no" type="number" class="form-control" value="<?php echo set_value('alternet_no'); ?>">
-                            <?php echo form_error('alternet_no'); ?>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Alternet No.</label>
+                        <div class="col-sm-8">
+                          <input id="alternet_no" name="alternet_no" type="number" class="form-control" value="<?php echo set_value('alternet_no'); ?>">
+                          <?php echo form_error('alternet_no'); ?>
                         </div>
-
-                        <div class="mt-12 text-center">
-                          <input type="submit" class="btn btn_success mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="company-create" value="Create">
-                          <button class="btn btn_secondary mt-5 ltr:mr-2 rtl:ml-2 uppercase" id="company-update" style="display:none;">Update</button>
-
-                          <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                          <input type="reset" class="btn btn_outlined btn_secondary mt-5 uppercase" id="reset-btn" value="Reset">
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-            <!-- Recent -->
-            <div class="lg:w-1/2 xl:w-3/4 lg:px-4">
-                <div class="relative card p-0">
-                    <div class="lg:w-2/2">
-                      <div class="card p-5">
-                          <h3>Company List</h3>
-                          <table class="table w-full mt-3">
-                              <thead>
-                                  <tr>
-                                    <th class="text-center uppercase">S.No.</th>
-                                    <th class="text-center uppercase">Name</th>
-                                    <th class="text-center uppercase">Contact No</th>
-                                    <th class="text-center uppercase">Alternet No</th>
-                                    <th class="text-center uppercase">Email</th>
-                                    <th class="text-center uppercase">Action</th>
-                                  </tr>
-                              </thead>
-                              <tbody id="companyList">
-                                <?php $c=1; foreach($companies as $company){ ?>
-                                    <tr>
-                                        <td class="text-center"><?= $c++; ?></td>
-                                        <td class="text-center"><?= $company['name']; ?></td>
-                                        <td class="text-center"><?= $company['contact_no']; ?></td>
-                                        <td class="text-center"><?= $company['alternet_no']; ?></td>
-                                        <td class="text-center"><?= $company['email']; ?></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="company_edit" data-id="<?= $company['cid']; ?>"><i class="la la-pencil"></i></a>
-                                            <a href="javascript:void(0);" class="company_delete" data-id="<?= $company['cid']; ?>"><i class="la la-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-                </div>
-            </div>
-        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                      <input type="submit" class="btn btn-outline-success uppercase" id="company-create" value="Create">
+                      <button class="btn btn-outline-warning uppercase" id="company-update" style="display:none;">Update</button>
     
-
+                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                    </div>
+                </form>
+          	</div>
+          	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
+          		<div class="table-responsive">
+                    <table class="table table-bordered ">
+                        <thead>
+                            <tr class="bg-dark">
+                            <th class="text-center uppercase">S.No.</th>
+                            <th class="text-center uppercase">Company Name</th>
+                            <th class="text-center uppercase">Contact No</th>
+                            <th class="text-center uppercase">Alternet No</th>
+                            <th class="text-center uppercase">Email</th>
+                            <th class="text-center uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companyList">
+                            <?php $c=1; foreach($companies as $company){ ?>
+                                <tr>
+                                    <td class="text-center"><?= $c++; ?></td>
+                                    <td class="text-center"><?= $company['name']; ?></td>
+                                    <td class="text-center"><?= $company['contact_no']; ?></td>
+                                    <td class="text-center"><?= $company['alternet_no']; ?></td>
+                                    <td class="text-center"><?= $company['email']; ?></td>
+                                    <td class="text-center">
+                                        <a href="javascript:void(0);" class="company_edit" data-id="<?= $company['cid']; ?>"><i class="fas fa-edit"></i></a>
+                                        <a href="javascript:void(0);" class="company_delete ml-2" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                  </div>
+          	</div>
+          </div>
+          
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+    </section>
+    
 
     <script>
     const baseUrl = $('#base_url').val();
@@ -104,6 +113,7 @@
                 });    
             request.done(function( response ) {
                 if(response.status == 200){
+                	$('#page-heading').html('Update Company');
                     $('#company-update').show();
                     $('#cancel-btn').show();
                     $('#company-create').hide();
@@ -123,6 +133,7 @@
       });
 
       $('#cancel-btn').on('click',function(){
+      		$('#page-heading').html('Create Company');
             $('#company-update').hide();
             $('#cancel-btn').hide();
             $('#company-create').show();
@@ -151,6 +162,12 @@
       });
 
 
+	$(document).on('click','#add_more',function(){
+		$('#exampleModal').modal({
+			show : true,
+			keyboard : false
+		})
+	});
 
       function reload(){
         $.ajax({
@@ -171,8 +188,8 @@
                             '<td class="text-center">'+ value.alternet_no +'</td>'+
                             '<td class="text-center">'+ value.email +'</td>'+
                             '<td class="text-center">'+
-                                '<a href="javascript:void(0);" class="company_edit" data-id="'+ value.cid +'"><i class="la la-pencil"></i></a>'+
-                                '<a href="javascript:void(0);" class="company_delete" data-id="'+ value.cid +'"><i class="la la-trash"></i></a>'+
+                                '<a href="javascript:void(0);" class="company_edit" data-id="'+ value.cid +'"><i class="fas fa-edit"></i></a>'+
+                                '<a href="javascript:void(0);" class="company_delete" data-id="'+ value.cid +'"><i class="fas fa-trash"></i></a>'+
                             '</td>'+
                         '</tr>';
 
@@ -182,4 +199,6 @@
             }
         });
       }
+
+
     </script>

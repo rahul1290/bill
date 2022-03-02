@@ -47,9 +47,9 @@ class Costcenter_ctrl extends CI_Controller {
 			$data['main_content'] = $this->load->view('master/cost-center',$data,true);
 	  		$this->load->view('admin_layout',$data);
 		} else {
-			$this->form_validation->set_rules('cname', 'Company name', 'required|trim');
-			$this->form_validation->set_rules('company', 'Compnay address', 'required|trim');
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_rules('cname', 'Cost-Center name', 'required|trim');
+			$this->form_validation->set_rules('company', 'Compnay', 'required|trim');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$cid = $this->input->post('cid');
 				$db_data['name'] = $this->input->post('cname');

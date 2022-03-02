@@ -19,8 +19,8 @@ class Meter_ctrl extends CI_Controller {
 		}
 	}
 
-	function getMeters(){
-		$result = $this->Meter_model->meter_list();
+	function getMeters($mid=null){
+		$result = $this->Meter_model->meter_list($mid);
 		
 		if(!is_null($result) && count($result)>0){
 			echo json_encode(array('data'=>$result,'status'=>200));
@@ -59,15 +59,18 @@ class Meter_ctrl extends CI_Controller {
 			$data['main_content'] = $this->load->view('master/meter',$data,true);
 	  		$this->load->view('admin_layout',$data);
 		} else {
-			print_r($this->input->post());
 			$this->form_validation->set_rules('bpno', 'BP no.', 'required|trim');
 			$this->form_validation->set_rules('mtype', 'Meter type', 'required|trim');
+			if($this->input->post('mtype') == 'sub-meter'){
+			    $this->form_validation->set_rules('main_meter', 'Main Meter', 'required|trim');
+			}
 			$this->form_validation->set_rules('cid', 'Company', 'required|trim');
 			$this->form_validation->set_rules('costc_id', 'Cost-center', 'required|trim');
 			$this->form_validation->set_rules('loc_id', 'Location', 'required|trim');
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$mid = $this->input->post('mid');
+				$db_data['parent_meter'] = $this->input->post('main_meter');
 				$db_data['bpno'] = $this->input->post('bpno');
 				$db_data['mtype'] = $this->input->post('mtype');
 				$db_data['cid'] = $this->input->post('cid');
@@ -111,11 +114,110 @@ class Meter_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
-
-
-  function merter_reading(){
-	$data['companies'] = $this->Company_model->company_list();
-	$data['main_content'] = $this->load->view('meter_reading',$data,true);
-	$this->load->view('admin_layout',$data);
+  
+  
+  function bill_upload(){
+      $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+      
+      if ($this->input->server('REQUEST_METHOD') === 'GET') {
+          $data['main_content'] = $this->load->view('bill-upload',$data,true);
+          $this->load->view('admin_layout',$data);
+      } else {
+          $this->form_validation->set_rules('serviceno', 'Service No', 'required|trim');
+          $this->form_validation->set_rules('billing_period_from', 'Billing Period From', 'required|trim');
+          $this->form_validation->set_rules('billing_period_to', 'Billing Period To', 'required|trim');
+          $this->form_validation->set_rules('bill_no', 'Bill No', 'required|trim');
+          $this->form_validation->set_rules('bill_date', 'Bill Date', 'required|trim');
+          $this->form_validation->set_rules('due_date', 'Due Date', 'required|trim');
+          $this->form_validation->set_rules('current_reading', 'Current Reading', 'required|trim');
+          $this->form_validation->set_rules('current_reading_date', 'Current Reading Date', 'required|trim');
+          $this->form_validation->set_rules('previous_reading', 'Previous Reading', 'required|trim');
+          $this->form_validation->set_rules('total_consumption', 'Total Consumption', 'required|trim');
+          $this->form_validation->set_rules('highest_demand_rating', 'Highest Demand Rating', 'required|trim');
+          $this->form_validation->set_rules('sum', 'Sum', 'required|trim');
+          $this->form_validation->set_rules('cess', 'cess', 'required|trim');
+          $this->form_validation->set_rules('concession_amount', 'Concession Amount', 'required|trim');
+          $this->form_validation->set_rules('vca', 'VCA', 'required|trim');
+          $this->form_validation->set_rules('past_due', 'Past Due', 'required|trim');
+          $this->form_validation->set_rules('payable_amount', 'Payable Amount', 'required|trim');
+          $this->form_validation->set_rules('surcharge', 'surcharge', 'required|trim');
+          
+          $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+          if ($this->form_validation->run()){
+              $db_data['sno_id'] = $this->input->post('serviceno');
+              $db_data['from_date'] = $this->input->post('billing_period_from');
+              $db_data['to_date'] = $this->input->post('billing_period_to');
+              $db_data['bill_no'] = $this->input->post('bill_no');
+              $db_data['date_of_bill'] = $this->input->post('bill_date');
+              $db_data['due_date'] = $this->input->post('due_date');
+              $db_data['reading'] = $this->input->post('current_reading');
+              $db_data['reading_date'] = $this->input->post('current_reading_date');
+              $db_data['power_consumption'] = $this->input->post('power_consumption');
+              $db_data['power_factor'] =   $this->input->post('power_factor');
+              $db_data['total_consumption'] = $this->input->post('total_consumption');
+              $db_data['highest_demand_reading'] = $this->input->post('highest_demand_rating');
+              $db_data['je_ae_name'] = $this->input->post('je_ae_name');
+              $db_data['je_ae_contact_no'] = $this->input->post('je_ae_contact');
+              $db_data['ae_ee_name'] = $this->input->post('ae_ee_name');
+              $db_data['ae_ee_contact_no'] = $this->input->post('ae_ee_contact');
+              $db_data['fixed_demand_charges'] = $this->input->post('fix_demand');
+              $db_data['minimum_charges'] = $this->input->post('minimum_charge');
+              $db_data['energy_charges'] = $this->input->post('energy_charges');
+              $db_data['total_charges'] = $this->input->post('sum');
+              $db_data['electricity_duty'] = $this->input->post('electricity_duty');
+              $db_data['cess'] = $this->input->post('cess');
+              $db_data['welding_capacitor_overload'] = $this->input->post('capacitor_overload');
+              $db_data['meter_fare'] = $this->input->post('meter_fare');
+              $db_data['vca_charge'] = $this->input->post('vca');
+              $db_data['security_deposit'] = $this->input->post('security_deposit');
+              $db_data['concession_amount'] = $this->input->post('concession_amount');
+              $db_data['total_bill'] = $this->input->post('total_bill');
+              $db_data['deviation_adjustment'] = $this->input->post('deviation');
+              $db_data['past_dues'] = $this->input->post('past_due');
+              $db_data['security_fund_outstanding'] = $this->input->post('security_fund_outstanding');
+              $db_data['payable_amount'] =$this->input->post('payable_amount');
+              $db_data['extra'] = $this->input->post('extra');
+              $db_data['gross_amount'] = $this->input->post('surcharge');
+              $db_data['overload'] = $this->input->post('overload');
+              $db_data['image'] = '';
+              $db_data['created_at'] = date('Y-m-d');
+              $db_data['created_by'] = $this->session->userdata('user_id');
+              $result = $this->Meter_model->bill_entry($db_data);
+              if(!is_null($result)){
+                  redirect(current_url());
+              }
+          } else {
+              $data['main_content'] = $this->load->view('bill-upload',$data,true);
+              $this->load->view('admin_layout',$data);
+          }
+      }
+  }
+  
+  function meter_reading(){
+      if($this->session->userdata('role') == 'super_admin'){
+        $data['service_no'] = $this->Meter_model->meterlistUserWise();
+      }  else {
+        $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+      }
+      
+      if ($this->input->server('REQUEST_METHOD') === 'GET') {
+          $data['main_content'] = $this->load->view('meter-reading',$data,true);
+          $this->load->view('admin_layout',$data);
+      } else {
+          $this->form_validation->set_rules('serviceno', 'Service No', 'required|trim');
+          $this->form_validation->set_rules('company', 'Company', 'required|trim');
+          $this->form_validation->set_rules('costcenter', 'Cost-Center', 'required|trim');
+          $this->form_validation->set_rules('location', 'location', 'required|trim');
+          $this->form_validation->set_rules('reading_date', 'Reading Date', 'required|trim');
+          $this->form_validation->set_rules('reading_value', 'Reading Value', 'required|trim');
+          
+          $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+          if ($this->form_validation->run()){
+              
+          } else {
+              $data['main_content'] = $this->load->view('meter-reading',$data,true);
+              $this->load->view('admin_layout',$data);
+          }
+      }
   }
 }
