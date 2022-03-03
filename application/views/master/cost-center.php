@@ -13,7 +13,7 @@
                         <div class="col-sm-8">
                           <input id="cid" name="cid" type="hidden" class="form-control" value="<?php echo set_value('cid'); ?>">
                           <select id="company" name="company" class="form-control">
-                            <option value="" selected>Select company</option>
+                            <option value="" selected>Select Company</option>
                                 <?php foreach($companies as $company){ ?>
                                     <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
                                 <?php } ?>
@@ -23,7 +23,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Costcenter Name<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Cost Center Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="cname" name="cname" type="text" class="form-control" value="<?php echo set_value('cname'); ?>">
                           <?php echo form_error('cname'); ?>
@@ -45,7 +45,7 @@
                           <thead>
                               <tr>
                                 <th class="text-center uppercase">S.No.</th>
-                                <th class="text-center uppercase">Cost-center Name</th>
+                                <th class="text-center uppercase">Cost Center Name</th>
                                 <th class="text-center uppercase">Company Name</th>
                                 <th class="text-center uppercase">Created At</th>
                                 <th class="text-center uppercase">Created By</th>

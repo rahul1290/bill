@@ -7,7 +7,7 @@
           		<table class="table table-bordered text-center">
                   <thead>
                     <tr>
-                      <th>Sno.</th>
+                      <th>S.No.</th>
                       <th>Service No.</th>
                       <th>Reading value</th>
                       <th>Reading Date</th>

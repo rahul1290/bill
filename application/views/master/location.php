@@ -13,7 +13,7 @@
                         <div class="col-sm-8">
                           <input id="lid" name="lid" type="hidden" class="form-control" value="<?php echo set_value('lid'); ?>">
                           <select id="cost_center" name="cost_center" class="form-control">
-                            <option value="" selected>Select cost-center</option>
+                            <option value="" selected>Select Cost-Center</option>
                                 <?php foreach($costceners as $costcener){ ?>
                                     <option value="<?php echo $costcener['costc_id']; ?>"><?php echo $costcener['name']; ?></option>
                                 <?php } ?>
@@ -46,7 +46,7 @@
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
                                     <th class="text-center uppercase">Location Name</th>
-                                    <th class="text-center uppercase">Cost-center / Company Name</th>
+                                    <th class="text-center uppercase">Cost-Center / Company Name</th>
                                     <th class="text-center uppercase">Created At</th>
                                     <th class="text-center uppercase">Created By</th>
                                     <th class="text-center uppercase">Action</th>

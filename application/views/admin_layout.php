@@ -24,7 +24,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../../index3.html" class="nav-link">Home</a>
+        <a href="<?php echo base_url(); ?>" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -157,9 +157,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.png" alt="Ebill Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Ebill</span>
+    <a style="background-color:#f1f1f1;" href="<?php echo base_url(); ?>" class="brand-link">
+      <img src="<?php echo base_url(); ?>assets/images/logo.png" alt="E-bill" class="brand-image" style="opacity: .8">
+      <span class="brand-text font-weight-bold " style="color:#000;">Electricity Bill</span>
     </a>
 
     <!-- Sidebar -->
@@ -167,10 +167,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="<?php echo base_url(); ?>assets/images/user-icon.png" class="img-circle elevation-2" alt="Naresh">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Naresh Singh</a>
         </div>
       </div>
 
@@ -210,12 +210,12 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
                 <a href="<?php echo base_url()?>master/Company" class="nav-link <?php if($this->uri->segment('2') == 'Company'){
                         echo "active";
                     }?>">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa-building nav-icon"></i>
                   <p>Company</p>
                 </a>
               </li>
@@ -225,14 +225,14 @@
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Cost-Centersd</p>
+                  <p>Cost Centersd</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url('master/Location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
                         echo 'active';
                     }?>">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa-map nav-icon"></i>
                   <p>Location</p>
                 </a>
               </li>
@@ -248,7 +248,7 @@
                 <a href="<?php echo base_url('master/User')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
                         echo 'active';
                     }?>">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa-user nav-icon"></i>
                   <p>User</p>
                 </a>
               </li>
@@ -260,7 +260,7 @@
             <a href="<?php echo base_url('Assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter'){
                     echo 'active';
                 }?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-user"></i>
               <p>
                 Assign User Task
 <!--                 <span class="right badge badge-danger">New</span> -->
@@ -273,9 +273,9 @@
             <a href="<?php echo base_url('Bill-upload'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Bill-upload'){
                     echo 'active';
                 }?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-upload"></i>
               <p>
-                Bill-Upload
+                Bill Upload
               </p>
             </a>
           </li>
@@ -284,16 +284,18 @@
             <a href="<?php echo base_url('Meter-Reading'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Meter-Reading'){
                     echo 'active';
                 }?>">
-              <i class="nav-icon fas fa-th"></i>
+              
+              <i class="nav-icon fas fa-bolt"></i>
               <p>
-                Meter-Reading
+                Meter Reading
               </p>
             </a>
           </li>
           
           <li class="nav-item">
             <a href="<?php echo base_url('Log-Out'); ?>" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-power-off"></i>
+        
               <p>
                 Log Out
               </p>
@@ -321,7 +323,7 @@
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 3.2.0
     </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2021-2022 <a href="<?php echo base_url(); ?>">e-bill</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
