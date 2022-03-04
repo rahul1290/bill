@@ -34,7 +34,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact No.<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="contact" name="contact" type="number" class="form-control" value="<?php echo set_value('contact'); ?>">
                           <?php echo form_error('contact'); ?>
@@ -42,10 +42,10 @@
                     </div>
                    
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Sex<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Gender<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <select name="sex" id="sex" class="form-control">
-                                <option value="">Select sex</option>
+                                <option value="">Select Gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
@@ -57,7 +57,7 @@
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Role<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <select name="utype" id="utype" class="form-control">
-                                <option value="">Select user role</option>
+                                <option value="">Select User Role</option>
                                 <?php foreach($user_types as $user_type){ ?>
                                 <option value="<?php echo $user_type['utype_id']; ?>"><?php echo $user_type['type_name']?></option>
                                 <?php } ?>
@@ -84,7 +84,7 @@
                                     <th class="text-center uppercase">Name</th>
                                     <th class="text-center uppercase">Email</th>
                                     <th class="text-center uppercase">Contact No.</th>
-                                    <th class="text-center uppercase">Sex</th>
+                                    <th class="text-center uppercase">Gender</th>
                                     <th class="text-center uppercase">Role</th>
                                     <th class="text-center uppercase">Action</th>
                                   </tr>

@@ -25,7 +25,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">EMail<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Email<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="email" name="email" type="email" class="form-control" value="<?php echo set_value('email'); ?>">
                           <?php echo form_error('email'); ?>
@@ -33,7 +33,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact No.<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="contact" name="contact" type="number" class="form-control" value="<?php echo set_value('contact'); ?>">
                           <?php echo form_error('contact'); ?>
@@ -64,8 +64,8 @@
                             <tr class="bg-dark">
                             <th class="text-center uppercase">S.No.</th>
                             <th class="text-center uppercase">Company Name</th>
-                            <th class="text-center uppercase">Contact No</th>
-                            <th class="text-center uppercase">Alternet No</th>
+                            <th class="text-center uppercase">Contact No.</th>
+                            <th class="text-center uppercase">Alternet No.</th>
                             <th class="text-center uppercase">Email</th>
                             <th class="text-center uppercase">Action</th>
                             </tr>

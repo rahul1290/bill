@@ -14,7 +14,7 @@
                             <div class="col-sm-8">
                               <input id="uid" name="uid" type="hidden" class="form-control" value="<?php echo set_value('uid'); ?>">
                               <select id="company" name="company" class="form-control">
-                                <option value="" selected>Select company</option>
+                                <option value="" selected>Select Company</option>
                                     <?php foreach($companies as $company){ ?>
                                         <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
                                     <?php } ?>
@@ -23,15 +23,19 @@
                             </div>
                         </div>
                     	<div class="col row">
-                            <label for="inputEmail3" class="col-sm-5 col-form-label">Costcenter<label class="text-danger">*</label></label>
-                            <div class="col-sm-7">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Cost-Center<label class="text-danger">*</label></label>
+                            <div class="col-sm-8">
                               <select id="costc_id" name="costc_id" class="form-control">
-                                <option value="">Select cost-center</option>
+                                <option value="">Select Cost-Center</option>
                             </select>
                             <?php echo form_error('costc_id'); ?>
                             </div>
                         </div>
-                        <div class="col row">
+                        
+                    </div>
+                    
+                    <div class="form-group row">
+                    <div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label">Location<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
                               <select id="loc_id" name="loc_id" class="form-control">
@@ -40,31 +44,30 @@
                               <?php echo form_error('loc_id'); ?>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <div class="col row">
+                    <div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label">Service No.<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
                               <select id="meter" name="meter" class="form-control">
-                                <option value="" selected>Select meter</option>
+                                <option value="" selected>Select Meter</option>
                               </select>
                               <?php echo form_error('meter'); ?>
                             </div>
                         </div>
                        
-                        <div class="col row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label">Submeter No.</label>
-                            <div class="col-sm-8">
-                              <select id="sub-meter" name="sub-meter" class="form-control">
-                                <option value="" selected>Select sub-meter</option>
-                              </select>
-                              <?php echo form_error('sub-meter'); ?>
-                            </div>
-                        </div>
+                        
                     </div>
                     
                     <div class="form-group row">
+                    <div class="col row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Submeter No.</label>
+                            <div class="col-sm-8">
+                              <select id="sub-meter" name="sub-meter" class="form-control">
+                                <option value="" selected>Select Sub-Meter</option>
+                              </select>
+                              <?php echo form_error('sub-meter'); ?>
+                            </div>
+                        </div>    
+                        <div class="col row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Employee<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <select id="user" name="user" class="form-control">
@@ -75,19 +78,30 @@
                           </select>
                         <?php echo form_error('user'); ?>
                         </div>
+                        </div>
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Task<label class="text-danger">*</label></label>
-                        <div class="col-sm-8">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Task<label class="text-danger">*</label></label>
+                        <div class="col-sm-10">
                           <div class="row">
-                          	<input class="" type="checkbox" name="meter_reading" style="margin-top:7px;"> Meter Reading
-                          	<input name="reading_frq" width="20" type="number" value="1" class="col-2 ml-2 mr-1">Days
+                          <div class="col-sm-2">
+                          <input class="" type="checkbox" name="meter_reading" style="margin-top:7px;"> Meter Reading
+                                </div>
+                                <div class="col-sm-8">
+                          	<input name="reading_frq" width="20" type="number" value="1" class=" mr-1">Days
+                                </div>
                           </div>
                           
                           <div class="row mt-2">
-                          	<input class="mr-2" type="checkbox" name="bill_upload" style="margin-top:6px;">Bill Upload
-                          	<input name="upload_frq" width="20" type="number" value="1" class="col-2 ml-2 mr-1"> Months
+                          
+                          <div class="col-sm-2">
+                          <input class="mr-2" type="checkbox" name="bill_upload" style="margin-top:6px;">Bill Upload
+                                </div>
+                                <div class="col-sm-8">
+                          	<input name="upload_frq" width="20" type="number" value="1" class=" mr-1"> Months
+                                </div>
+                                
                           </div>
                         </div>
                     </div>
