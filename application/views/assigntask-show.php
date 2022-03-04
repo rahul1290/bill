@@ -23,29 +23,35 @@
                       <tr>
                         <!-- S.No. -->
                         <td style="vertical-align: middle;"><?php echo $c++; ?></td>
-                        <?php $ic=0; foreach($records as $r) { 
+                        <?php $ic=1; foreach($records as $r) { 
                           if($r['parent_meter'] == $record['mid']){
                             $ic++;
                           }
-                        } ?> 
+                        } 
+                        if($ic == 1){
+                          $ic = 2;
+                        }
+                        ?> 
                         <!-- Service No. -->
-                        <td class="text-center" style="vertical-align: middle;height:<?php echo $ic * 30; ?>px;"><?php echo $record['bpno']; ?></td>
+                        <td class="text-center m-0 p-0" style="vertical-align: middle;height:<?php echo (($ic-1) * 2) * 30; ?>px;"><?php echo $record['bpno']; ?></td>
                         <!-- Sub Meter -->
-                        <td style="height:<?php echo $ic * 30; ?>px;" class="text-center m-0 p-0">
-                          <table width="100%" style="height:100%;">
+                        <td class="text-center m-0 p-0">
+                          <table width="100%" style="border:0px;">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<tr><td style='vertical-align: middle;height:".($ic*30)/$ic."px;'>".$r['bpno']."</td></tr>";
+                                echo "<tr><td class='m-0 p-0' style='height:".(((($ic-1) * 2) * 30)/($ic-1))."px;vertical-align: middle;'>".$r['bpno']."</td></tr>";
                               }
                             } ?> 
                           </table>
                         </td>
+
+                        
                         <!-- Location -->
-                        <td style="height:30px;" class="text-center m-0 p-0">
-                          <table width="100%" style="height:100%;">
+                        <td class="text-center m-0 p-0">
+                          <table width="100%" style="border:0px;">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<tr><td style='vertical-align: middle;'>".$r['location']."</td></tr>";
+                                echo "<tr><td class='m-0 p-0' style='height:".(((($ic-1) * 2) * 30)/($ic-1))."px;vertical-align: middle;'>".$r['location']."</td></tr>";
                               }
                             } ?> 
                           </table>
@@ -54,22 +60,22 @@
                         <td class="text-center m-0 p-0">
                             <?php if($ic > 0) { foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<table width='100%' style='height:100%'>
+                                echo "<table width='100%' style='border:0px;'>
                                   <tr>
-                                    <td style='height:15px;'>Meter Reading</td>
+                                    <td class='m-0 p-0' style='height:30px;'>Meter Reading</td>
                                   </tr>
                                   <tr>
-                                    <td style='height:15px;'>Bill Upload</td>
+                                    <td class='m-0 p-0' style='height:30px;'>Bill Upload</td>
                                   </tr>
                                 </table>";
                               }
                             } } else { ?>
-                                <table width='100%' style='height:100%'>
+                                <table width='100%' style='border:0px;'>
                                   <tr>
-                                    <td style='height:15px;'>Meter Reading</td>
+                                    <td class='m-0 p-0' style='height:30px;'>Meter Reading</td>
                                   </tr>
                                   <tr>
-                                    <td style='height:15px;'>Bill Upload</td>
+                                    <td class='m-0 p-0' style='height:30px;'>Bill Upload</td>
                                   </tr>
                                 </table>
                             <?php } ?> 
@@ -80,8 +86,8 @@
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
-                                    <td style='height:15px;' class='m-0 p-0'>
-                                      <select style='width:100%;' class='form-control'>
+                                    <td style='' class='m-0 p-0'>
+                                      <select style='width:100%;height:30px;'>
                                         <option value=''>Select User</option>";
                                         foreach($users as $user){
                                           if($user['uid'] == $r['user_id']){
@@ -94,8 +100,8 @@
                                     </td>
                                   </tr>
                                   <tr>
-                                  <td style='height:15px;' class='m-0 p-0'>
-                                    <select style='width:100%;' class='form-control'>
+                                  <td style='' class='m-0 p-0'>
+                                    <select style='width:100%;height:30px;'>
                                       <option value=''>Select User</option>";
                                       foreach($users as $user){
                                         if($user['uid'] == $r['user_id']){
@@ -111,6 +117,7 @@
                               }
                             } ?> 
                         </td>
+                        
                         <!-- Frequency -->
                         <td class="text-center m-0 p-0">
                             <?php foreach($records as $r) { 
@@ -118,19 +125,18 @@
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input type='number' class='form-control'/>
+                                      <input style='height:30px;' type='number'/>
                                     </td>
                                   </tr>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input type='number' class='form-control'/>
+                                      <input style='height:30px;' type='number'/>
                                     </td>
                                   </tr>
                                 </table>";
                               }
                             } ?> 
                         </td>
-
                       </tr>
                   <?php } ?>
                 </tbody>
