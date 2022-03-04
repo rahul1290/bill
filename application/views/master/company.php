@@ -4,7 +4,7 @@
         <div class="card-body">
           <div class="row">
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-          		<h5 class="text-warning" id="page-heading">Create Company</h5>
+          		<h5 class="text-primary" id="page-heading">Create Company</h5>
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
                     <div class="form-group row">
@@ -25,7 +25,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">EMail<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Email<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="email" name="email" type="email" class="form-control" value="<?php echo set_value('email'); ?>">
                           <?php echo form_error('email'); ?>
@@ -33,7 +33,7 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Contact No.<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="contact" name="contact" type="number" class="form-control" value="<?php echo set_value('contact'); ?>">
                           <?php echo form_error('contact'); ?>
@@ -48,24 +48,24 @@
                         </div>
                     </div>
                     
-                    <div class="text-center">
-                      <input type="submit" class="btn btn-outline-success uppercase" id="company-create" value="Create">
-                      <button class="btn btn-outline-warning uppercase" id="company-update" style="display:none;">Update</button>
+                    <div class="text-center mb-4">
+                      <input type="submit" class="btn btn-success uppercase" id="company-create" value="Create">
+                      <button class="btn btn-warning uppercase" id="company-update" style="display:none;">Update</button>
     
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                      <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                     </div>
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
                     <table class="table table-bordered ">
-                        <thead>
-                            <tr class="bg-dark">
+                        <thead class="bg-light">
+                            <tr>
                             <th class="text-center uppercase">S.No.</th>
                             <th class="text-center uppercase">Company Name</th>
-                            <th class="text-center uppercase">Contact No</th>
-                            <th class="text-center uppercase">Alternet No</th>
+                            <th class="text-center uppercase">Contact No.</th>
+                            <th class="text-center uppercase">Alternet No.</th>
                             <th class="text-center uppercase">Email</th>
                             <th class="text-center uppercase">Action</th>
                             </tr>
@@ -91,11 +91,7 @@
           </div>
           
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
+        
       </div>
       <!-- /.card -->
     </section>
