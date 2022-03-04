@@ -5,6 +5,7 @@ class Meter_ctrl extends CI_Controller {
 
 	function __construct() {
     parent::__construct();
+    $this->load->library('upload');
 		$this->load->database();
 		$this->load->model(array('Costcenter_model','Company_model','Location_model','Meter_model'));
   }
@@ -194,10 +195,17 @@ class Meter_ctrl extends CI_Controller {
   }
   
   function meter_reading(){
-      if($this->session->userdata('role') == 'super_admin'){
+      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
         $data['service_no'] = $this->Meter_model->meterlistUserWise();
+        $data['companies'] = $this->db->query("select * from company_master where status = 1")->result_array();
+        $data['readings'] = $this->Meter_model->show_meter_readings();
       }  else {
         $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+        $data['companies'] = $this->db->query("select * from company_master where cid in (
+          select cid from meter_master 
+          WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = 5)
+          GROUP by cid)")->result_array();
+        $data['readings'] = $this->Meter_model->show_meter_readings($this->session->userdata('user_id'));
       }
       
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
@@ -210,16 +218,35 @@ class Meter_ctrl extends CI_Controller {
           $this->form_validation->set_rules('location', 'location', 'required|trim');
           $this->form_validation->set_rules('reading_date', 'Reading Date', 'required|trim');
           $this->form_validation->set_rules('reading_value', 'Reading Value', 'required|trim');
+
+          $config = array(
+            'upload_path' => APPPATH."../upload/",
+            'allowed_types' => "gif|jpg|png|jpeg|pdf",
+            'encrypt_name' => TRUE,
+            // 'overwrite' => TRUE,
+            // 'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            // 'max_height' => "768",
+            // 'max_width' => "1024"
+          );
+          $this->upload->initialize($config);
+          $this->load->library('upload', $config);
+          if($this->upload->do_upload('userfile')){
+            $fdata = array('upload_data' => $this->upload->data());
+            $db_data['image'] = $fdata['upload_data']['file_name'];
+          }
           
           $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
           if ($this->form_validation->run()){
               $db_data['bpno'] = $this->input->post('serviceno');
               $db_data['user_id'] = $this->session->userdata('user_id');
-              $db_data['reading_date'] = $this->input->post('reading_date');
+              $db_data['reading_date'] = date('Y-m-d', strtotime(str_replace('/','-',$this->input->post('reading_date'))));
               $db_data['reading_value'] = $this->input->post('reading_value');
               $db_data['created_at'] = date('Y-m-d');
               $db_data['created_by'] = $this->session->userdata('user_id');
               if($this->Meter_model->meter_reading($db_data)){
+                $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                Meter reading submitted.
+              </div>');
                 redirect(current_url());
               }
           } else {
@@ -236,7 +263,7 @@ class Meter_ctrl extends CI_Controller {
       } else {
         $data['readings'] = $this->Meter_model->show_meter_readings($user_id);
       }
-
+      print_r($this->db->last_query()); die;
       $data['main_content'] = $this->load->view('meter-reading-show',$data,true);
       $this->load->view('admin_layout',$data);
   }

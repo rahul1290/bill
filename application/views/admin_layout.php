@@ -7,11 +7,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="<?php echo base_url('assets')?>/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="<?php echo base_url('assets')?>/css/adminlte.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   
   <script src="<?php echo base_url('assets')?>/plugins/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url('assets')?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?php echo base_url('assets')?>/js/adminlte.min.js"></script>
 <script src="<?php echo base_url('assets')?>/js/demo.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
