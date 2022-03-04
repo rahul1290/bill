@@ -1,14 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Mar 02, 2022 at 10:07 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.8
+-- Host: 127.0.0.1
+-- Generation Time: Mar 04, 2022 at 01:30 PM
+-- Server version: 10.1.30-MariaDB
+-- PHP Version: 5.6.33
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -68,7 +69,7 @@ CREATE TABLE `bill` (
   `image` varchar(200) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -86,7 +87,7 @@ CREATE TABLE `company_master` (
   `email` varchar(200) DEFAULT NULL,
   `created_at` date NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -109,7 +110,7 @@ CREATE TABLE `cost_center_master` (
   `name` varchar(50) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -134,7 +135,7 @@ CREATE TABLE `location_master` (
   `name` varchar(200) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -162,7 +163,7 @@ CREATE TABLE `meter_master` (
   `loc_id` int(255) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -178,8 +179,8 @@ INSERT INTO `meter_master` (`mid`, `parent_meter`, `bpno`, `mtype`, `cid`, `cost
 (6, NULL, 'bpno-104', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
 (7, 1, 'bpno-105', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
 (8, NULL, 'bpno-106', 'main-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(10, 0, 'bpno-107', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(11, 0, 'bpno-108', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
+(10, NULL, 'bpno-107', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
+(11, NULL, 'bpno-108', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
 (12, 8, 'bpno-109', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1);
 
 -- --------------------------------------------------------
@@ -194,17 +195,20 @@ CREATE TABLE `meter_reading` (
   `user_id` int(255) NOT NULL,
   `reading_date` date NOT NULL,
   `reading_value` varchar(20) NOT NULL,
+  `image` varchar(500) DEFAULT NULL,
   `created_at` date NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `meter_reading`
 --
 
-INSERT INTO `meter_reading` (`mr_id`, `bpno`, `user_id`, `reading_date`, `reading_value`, `created_at`, `created_by`, `status`) VALUES
-(1, 1, 5, '2022-03-02', '3450', '2022-03-02', 5, 1);
+INSERT INTO `meter_reading` (`mr_id`, `bpno`, `user_id`, `reading_date`, `reading_value`, `image`, `created_at`, `created_by`, `status`) VALUES
+(1, 1, 5, '2022-03-02', '100', 'b98a36bf384a7f2afe46f9d278376240.png', '2022-03-03', 5, 1),
+(2, 1, 5, '2022-03-03', '200', 'b98a36bf384a7f2afe46f9d278376240.png', '2022-03-03', 5, 1),
+(3, 4, 5, '2022-03-04', '300', 'b98a36bf384a7f2afe46f9d278376240.png', '2022-03-03', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -217,13 +221,13 @@ CREATE TABLE `task_assign` (
   `sno_id` int(255) NOT NULL,
   `sub_meter_id` int(255) DEFAULT NULL,
   `user_id` int(255) NOT NULL,
-  `meter_reading` tinyint(1) NOT NULL DEFAULT 0,
+  `meter_reading` tinyint(1) NOT NULL DEFAULT '0',
   `reading_frq` int(11) DEFAULT NULL,
-  `bill_upload` tinyint(1) NOT NULL DEFAULT 0,
+  `bill_upload` tinyint(1) NOT NULL DEFAULT '0',
   `upload_frq` int(11) DEFAULT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -252,7 +256,7 @@ CREATE TABLE `users` (
   `sex` enum('male','female') NOT NULL,
   `created_by` int(255) DEFAULT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -273,7 +277,7 @@ INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `p
 CREATE TABLE `user_type` (
   `utype_id` int(255) NOT NULL,
   `type_name` varchar(100) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -376,13 +380,13 @@ ALTER TABLE `bill`
 -- AUTO_INCREMENT for table `company_master`
 --
 ALTER TABLE `company_master`
-  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cost_center_master`
 --
 ALTER TABLE `cost_center_master`
-  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `location_master`
@@ -400,7 +404,7 @@ ALTER TABLE `meter_master`
 -- AUTO_INCREMENT for table `meter_reading`
 --
 ALTER TABLE `meter_reading`
-  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `task_assign`
