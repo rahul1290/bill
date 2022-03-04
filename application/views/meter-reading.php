@@ -3,9 +3,9 @@
       <div class="card">
         <div class="card-body">
           		<span class="text-warning" id="page-heading">Meter Reading</span>
-              <span class="pull-right" style="float: right;">
-                <a class="btn btn-sm btn-primary" href="<?php echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
-              </span>
+              <!-- <span class="pull-right" style="float: right;">
+                <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
+              </span> -->
           		<hr/>
               <div class="row">
                 <div class="col-5">
@@ -92,6 +92,7 @@
                 </div>
 
                 <div class="col-7">
+                  <p class="text-lg text-bold text-info bg-success pl-2 mb-0">Pending Readings</p>
                   <table class="table table-bordered">
                     <thead>
                       <tr>
@@ -109,8 +110,21 @@
                             <td><?php echo $c++; ?></td>
                             <td><?php echo $reading['cost_center']; ?></td>
                             <td><?php echo $reading['location_name']; ?></td>
-                            <td><?php echo $reading['bpno']; ?></td>
-                            <td><?php echo $reading['bpno']; ?></td>
+                            <td>
+                              <?php if($reading['mtype'] == 'sub-meter'){ ?>
+                                <?php echo $reading['parent_meter'];
+                               } else {
+                                echo $reading['bpno'];
+                              } ?>
+                            </td>
+                            <td>
+                              <?php if($reading['mtype'] == 'main-meter'){ ?>
+                                <?php echo $reading['parent_meter']; ?>
+                              <?php } else { ?>
+                                <?php echo $reading['bpno']; ?>
+                              <?php } ?>
+                            </td>
+                            <td><?php echo $reading['last_reading_date']; ?></td>
                           </tr>
                         <?php } ?>
                     </tbody>

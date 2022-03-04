@@ -80,7 +80,7 @@
           <img src="<?php echo base_url(); ?>assets/images/user-icon.png" class="img-circle elevation-2" alt="Naresh">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Naresh Singh</a>
+          <a href="#" class="d-block"><?php echo ucfirst($this->session->userdata('name')); ?></a>
         </div>
       </div>
 
