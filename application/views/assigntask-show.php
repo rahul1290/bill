@@ -35,7 +35,7 @@
                           <table width="100%" style="height:100%;">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<tr><td style='height:".($ic*30)/$ic."px;'>".$r['bpno']."</td></tr>";
+                                echo "<tr><td style='vertical-align: middle;height:".($ic*30)/$ic."px;'>".$r['bpno']."</td></tr>";
                               }
                             } ?> 
                           </table>
@@ -45,14 +45,14 @@
                           <table width="100%" style="height:100%;">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<tr><td>".$r['location']."</td></tr>";
+                                echo "<tr><td style='vertical-align: middle;'>".$r['location']."</td></tr>";
                               }
                             } ?> 
                           </table>
                         </td>
                         <!-- Task -->
                         <td class="text-center m-0 p-0">
-                            <?php foreach($records as $r) { 
+                            <?php if($ic > 0) { foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
@@ -63,7 +63,16 @@
                                   </tr>
                                 </table>";
                               }
-                            } ?> 
+                            } } else { ?>
+                                <table width='100%' style='height:100%'>
+                                  <tr>
+                                    <td style='height:15px;'>Meter Reading</td>
+                                  </tr>
+                                  <tr>
+                                    <td style='height:15px;'>Bill Upload</td>
+                                  </tr>
+                                </table>
+                            <?php } ?> 
                         </td>
                         <!-- Assign user -->
                         <td class="text-center m-0 p-0">
@@ -71,24 +80,51 @@
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
-                                    <td style='height:15px;'>&nbsp;".$r['user_id']."</td>
+                                    <td style='height:15px;' class='m-0 p-0'>
+                                      <select style='width:100%;' class='form-control'>
+                                        <option value=''>Select User</option>";
+                                        foreach($users as $user){
+                                          if($user['uid'] == $r['user_id']){
+                                            echo "<option value='".$user['uid']."' selected>".$user['fname']."</option>";
+                                          } else {
+                                            echo "<option value='".$user['uid']."'>".$user['fname']."</option>";
+                                          }
+                                        }
+                                      echo "</select>
+                                    </td>
                                   </tr>
                                   <tr>
-                                    <td style='height:15px;'>&nbsp;".$r['user_id']."</td>
+                                  <td style='height:15px;' class='m-0 p-0'>
+                                    <select style='width:100%;' class='form-control'>
+                                      <option value=''>Select User</option>";
+                                      foreach($users as $user){
+                                        if($user['uid'] == $r['user_id']){
+                                          echo "<option value='".$user['uid']."' selected>".$user['fname']."</option>";
+                                        } else {
+                                          echo "<option value='".$user['uid']."'>".$user['fname']."</option>";
+                                        }
+                                      }
+                                    echo "</select>
+                                  </td>
                                   </tr>
                                 </table>";
                               }
                             } ?> 
                         </td>
+                        <!-- Frequency -->
                         <td class="text-center m-0 p-0">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
-                                    <td style='height:15px;'>&nbsp;".$r['reading_frq']."</td>
+                                    <td class='m-0 p-0'>
+                                      <input type='number' class='form-control'/>
+                                    </td>
                                   </tr>
                                   <tr>
-                                    <td style='height:15px;'>&nbsp;".$r['upload_frq']."</td>
+                                    <td class='m-0 p-0'>
+                                      <input type='number' class='form-control'/>
+                                    </td>
                                   </tr>
                                 </table>";
                               }

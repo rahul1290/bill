@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="<?php echo base_url('assets')?>/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="<?php echo base_url('assets')?>/css/adminlte.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="icon" type="image/png" href="<?php echo base_url('assets')?>/images/favicon.png">
   
   <script src="<?php echo base_url('assets')?>/plugins/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url('assets')?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -45,15 +46,18 @@
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link text-capitalize" data-toggle="dropdown" href="#">
-          <?php //echo $this->session->userdata('name'); ?>
           <i class="fa fa-user-cog"></i>
           <!-- <span class="badge badge-warning navbar-badge">15</span> -->
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header"></span>
+          
+          <div class="dropdown-divider"></div>
+          <a href="" class="dropdown-item text-capitalize">
+            <i class="fas fa-user mr-2"></i> <?php echo $this->session->userdata('name'); ?>
+          </a>
           <div class="dropdown-divider"></div>
           <a href="<?php echo base_url('Log-Out'); ?>" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> LogOut
+            <i class="fas fa-power-off mr-2"></i> LogOut
           </a>
           <!-- <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a> -->
