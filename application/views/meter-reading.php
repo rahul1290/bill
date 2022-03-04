@@ -2,7 +2,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-          		<span class="text-warning" id="page-heading">Meter Reading</span>
+          		<span class="text-primary" id="page-heading">Meter Reading</span>
               <span class="pull-right" style="float: right;">
                 <a class="btn btn-sm btn-primary" href="<?php echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
               </span>
@@ -12,8 +12,8 @@
                 <?php echo $this->session->flashdata('msg'); ?>
                 <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Meter-Reading">
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Company</label>
-                        <div class="col-sm-10">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Company</label>
+                        <div class="col-sm-9">
                           <select id="company" name="company" class="form-control">
                             <option value="">Select Company</option>
                             <?php foreach($companies as $company){ ?>
@@ -25,8 +25,8 @@
                     </div>
                   
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Service No.</label>
-                        <div class="col-sm-10">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label ">Service No.</label>
+                        <div class="col-sm-9">
                           <select id="serviceno" name="serviceno" class="form-control">
                             <option value="">Select Service No</option>
                             <?php foreach($service_no as $sno){ ?>
@@ -39,8 +39,8 @@
                         
                       
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Cost-Center</label>
-                          <div class="col-sm-10">
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Cost-Center</label>
+                          <div class="col-sm-9">
                             <select id="costcenter" name="costcenter" class="form-control">
                               <option value="">Select Cost-Center</option>
                             </select>
@@ -48,8 +48,8 @@
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Location</label>
-                          <div class="col-sm-10">
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Location</label>
+                          <div class="col-sm-9">
                             <select id="location" name="location" class="form-control">
                               <option value="">Select Location</option>
                             </select>
@@ -58,42 +58,42 @@
                       </div>
                       
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Date Of Reading</label>
-                          <div class="col-sm-10">
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Date Of Reading</label>
+                          <div class="col-sm-9">
                             <input type="text" name="reading_date" id="reading_date" class="form-control" placeholder="dd/mm/yyyy"/>
                           <?php echo form_error('reading_date'); ?>
                           </div>
                       </div>
                       
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Reading Value</label>
-                          <div class="col-sm-10">
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Reading Value</label>
+                          <div class="col-sm-9">
                             <input type="text" name="reading_value" id="reading_value" class="form-control" />
                           <?php echo form_error('reading_value'); ?>
                           </div>
                       </div>
                       
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-2 col-form-label text-xs">Upload Photo</label>
-                          <div class="col-sm-10">
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Upload Photo</label>
+                          <div class="col-sm-9">
                             <input type="file" name="userfile" id="photo" class="form-control" />
                           <?php echo form_error('photo'); ?>
                           </div>
                       </div>
                       
                       <div class="offset-1 mt-3">
-                        <input type="submit" class="btn btn-outline-success uppercase" id="assign-create" value="Submit">
-                        <button class="btn btn-outline-warning uppercase" id="assign-update" style="display:none;">Update</button>
+                        <input type="submit" class="btn btn-success uppercase" id="assign-create" value="Submit">
+                        <button class="btn btn-warning uppercase" id="assign-update" style="display:none;">Update</button>
         
-                        <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                        <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                        <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                        <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                       </div>
                   </form>
                 </div>
 
                 <div class="col-7">
                   <table class="table table-bordered">
-                    <thead>
+                    <thead class="bg-light">
                       <tr>
                         <th>S.No.</th>
                         <th>Cost Center</th>
@@ -122,10 +122,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

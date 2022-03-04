@@ -4,7 +4,7 @@
         <div class="card-body">
           <div class="row">
           	<div class="col-12">
-          		<h5 class="text-warning" id="page-heading">Assign User</h5>
+          		<h5 class="text-primary" id="page-heading">Assign User</h5>
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>Assign-meter">
           		
@@ -107,18 +107,18 @@
                     </div>
                     
                     <div class="text-center">
-                      <input type="submit" class="btn btn-outline-success uppercase" id="assign-create" value="Assign">
-                      <button class="btn btn-outline-warning uppercase" id="assign-update" style="display:none;">Update</button>
+                      <input type="submit" class="btn btn-success uppercase" id="assign-create" value="Assign">
+                      <button class="btn btn-warning uppercase" id="assign-update" style="display:none;">Update</button>
     	
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                      <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                     </div>
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8" style="display:none;">
           		<div class="table-responsive">
                     <table class="table table-bordered">
-                          <thead>
+                          <thead class="bg-light">
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
                                     <th class="text-center uppercase">Name</th>
@@ -152,10 +152,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

@@ -3,10 +3,10 @@
       <div class="card">
         <div class="card-body">
           	<div class="offset-sm-1 col-10">
-          		<span class="text-warning" id="page-heading">Assigned Users</span>
+          		<span class="text-primary" id="page-heading">Assigned Users</span>
           		
               <table class="table table-bordered">
-                <thead>
+                <thead class="bg-light">
                   <tr>
                     <th>Id</th>
                     <th>Main Meter</th>
@@ -44,10 +44,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

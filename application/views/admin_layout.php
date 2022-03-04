@@ -44,9 +44,9 @@
       </li>
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
+        <a class="nav-link text-capitalize" data-toggle="dropdown" href="#">
           <?php echo $this->session->userdata('name'); ?>
-          <i class="far fa-bell"></i>
+          <i class="fa fa-user-cog"></i>
           <!-- <span class="badge badge-warning navbar-badge">15</span> -->
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -80,7 +80,7 @@
           <img src="<?php echo base_url(); ?>assets/images/user-icon.png" class="img-circle elevation-2" alt="Naresh">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Naresh Singh</a>
+          <a href="#" class="d-block text-capitalize"><?php echo $this->session->userdata('name'); ?></a>
         </div>
       </div>
 
@@ -233,7 +233,7 @@
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 3.2.0
     </div>
-    <strong>Copyright &copy; 2021-2022 <a href="<?php echo base_url(); ?>">e-bill</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2021-2022 <a href="<?php echo base_url(); ?>">Electricity Bill</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->

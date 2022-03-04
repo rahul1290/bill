@@ -4,7 +4,7 @@
         <div class="card-body">
           <div class="row">
           	<div class="offset-sm-1 col-md-10 col-sm-12">
-          		<h5 class="text-warning" id="page-heading">Meter Data Entry</h5>
+          		<h5 class="text-primary" id="page-heading">Meter Data Entry</h5>
           		<hr/>
           		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Bill-upload">
           		
@@ -180,6 +180,7 @@
                             <?php echo form_error('total_consumption'); ?>
                             </div>
                         </div>
+                        </div>
                         <div class="col-md-6">
                           <div class="row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Highest Demand Reading</label>
@@ -189,7 +190,7 @@
                             </div>
                           </div>
                         </div>
-                        </div>
+                        
                     </div>
                     <hr/>
                     
@@ -282,6 +283,7 @@
                             <?php echo form_error('electricity_duty'); ?>
                             </div>
                         </div>
+                        </div>
                         <div class="col-md-6">
                           <div class="row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Cess</label>
@@ -291,7 +293,7 @@
                             </div>
                           </div>
                         </div>
-                        </div>
+                        
                     </div>
                     
                     <div class="form-group row mt-3">
@@ -441,24 +443,24 @@
                     
                     
                     <div class="text-center">
-                      <input type="submit" class="btn btn-outline-success uppercase" id="assign-create" value="Submit">
-                      <button class="btn btn-outline-warning uppercase" id="assign-update" style="display:none;">Update</button>
+                      <input type="submit" class="btn btn-success uppercase" id="assign-create" value="Submit">
+                      <button class="btn btn-warning uppercase" id="assign-update" style="display:none;">Update</button>
     	
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                      <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                     </div>
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8" style="display:none;">
           		<div class="table-responsive">
                     <table class="table table-bordered">
-                          <thead>
+                          <thead class="bg-light">
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
                                     <th class="text-center uppercase">Name</th>
                                     <th class="text-center uppercase">Email</th>
                                     <th class="text-center uppercase">Contact No.</th>
-                                    <th class="text-center uppercase">Sex</th>
+                                    <th class="text-center uppercase">Gender</th>
                                     <th class="text-center uppercase">Role</th>
                                     <th class="text-center uppercase">Action</th>
                                   </tr>
@@ -486,10 +488,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

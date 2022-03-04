@@ -11,8 +11,9 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="login-logo">
-    <a href="#"><?php echo $this->config->item('project_name'); ?></a>
+  <div class="login-logo mb-4">
+  <a href=""><img src="<?php echo base_url(); ?>assets/images/logo.png" alt="E-bill" class="brand-image" style="opacity: .8;width:200px;margin-bottom:10px;"></a>
+    <br><a style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;" href="#"><?php echo $this->config->item('project_name'); ?></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
