@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     
-                    <div class="text-center">
+                    <div class="text-center mb-4">
                       <input type="submit" class="btn btn-outline-success uppercase" id="company-create" value="Create">
                       <button class="btn btn-outline-warning uppercase" id="company-update" style="display:none;">Update</button>
     
@@ -60,8 +60,8 @@
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
                     <table class="table table-bordered ">
-                        <thead>
-                            <tr class="bg-dark">
+                        <thead class="bg-light">
+                            <tr>
                             <th class="text-center uppercase">S.No.</th>
                             <th class="text-center uppercase">Company Name</th>
                             <th class="text-center uppercase">Contact No.</th>
