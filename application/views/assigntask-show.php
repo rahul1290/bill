@@ -2,11 +2,12 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
+
           	<div class="">
-          		<span class="text-warning" id="page-heading">Assigned Users</span>
+          		<span class="text-primary" id="page-heading">Assigned Users</span>
           		
-              <table class="table-bordered" width="100%">
-                <thead>
+              <table class="table table-bordered">
+                <thead class="bg-light">
                   <tr>
                     <th>Id</th>
                     <th>Main Meter</th>
@@ -20,13 +21,16 @@
                 <tbody>
                   <?php $c=1; foreach($records as $record){ ?>
                       <tr>
+                        <!-- S.No. -->
                         <td style="vertical-align: middle;"><?php echo $c++; ?></td>
                         <?php $ic=0; foreach($records as $r) { 
                           if($r['parent_meter'] == $record['mid']){
                             $ic++;
                           }
                         } ?> 
-                        <td class="text-center sdf" style="vertical-align: middle;height:<?php echo $ic * 30; ?>px;"><?php echo $record['bpno']; ?></td>
+                        <!-- Service No. -->
+                        <td class="text-center" style="vertical-align: middle;height:<?php echo $ic * 30; ?>px;"><?php echo $record['bpno']; ?></td>
+                        <!-- Sub Meter -->
                         <td style="height:<?php echo $ic * 30; ?>px;" class="text-center m-0 p-0">
                           <table width="100%" style="height:100%;">
                             <?php foreach($records as $r) { 
@@ -36,6 +40,7 @@
                             } ?> 
                           </table>
                         </td>
+                        <!-- Location -->
                         <td style="height:30px;" class="text-center m-0 p-0">
                           <table width="100%" style="height:100%;">
                             <?php foreach($records as $r) { 
@@ -45,6 +50,7 @@
                             } ?> 
                           </table>
                         </td>
+                        <!-- Task -->
                         <td class="text-center m-0 p-0">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
@@ -59,6 +65,7 @@
                               }
                             } ?> 
                         </td>
+                        <!-- Assign user -->
                         <td class="text-center m-0 p-0">
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
@@ -98,10 +105,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

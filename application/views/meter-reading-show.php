@@ -3,7 +3,7 @@
       <div class="card">
         <div class="card-body">
           	<div class="offset-sm-1 col-10">
-          		<h4 class="text-warning" id="page-heading">Meter Readings</h4>
+          		<h4 class="text-primary" id="page-heading">Meter Readings</h4>
           		<table class="table table-bordered text-center">
                   <thead>
                     <tr>
@@ -30,10 +30,6 @@
           
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>

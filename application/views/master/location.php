@@ -4,7 +4,7 @@
         <div class="card-body">
           <div class="row">
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-          		<h5 class="text-warning" id="page-heading">Create Location</h5>
+          		<h5 class="text-primary" id="page-heading">Create Location</h5>
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>master/Location">
           		
@@ -31,11 +31,11 @@
                     </div>
                     
                     <div class="text-center mb-4">
-                      <input type="submit" class="btn btn-outline-success uppercase" id="location-create" value="Create">
-                      <button class="btn btn-outline-warning uppercase" id="location-update" style="display:none;">Update</button>
+                      <input type="submit" class="btn btn-success uppercase" id="location-create" value="Create">
+                      <button class="btn btn-warning uppercase" id="location-update" style="display:none;">Update</button>
     	
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
-                      <input type="reset" class="btn btn-outline-secondary uppercase" id="reset-btn" value="Reset">
+                      <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
+                      <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                     </div>
                 </form>
           	</div>
@@ -73,11 +73,6 @@
           </div>
           
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
       </div>
       <!-- /.card -->
     </section>
