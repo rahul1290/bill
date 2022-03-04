@@ -70,15 +70,6 @@ class Meter_model extends CI_Model {
 	}
 
 	function show_meter_readings($uid=null){
-
-		// $this->db->select('mr.*,u.fname,u.lname,mm.bpno,ta.upload_frq,ta.bill_upload');
-		// $this->db->join('users u','u.uid = mr.user_id');
-		// if(!is_null($uid)){
-		// 	$this->db->where('mr.user_id',$uid);
-		// }
-		// $this->db->join("(SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as bpno,upload_frq,bill_upload FROM task_assign) as ta",'ta.bpno = mr.bpno');
-		// $this->db->join('meter_master mm','mm.mid = mr.bpno AND mm.status = 1');
-		// $result = $this->db->get_where('meter_reading mr',array('mr.status'=>1))->result_array();
 		if(!is_null($uid)){
 			$result = $this->db->query("select t2.meter_id,mm.mtype,mm2.bpno as parent_meter,mm.bpno,ccm.name as cost_center,lm.name as location_name,t2.reading_frq,t1.reading_date,t1.reading_value,MAX(t1.reading_date) as last_reading_date from meter_reading as t1
 			right join (select if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,reading_frq
@@ -88,6 +79,15 @@ class Meter_model extends CI_Model {
 			JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id AND ccm.status = 1
 			JOIN location_master lm on lm.loc_id = mm.loc_id AND lm.status = 1
 			GROUP by t2.meter_id")->result_array();
+		} else {
+			$this->db->select('mr.*,u.fname,u.lname,mm.bpno,ta.upload_frq,ta.bill_upload');
+			$this->db->join('users u','u.uid = mr.user_id');
+			if(!is_null($uid)){
+				$this->db->where('mr.user_id',$uid);
+			}
+			$this->db->join("(SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as bpno,upload_frq,bill_upload FROM task_assign) as ta",'ta.bpno = mr.bpno');
+			$this->db->join('meter_master mm','mm.mid = mr.bpno AND mm.status = 1');
+			$result = $this->db->get_where('meter_reading mr',array('mr.status'=>1))->result_array();
 		}
 
 		return $result;

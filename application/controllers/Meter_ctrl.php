@@ -7,7 +7,7 @@ class Meter_ctrl extends CI_Controller {
     parent::__construct();
     $this->load->library('upload');
 		$this->load->database();
-		$this->load->model(array('Costcenter_model','Company_model','Location_model','Meter_model'));
+		$this->load->model(array('Costcenter_model','Company_model','Location_model','Meter_model')); 
   }
 
 	function getMeterById(){
@@ -119,7 +119,6 @@ class Meter_ctrl extends CI_Controller {
   
   function bill_upload(){
       $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
-      //print_r($this->db->last_query()); die;
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -134,17 +133,35 @@ class Meter_ctrl extends CI_Controller {
           $this->form_validation->set_rules('current_reading_date', 'Current Reading Date', 'required|trim');
           $this->form_validation->set_rules('previous_reading', 'Previous Reading', 'required|trim');
           $this->form_validation->set_rules('total_consumption', 'Total Consumption', 'required|trim');
-          $this->form_validation->set_rules('highest_demand_rating', 'Highest Demand Rating', 'required|trim');
+          $this->form_validation->set_rules('highest_demand_rating', 'Highest Demand Rating', 'trim');
           $this->form_validation->set_rules('sum', 'Sum', 'required|trim');
-          $this->form_validation->set_rules('cess', 'cess', 'required|trim');
-          $this->form_validation->set_rules('concession_amount', 'Concession Amount', 'required|trim');
-          $this->form_validation->set_rules('vca', 'VCA', 'required|trim');
+          $this->form_validation->set_rules('cess', 'cess', 'trim');
+          $this->form_validation->set_rules('concession_amount', 'Concession Amount', 'trim');
+          $this->form_validation->set_rules('vca', 'VCA', 'trim');
           $this->form_validation->set_rules('past_due', 'Past Due', 'required|trim');
           $this->form_validation->set_rules('payable_amount', 'Payable Amount', 'required|trim');
           $this->form_validation->set_rules('surcharge', 'surcharge', 'required|trim');
+          $this->form_validation->set_rules('total_bill', 'Total Bill', 'required|trim');
+          
           
           $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
           if ($this->form_validation->run()){
+            $config = array(
+              'upload_path' => APPPATH."../upload/bills/",
+              'allowed_types' => "gif|jpg|png|jpeg|pdf",
+              'encrypt_name' => TRUE,
+              // 'overwrite' => TRUE,
+              // 'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+              // 'max_height' => "768",
+              // 'max_width' => "1024"
+            );
+            $this->upload->initialize($config);
+            $this->load->library('upload', $config);
+            if($this->upload->do_upload('userfile')){
+              $fdata = array('upload_data' => $this->upload->data());
+              $db_data['image'] = $fdata['upload_data']['file_name'];
+            }
+
               $db_data['sno_id'] = $this->input->post('serviceno');
               $db_data['from_date'] = $this->input->post('billing_period_from');
               $db_data['to_date'] = $this->input->post('billing_period_to');

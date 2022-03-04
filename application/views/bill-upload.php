@@ -6,7 +6,7 @@
           	<div class="offset-sm-1 col-md-10 col-sm-12">
           		<h5 class="text-warning" id="page-heading">Meter Data Entry</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>Bill-upload">
+          		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Bill-upload">
           		
                     <div class="form-group row">
                     	<div class="col-md-4">
@@ -164,7 +164,7 @@
                         <div class="row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Power Factor</label>
                             <div class="col-sm-8">
-                              <input type="date" name="power_factor" id="power_factor" class="form-control"/>
+                              <input type="text" name="power_factor" id="power_factor" class="form-control"/>
                             <?php echo form_error('power_factor'); ?>
                             </div>
                         </div>
@@ -180,14 +180,14 @@
                             <?php echo form_error('total_consumption'); ?>
                             </div>
                         </div>
-                        </div>
                         <div class="col-md-6">
-                        <div class="row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Highest Demand Reading<label class="text-danger">*</label></label>
+                          <div class="row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Highest Demand Reading</label>
                             <div class="col-sm-8">
-                              <input type="date" name="highest_demand_rating" id="highest_demand_rating" class="form-control"/>
+                              <input type="text" name="highest_demand_rating" id="highest_demand_rating" class="form-control"/>
                             <?php echo form_error('highest_demand_rating'); ?>
                             </div>
+                          </div>
                         </div>
                         </div>
                     </div>
@@ -282,14 +282,14 @@
                             <?php echo form_error('electricity_duty'); ?>
                             </div>
                         </div>
-                        </div>
                         <div class="col-md-6">
-                        <div class="row">
-                            <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Cess<label class="text-danger">*</label></label>
+                          <div class="row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Cess</label>
                             <div class="col-sm-8">
                               <input type="text" name="cess" id="cess" value="<?php set_Value('cess'); ?>" class="form-control"/>
                             <?php echo form_error('cess'); ?>
                             </div>
+                          </div>
                         </div>
                         </div>
                     </div>
@@ -338,7 +338,7 @@
                     
                         
                     <div class="form-group row offset-6">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Special Concession Amount<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Special Concession Amount</label>
                         <div class="col-sm-8">
                           <input class="form-control" type="text" id="concession_amount" name="concession_amount" value="<?php echo set_value('concession_amount');?>" />
                           <?php echo form_error('concession_amount'); ?>
@@ -426,6 +426,15 @@
                             <?php echo form_error('overload'); ?>
                             </div>
                         </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-3">
+                    	<div class="row">
+                            <label for="inputEmail3" class="col-sm-5 col-form-label text-xs">Image<label class="text-danger">*</label></label>
+                            <div class="col-sm-7">
+                              <input type="file" name="userfile" id="userfile"  class="form-control"/>
+                              <?php echo form_error('userfile'); ?>
+                            </div>
                         </div>
                     </div>
                     

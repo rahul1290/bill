@@ -107,6 +107,10 @@
                         <?php $c=1; foreach($readings as $reading){ ?>
                           <tr>
                             <td><?php echo $c++; ?></td>
+                            <td><?php echo $reading['cost_center']; ?></td>
+                            <td><?php echo $reading['location_name']; ?></td>
+                            <td><?php echo $reading['bpno']; ?></td>
+                            <td><?php echo $reading['bpno']; ?></td>
                           </tr>
                         <?php } ?>
                     </tbody>
