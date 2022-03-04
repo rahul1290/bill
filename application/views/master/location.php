@@ -9,7 +9,7 @@
           		<form name="f1" method="POST" action="<?php echo base_url();?>master/Location">
           		
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-4 col-form-label">Cost-center<label class="text-danger">*</label></label>
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Cost-Center<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="lid" name="lid" type="hidden" class="form-control" value="<?php echo set_value('lid'); ?>">
                           <select id="cost_center" name="cost_center" class="form-control">
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     
-                    <div class="text-center">
+                    <div class="text-center mb-4">
                       <input type="submit" class="btn btn-outline-success uppercase" id="location-create" value="Create">
                       <button class="btn btn-outline-warning uppercase" id="location-update" style="display:none;">Update</button>
     	
@@ -42,7 +42,7 @@
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
                     <table class="table table-bordered">
-                              <thead>
+                              <thead class="bg-light">
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
                                     <th class="text-center uppercase">Location Name</th>
