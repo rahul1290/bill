@@ -224,8 +224,19 @@ class Meter_ctrl extends CI_Controller {
           WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = $uid)
           GROUP by cid)")->result_array();
         $data['readings'] = $this->Meter_model->show_meter_readings($this->session->userdata('user_id'));
+        
+        $finalarray = array();
+        foreach($data['readings'] as $reading){
+            if($reading['last_reading_date'] != ''){
+                if(date('Y-m-d') >= date('Y-m-d', strtotime($reading['last_reading_date']. ' + '.$reading['reading_frq'].' days'))){
+                   $finalarray[] = $reading;
+                }
+            } else {
+                $finalarray[] = $reading;
+            }
+        }
+        $data['readings'] = $finalarray;
       }
-      
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('meter-reading',$data,true);
           $this->load->view('admin_layout',$data);

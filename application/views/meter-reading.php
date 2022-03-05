@@ -4,7 +4,7 @@
         <div class="card-body">
           		<span class="text-primary" id="page-heading">Meter Reading</span>
               <!-- <span class="pull-right" style="float: right;">
-                <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
+                <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Your Pending Readings</a>
               </span> -->
           		<hr/>
               <div class="row">
@@ -92,24 +92,28 @@
                 </div>
 
                 <div class="col-7">
-                  <p class="text-lg text-bold text-info bg-success pl-2 mb-0">Pending Readings</p>
-                  <table class="table table-bordered">
+                  <p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Your Pending Readings</p>
+                  <div class="table-responsive">
+                  <table id="pending-readings" class="table table-bordered table-striped">
                     <thead class="bg-light">
-                      <tr>
+                      <tr class="bg-info text-center">
                         <th>S.No.</th>
                         <th>Cost Center</th>
                         <th>Location</th>
                         <th>Service No.</th>
                         <th>Submeter No.</th>
+                        <?php if($this->session->userdata('role') == 'admin' || $this->session->userdata('role') == 'super_admin'){ ?>
+                        <th>Assign User</th>
+                        <?php } ?>
                         <th>Last Reading Date</th>
                       </tr>
                     </thead>
                     <tbody>
-                        <?php $c=1; foreach($readings as $reading){ ?>
+                        <?php if(count($readings)>0){ $c=1; foreach($readings as $reading){ ?>
                           <tr>
                             <td><?php echo $c++; ?></td>
-                            <td><?php echo $reading['cost_center']; ?></td>
-                            <td><?php echo $reading['location_name']; ?></td>
+                            <td><?php echo ucfirst($reading['cost_center']); ?></td>
+                            <td><?php echo ucfirst($reading['location_name']); ?></td>
                             <td>
                               <?php if($reading['mtype'] == 'sub-meter'){ ?>
                                 <?php echo $reading['parent_meter'];
@@ -124,11 +128,21 @@
                                 <?php echo $reading['bpno']; ?>
                               <?php } ?>
                             </td>
+                            <?php if($this->session->userdata('role') == 'admin' || $this->session->userdata('role') == 'super_admin'){ ?>
+                                <td>
+                                	<?php if(isset($reading['fname'])){ echo $reading['fname'].' '.$reading['lname']; } ?>
+                                </td>
+                            <?php } ?>
                             <td><?php echo $reading['last_reading_date']; ?></td>
                           </tr>
+                        <?php } } else { ?>
+                        	<tr>
+                        		<td colspan="6" class="text-center">No Pending Readings.</td>
+                        	</tr>
                         <?php } ?>
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
           	
@@ -143,17 +157,20 @@
 
     <script>
     const baseUrl = $('#base_url').val();
-    var disabledDates = ["2022-03-28","2022-03-14","2022-03-20"];
+    
+   // var disabledDates = ["2022-03-28","2022-03-14","2022-03-20"];
     $( function() {
       
       $("#reading_date").datepicker({ 
         dateFormat: 'dd/mm/yy',
-        beforeShowDay: function(date){
-        var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-        return [ disabledDates.indexOf(string) == -1 ]
-    }
+//         beforeShowDay: function(date){
+//             var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+//             return [ disabledDates.indexOf(string) == -1 ]
+//         }
       });
     });
+    
+    $('#pending-readings').DataTable();
     
     $(document).on('change','#serviceno',function(){
     	var serviceNo = $(this).val();
@@ -163,6 +180,7 @@
             dataType: "json",
             success(response){
                 if(response.status == 200){
+                	
                     $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
                     $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
                     $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
