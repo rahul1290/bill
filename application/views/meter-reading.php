@@ -3,9 +3,9 @@
       <div class="card">
         <div class="card-body">
           		<span class="text-primary" id="page-heading">Meter Reading</span>
-              <span class="pull-right" style="float: right;">
-                <a class="btn btn-sm btn-primary" href="<?php echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
-              </span>
+              <!-- <span class="pull-right" style="float: right;">
+                <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
+              </span> -->
           		<hr/>
               <div class="row">
                 <div class="col-5">

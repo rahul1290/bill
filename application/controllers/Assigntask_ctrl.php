@@ -12,7 +12,7 @@ class Assigntask_ctrl extends CI_Controller {
 	function getUserById(){
 		$uid = $this->input->post('uid');
 		$result = $this->User_model->user_list($uid);
-		if(count($result)>0){
+		if(count($result)>0) {
 			echo json_encode(array('data'=>$result[0],'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));

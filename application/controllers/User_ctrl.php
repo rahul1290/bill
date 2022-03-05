@@ -100,4 +100,41 @@ class User_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+
+  function check_password(){
+	  $password = sha1($this->input->post('password'));
+	  $uid = $this->session->userdata('user_id');
+
+	  $this->db->select('*');
+	  $result = $this->db->get_where('users',array('uid'=>$uid,'password'=>$password,'status'=>1))->result_array();
+	  if(count($result)>0){
+		  echo json_encode(array('msg'=>'password is valid.','status'=>200));
+	  } else {
+		echo json_encode(array('msg'=>'password is not valid.','status'=>500));
+	  }
+
+  }
+  function change_password(){
+	if ($this->input->server('REQUEST_METHOD') === 'GET') {
+		$data['main_content'] = $this->load->view('forgot-password','',true);
+		$this->load->view('admin_layout',$data);
+	} else {
+		$this->form_validation->set_rules('old_password', 'Old Password', 'required|trim|min_length[4]');
+		$this->form_validation->set_rules('new_password', 'New Password', 'required|trim|min_length[4]');
+		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|trim|matches[new_password]|min_length[4]');
+
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		if ($this->form_validation->run()){
+			$uid = $this->session->userdata('user_id');
+			$password = sha1($this->input->post('new_password'));
+			if($this->User_model->change_password($uid,$password)){
+				$this->session->set_flashdata('msg', '<p class="text-success text-center">Password Change successfully.</p>');
+				redirect(current_url());
+			}
+		} else {
+			$data['main_content'] = $this->load->view('forgot-password','',true);
+			$this->load->view('admin_layout',$data);
+		}
+	}
+  }
 }

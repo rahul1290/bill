@@ -31,6 +31,9 @@ class Auth extends CI_Controller {
 				  'role' => $result[0]['type_name'],
 				));
 				redirect('/master/Company');
+			  } else {
+				$this->session->set_flashdata('msg', '<p class="text-danger text-center">Login Failed. Please try again.</p>');
+				$this->load->view('login');	  
 			  }
 			} else {
 			  $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');

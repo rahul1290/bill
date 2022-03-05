@@ -71,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody id="companyList">
-                            <?php $c=1; foreach($companies as $company){ ?>
+                            <?php if(count($companies)>0){ $c=1; foreach($companies as $company){ ?>
                                 <tr>
                                     <td class="text-center"><?= $c++; ?></td>
                                     <td class="text-center"><?= $company['name']; ?></td>
@@ -83,6 +83,8 @@
                                         <a href="javascript:void(0);" class="company_delete ml-2" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
+                            <?php } } else { ?>
+                                <tr><td colspan="6" class="text-center">No Record Found</td></tr>
                             <?php } ?>
                         </tbody>
                     </table>

@@ -12,18 +12,17 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo mb-4">
-    
   <a href=""><img src="<?php echo base_url(); ?>assets/images/logo.png" alt="E-bill" class="brand-image" style="opacity: .8;width:200px;margin-bottom:10px;"></a>
-    <br><a style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;" href="#"><?php echo $this->config->item('project_name'); ?></a>
+    <!-- <br><a style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;" href="#"><?php //echo $this->config->item('project_name'); ?></a> -->
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-
+      <?php echo $this->session->flashdata('msg');?>
       <form action="<?php echo base_url('auth')?>" method="post">
         <div class="input-group">
-          <input type="email" name="identity" id="identity" class="form-control" placeholder="Email">
+          <input type="email" name="identity" id="identity" class="form-control" placeholder="Email" value="<?php echo set_value('identity'); ?>">
           
           <div class="input-group-append">
             <div class="input-group-text">
