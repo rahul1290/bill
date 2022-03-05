@@ -34,6 +34,7 @@ class Meter_model extends CI_Model {
 	}
 
 	function meter_list($mid=null){
+	    $uid = $this->session->userdata('user_id');
 		$this->db->select('m.*,ccm.name as cost_center,ccm.costc_id,cm.cid,cm.name as company_name,u.uid,u.fname,u.lname,lm.loc_id,lm.name as location_name');
 		$this->db->join('cost_center_master ccm','ccm.costc_id = m.costc_id AND ccm.status = 1');
 		if(!is_null($mid)){
@@ -42,8 +43,9 @@ class Meter_model extends CI_Model {
 		$this->db->join('company_master cm','cm.cid = m.cid AND cm.status = 1');
 		$this->db->join('location_master lm','lm.loc_id = m.loc_id AND lm.status = 1');
 		$this->db->join('users u','u.uid = m.created_by');
+		//$this->db->join('task_assign ta',"ta.user_id = $uid AND (ta.sno_id = m.mid OR ta.sub_meter_id = m.mid)",'left');
 		$result = $this->db->get_where('meter_master m',array('m.status'=>1))->result_array();
-		
+		//print_r($this->db->last_query()); die;
 		if(count($result)>0){
 			return  $result;
 		} else {

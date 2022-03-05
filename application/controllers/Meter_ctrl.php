@@ -212,15 +212,16 @@ class Meter_ctrl extends CI_Controller {
   }
   
   function meter_reading(){
+      $uid = $this->session->userdata('user_id');
       if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
         $data['service_no'] = $this->Meter_model->meterlistUserWise();
         $data['companies'] = $this->db->query("select * from company_master where status = 1")->result_array();
         $data['readings'] = $this->Meter_model->show_meter_readings();
-      }  else {
+      }  else { 
         $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
         $data['companies'] = $this->db->query("select * from company_master where cid in (
           select cid from meter_master 
-          WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = 5)
+          WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = $uid)
           GROUP by cid)")->result_array();
         $data['readings'] = $this->Meter_model->show_meter_readings($this->session->userdata('user_id'));
       }
