@@ -1,3 +1,13 @@
+    <style>
+.table-fd{
+
+}
+.table-fd tr td{border-bottom:1px solid #ddd;border-top:0px solid #ddd;border-left:0px solid #ddd;border-right:0px solid #ddd;}
+.table-fd tr:last-child td{border-bottom:0px solid #ddd;}
+.tbl-task tr td{border-bottom:1px solid #ddd !important;}
+.tbl-task tr:last-child td{border-bottom:1px solid #ddd !important;}
+.tbl-task tr:nth-child(2) td{border-bottom:1px solid #ddd !important;}
+    </style>
     <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
@@ -37,8 +47,8 @@
                         <td class="text-center m-0 p-0" style="vertical-align: middle;height:<?php echo ($ic * 2) * 30; ?>px;"><?php echo $record['bpno']; ?></td>
                         <!-- Sub Meter -->
                         <td class="text-center m-0 p-0">
-                          <table width="100%" style="border:0px;">
-                          		<tr><td class='m-0 p-0' style='height:"<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><?php echo $record['bpno']; ?></td></tr>
+                          <table class="table-fd" width="100%">
+                          		<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><?php echo $record['bpno']; ?></td></tr>
                             <?php foreach($records as $r) {
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'>".$r['bpno']."</td></tr>";
@@ -50,7 +60,7 @@
                         
                         <!-- Location -->
                         <td class="text-center m-0 p-0">
-                          <table width="100%" style="border:0px;">
+                          <table class="table-fd" width="100%">
                           	<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic); ?>px;vertical-align: middle;'><?php echo $record['location']; ?></td></tr>
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
@@ -61,7 +71,7 @@
                         </td>
                         <!-- Task -->
                         <td class="text-center m-0 p-0">
-                        	<table width="100%" style='border:0px;'>
+                        	<table class="table-fd tbl-task" width="100%" style='border:0px;'>
                               <tr>
                                 <td class='m-0 p-0' style='height:30px;'>Meter Reading</td>
                               </tr>
@@ -71,7 +81,7 @@
                             </table>
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){ ?>
-                                <table width='100%' style='border:0px;'>
+                                <table class="table-fd tbl-task" width='100%' style='border:0px;'>
                                   <tr>
                                     <td class='m-0 p-0' style='height:30px;'>Meter Reading</td>
                                   </tr>
@@ -119,7 +129,7 @@
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
                                     <td style='' class='m-0 p-0'>
-                                      <select style='width:100%;height:30px;'>
+                                      <select style='width:100%;height:28px;'>
                                         <option value=''>Select User</option>";
                                         foreach($users as $user){
                                           if($user['uid'] == $r['user_id']){
@@ -133,7 +143,7 @@
                                   </tr>
                                   <tr>
                                   <td style='' class='m-0 p-0'>
-                                    <select style='width:100%;height:30px;'>
+                                    <select style='width:100%;height:28px;'>
                                       <option value=''>Select User</option>";
                                       foreach($users as $user){
                                         if($user['uid'] == $r['user_id']){
@@ -152,17 +162,17 @@
                         
                         <!-- Frequency -->
                         <td class="text-center m-0 p-0">
-                        	<table width='100%' style='height:100%'>
+                        	<table style='height:100%'>
                               <tr>
                                 <td class='m-0 p-0'>
-                                  <input style='height:30px;' type='number' value="<?php if($record['meter_reading'] == 1){
+                                  <input style='height:28px;' type='number' value="<?php if($record['meter_reading'] == 1){
                                       echo $record['reading_frq'];
                                   }?>"/>
                                 </td>
                               </tr>
                               <tr>
                                 <td class='m-0 p-0'>
-                                  <input style='height:30px;' type='number' value="<?php if($record['bill_upload'] == 1){
+                                  <input style='height:28px;' type='number' value="<?php if($record['bill_upload'] == 1){
                                       echo $record['upload_frq'];
                                   }?>"/>
                                 </td>
@@ -170,10 +180,10 @@
                             </table>
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){ ?>
-                                <table width='100%' style='height:100%'>
+                                <table style='height:100%'>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input style='height:30px;' type='number' value="<?php
+                                      <input style='height:28px;' type='number' value="<?php
                                       if($r['meter_reading'] == 1){
                                           echo $r['reading_frq'];
                                       }
@@ -182,7 +192,7 @@
                                   </tr>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input style='height:30px;' type='number' value="<?php
+                                      <input style='height:28px;' type='number' value="<?php
                                       if($r['bill_upload'] == 1){
                                           echo $r['upload_frq'];
                                       }
