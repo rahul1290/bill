@@ -143,10 +143,15 @@
 
     <script>
     const baseUrl = $('#base_url').val();
-
+    var disabledDates = ["2022-03-28","2022-03-14","2022-03-20"];
     $( function() {
+      
       $("#reading_date").datepicker({ 
-        dateFormat: 'dd/mm/yy' 
+        dateFormat: 'dd/mm/yy',
+        beforeShowDay: function(date){
+        var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        return [ disabledDates.indexOf(string) == -1 ]
+    }
       });
     });
     

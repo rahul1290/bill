@@ -41,7 +41,7 @@ class Auth_ctrl extends CI_Controller {
           }
         }
       } else {
-        $this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->load->view('login');
       }
     }

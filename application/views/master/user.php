@@ -40,6 +40,14 @@
                           <?php echo form_error('contact'); ?>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Password<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="password" name="password" type="text" class="form-control" value="<?php echo set_value('password'); ?>">
+                          <?php echo form_error('password'); ?>
+                        </div>
+                    </div>
                    
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Gender<label class="text-danger">*</label></label>
@@ -58,7 +66,7 @@
                         <div class="col-sm-8">
                           <select name="utype" id="utype" class="form-control">
                                 <option value="">Select User Role</option>
-                                <?php foreach($user_types as $user_type){ ?>
+                                  <?php foreach($user_types as $user_type){ ?>
                                 <option value="<?php echo $user_type['utype_id']; ?>"><?php echo $user_type['type_name']?></option>
                                 <?php } ?>
                           </select>
@@ -155,6 +163,11 @@
             $('#user-create').show();
             $('#reset-btn').show();
       });
+
+
+      $(document).on('keyup','#contact',function(){
+        $('#password').val($(this).val());
+      })
 
 
       $(document).on('click','.user_delete',function(){

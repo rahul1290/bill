@@ -30,7 +30,9 @@ class User_ctrl extends CI_Controller {
 	}
 
   function index(){
+	  	$this->db->where_not_in('type_name','super_admin');
 	  	$data['user_types'] = $this->db->get_where('user_type',array('status'=>1))->result_array();
+		  
 	  	$data['users'] = $this->User_model->user_list();
 	  	$data['locations'] = $this->Location_model->location_list();
 		$data['costceners'] = $this->Costcenter_model->costcenter_list();
@@ -44,18 +46,18 @@ class User_ctrl extends CI_Controller {
 				$this->form_validation->set_rules('lname', 'Last name', 'required|trim');
 				$this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
 				$this->form_validation->set_rules('contact', 'Contact No', 'required|min_length[10]|max_length[13]|trim|is_natural');
-				//$this->form_validation->set_rules('password', 'Password', 'required|min_length[4]|trim');
+				$this->form_validation->set_rules('password', 'Password', 'required|min_length[4]|trim');
 				$this->form_validation->set_rules('sex', 'Gender', 'required|trim');
 				$this->form_validation->set_rules('utype', 'User type', 'required|trim');
 
-			$this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$uid = $this->input->post('uid');
 				$db_data['fname'] = $this->input->post('fname');
 				$db_data['lname'] = $this->input->post('lname');
 				$db_data['email'] = $this->input->post('email');
 				$db_data['contact_no'] = $this->input->post('contact');
-				$db_data['password'] = sha1($this->input->post('contact'));
+				$db_data['password'] = sha1($this->input->post('password'));
 				$db_data['sex'] = $this->input->post('sex');
 				$db_data['utype'] = $this->input->post('utype');
 				$db_data['created_by'] = $this->session->userdata('user_id');
@@ -65,19 +67,19 @@ class User_ctrl extends CI_Controller {
 				} else {
 					$result = $this->User_model->update_user($db_data,$uid);
 				}
-				if($result){
+				if($result) {
 					$data['users'] = $this->User_model->user_list();
 					$data['locations'] = $this->Location_model->location_list();
 					$data['costceners'] = $this->Costcenter_model->costcenter_list();
 					$data['companies'] = $this->Company_model->Company_list();
 
-					if($uid == ''){
+					if($uid == '') {
 						$this->session->set_flashdata('msg','Location created successfully.');
 					} else {
 						$this->session->set_flashdata('msg','Location updated successfully.');
 					}
 					redirect(current_url());
-				} else{
+				} else {
 					$this->session->set_flashdata('msg','Something went wrong.');
 
 					$data['main_content'] = $this->load->view('master/user',$data,true);
