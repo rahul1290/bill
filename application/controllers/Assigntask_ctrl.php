@@ -118,7 +118,7 @@ class Assigntask_ctrl extends CI_Controller {
 								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
 								group by mm.bpno
 								order by mm.mid")->result_array();
-
+	
 	$this->db->select('*');
 	$data['users'] = $this->db->get_where('users',array('status'=>1))->result_array();
 	
