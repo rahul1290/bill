@@ -56,6 +56,10 @@
             <i class="fas fa-user mr-2"></i> <?php echo $this->session->userdata('name'); ?>
           </a>
           <div class="dropdown-divider"></div>
+          <a href="<?php echo base_url('Forgot-Password'); ?>" class="dropdown-item">
+            <i class="fas fa-power-off mr-2"></i> Change Password
+          </a>
+          <div class="dropdown-divider"></div>
           <a href="<?php echo base_url('Log-Out'); ?>" class="dropdown-item">
             <i class="fas fa-power-off mr-2"></i> LogOut
           </a>
@@ -114,7 +118,7 @@
             </a>
           </li>     
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
-          <li class="nav-item <?php if($this->uri->segment('1') == 'master'){
+            <li class="nav-item <?php if($this->uri->segment('1') == 'master'){
               echo "menu-is-opening menu-open";
           }?>">
             <a href="#" class="nav-link">
@@ -139,7 +143,7 @@
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Cost Centersd</p>
+                  <p>Cost Center</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -205,6 +209,41 @@
               </p>
             </a>
           </li>
+
+          
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview ml-3">
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                  <i class="far fa-building nav-icon"></i>
+                  <p>User Assign Reports</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                  <i class="far fa-building nav-icon"></i>
+                  <p>Meter Reading Reports</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                  <i class="far fa-building nav-icon"></i>
+                  <p>Bill Upload Reports</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+
           
           <li class="nav-item">
             <a href="<?php echo base_url('Log-Out'); ?>" class="nav-link">

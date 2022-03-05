@@ -48,4 +48,10 @@ class User_model extends CI_Model {
 			return null;
 		}
 	}
+
+	function change_password($uid,$password){
+		$this->db->where('uid',$uid);
+		$result = $this->db->update('users',array('password'=>$password));
+		return true;
+	}
 }
