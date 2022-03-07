@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2022 at 01:18 PM
+-- Generation Time: Mar 07, 2022 at 04:34 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 5.6.33
 
@@ -67,6 +67,11 @@ CREATE TABLE `bill` (
   `gross_amount` float(10,2) NOT NULL,
   `overload` float(10,2) DEFAULT NULL,
   `image` varchar(200) DEFAULT NULL,
+  `payment_amount` float(10,9) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `payment_by` int(255) DEFAULT NULL,
+  `payment_type` enum('cash','check') DEFAULT NULL,
+  `check_no` varchar(100) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
@@ -95,8 +100,7 @@ CREATE TABLE `company_master` (
 --
 
 INSERT INTO `company_master` (`cid`, `name`, `address`, `contact_no`, `alternet_no`, `email`, `created_at`, `created_by`, `status`) VALUES
-(4, 'vnr-corporate', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1),
-(5, 'vnr-plant', 'raipur ', '9770866241', NULL, NULL, '2022-02-19', 1, 1);
+(1, 'vnr', 'corporate Center, Raipur', '9770866241', '', 'vnr@gmail.com', '2022-03-07', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -118,10 +122,7 @@ CREATE TABLE `cost_center_master` (
 --
 
 INSERT INTO `cost_center_master` (`costc_id`, `company_id`, `name`, `created_by`, `created_at`, `status`) VALUES
-(4, 4, 'durg', 1, '2022-02-19', 0),
-(5, 4, 'raipur', 1, '2022-02-19', 1),
-(6, 4, 'dhamdha', 1, '2022-02-19', 1),
-(7, 5, '123', 1, '2022-02-26', 1);
+(1, 1, 'taatibandh', 1, '2022-03-07', 1);
 
 -- --------------------------------------------------------
 
@@ -134,7 +135,7 @@ CREATE TABLE `location_master` (
   `cost_center_id` int(255) NOT NULL,
   `name` varchar(200) NOT NULL,
   `created_by` int(255) NOT NULL,
-  `created_at` datetime NOT NULL,
+  `created_at` date NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -143,9 +144,9 @@ CREATE TABLE `location_master` (
 --
 
 INSERT INTO `location_master` (`loc_id`, `cost_center_id`, `name`, `created_by`, `created_at`, `status`) VALUES
-(1, 5, 'bhilai', 1, '2022-02-19 00:00:00', 0),
-(2, 5, 'sarona', 1, '2022-02-19 00:00:00', 1),
-(3, 7, 'asd2', 1, '2022-02-26 00:00:00', 1);
+(1, 1, 'raipur-location', 1, '2022-03-07', 0),
+(2, 1, 'raipur-location', 1, '2022-03-07', 0),
+(3, 1, 'raipur-location', 1, '2022-03-07', 1);
 
 -- --------------------------------------------------------
 
@@ -167,23 +168,6 @@ CREATE TABLE `meter_master` (
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `meter_master`
---
-
-INSERT INTO `meter_master` (`mid`, `parent_meter`, `sort_code`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
-(1, NULL, NULL, '10000902009', 'main-meter', 4, 5, 2, 1, '2022-03-05', 1),
-(2, 1, NULL, 'bpno-124', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(3, 1, NULL, 'bpno-101', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(4, NULL, NULL, 'bpno-102', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(5, 4, NULL, 'bpno-103', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(6, NULL, NULL, 'bpno-104', 'main-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(7, 1, NULL, 'bpno-105', 'sub-meter', 4, 5, 2, 1, '2022-02-25', 1),
-(8, NULL, NULL, 'bpno-106', 'main-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(10, NULL, NULL, 'bpno-107', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(11, NULL, NULL, 'bpno-108', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1),
-(12, 8, NULL, 'bpno-109', 'sub-meter', 5, 7, 3, 1, '2022-02-26', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -201,13 +185,6 @@ CREATE TABLE `meter_reading` (
   `created_by` int(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `meter_reading`
---
-
-INSERT INTO `meter_reading` (`mr_id`, `bpno`, `user_id`, `reading_date`, `reading_value`, `image`, `created_at`, `created_by`, `status`) VALUES
-(4, 1, 6, '2022-03-04', '300', NULL, '2022-03-08', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -228,13 +205,6 @@ CREATE TABLE `task_assign` (
   `created_at` date NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `task_assign`
---
-
-INSERT INTO `task_assign` (`task_id`, `sno_id`, `sub_meter_id`, `user_id`, `meter_reading`, `reading_frq`, `bill_upload`, `upload_frq`, `created_by`, `created_at`, `status`) VALUES
-(10, 1, NULL, 6, 1, 2, 0, 1, 1, '2022-03-05', 1);
 
 -- --------------------------------------------------------
 
@@ -261,10 +231,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `password`, `sex`, `created_by`, `created_at`, `status`) VALUES
-(1, 1, 'rahul', 'sinha', 'admin@gmail.com', '9770866241', '8cb2237d0679ca88db6464eac60da96345513964', 'male', NULL, '2022-02-17', 1),
-(2, 2, 'manoj', 'sinha21', 'manoj@gmail.com', '9770866241', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'male', 1, '2022-02-19', 1),
-(5, 3, 'manoj', 'kumar', 'manoj@gmail.com', '9770866241', '50a12dd50d40e23444069e97d689c74f3a39a787', 'male', 1, '2022-02-28', 1),
-(6, 3, 'tarun', 'sahu', 'tarun@gmail.com', '9770866241', 'e754f27161bbaea556a2b4e47672c2cbfa0811af', 'male', 1, '2022-03-05', 1);
+(1, 1, 'admin', 'istator', 'admin@gmail.com', '9770866241', '8cb2237d0679ca88db6464eac60da96345513964', 'male', NULL, '2022-02-17', 1);
 
 -- --------------------------------------------------------
 
@@ -297,7 +264,8 @@ INSERT INTO `user_type` (`utype_id`, `type_name`, `status`) VALUES
 ALTER TABLE `bill`
   ADD PRIMARY KEY (`bill_id`),
   ADD KEY `sno_id` (`sno_id`),
-  ADD KEY `created_by` (`created_by`);
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `payment_by` (`payment_by`);
 
 --
 -- Indexes for table `company_master`
@@ -378,13 +346,13 @@ ALTER TABLE `bill`
 -- AUTO_INCREMENT for table `company_master`
 --
 ALTER TABLE `company_master`
-  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `cost_center_master`
 --
 ALTER TABLE `cost_center_master`
-  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `costc_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `location_master`
@@ -396,25 +364,25 @@ ALTER TABLE `location_master`
 -- AUTO_INCREMENT for table `meter_master`
 --
 ALTER TABLE `meter_master`
-  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `meter_reading`
 --
 ALTER TABLE `meter_reading`
-  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `mr_id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `task_assign`
 --
 ALTER TABLE `task_assign`
-  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_type`
