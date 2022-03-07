@@ -134,7 +134,7 @@
             </a>
             <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
-                <a href="<?php echo base_url()?>master/Company" class="nav-link <?php if($this->uri->segment('2') == 'Company'){
+                <a href="<?php echo base_url()?>master/company" class="nav-link <?php if($this->uri->segment('2') == 'company'){
                         echo "active";
                     }?>">
                   <i class="far fa-building nav-icon"></i>
@@ -143,7 +143,7 @@
               </li>
               
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Cost-Center')?>" class="nav-link <?php if($this->uri->segment('2') == 'Cost-Center'){
+                <a href="<?php echo base_url('master/cost-center')?>" class="nav-link <?php if($this->uri->segment('2') == 'cost-center'){
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -343,6 +343,19 @@
     </div>
     <strong>Copyright &copy; 2021-2022 <a href="<?php echo base_url(); ?>">Electricity Bill</a>.</strong> All rights reserved.
   </footer>
+  
+  
+  
+  <div class="modal" id="loaderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+  
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

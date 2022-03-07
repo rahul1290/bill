@@ -8,16 +8,27 @@
           		<hr/>
           		<form name="f1" method="POST" action="<?php echo base_url();?>master/Location">
           		
+          			<div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Company<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="lid" name="lid" type="hidden" class="form-control" value="<?php echo set_value('lid'); ?>">
+                          <select id="company" name="company" class="form-control">
+                            <option value="" selected>Select Company</option>
+                            	<?php foreach($companies as $company){ ?>
+                            		<option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
+                            	<?php } ?>
+                            </select>
+                            <?php echo form_error('company'); ?>
+                        </div>
+                    </div>
+                    
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Cost-Center<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="lid" name="lid" type="hidden" class="form-control" value="<?php echo set_value('lid'); ?>">
                           <select id="cost_center" name="cost_center" class="form-control">
                             <option value="" selected>Select Cost-Center</option>
-                                <?php foreach($costceners as $costcener){ ?>
-                                    <option value="<?php echo $costcener['costc_id']; ?>"><?php echo $costcener['name']; ?></option>
-                                <?php } ?>
-                            </select>
+                          </select>
                             <?php echo form_error('cost_center'); ?>
                         </div>
                     </div>
@@ -40,16 +51,17 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
+          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Location List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered">
-                              <thead class="bg-light">
+                    <table class="table table-bordered" id="locationListTable">
+                              <thead class="bg-info">
                                   <tr>
-                                    <th class="text-center uppercase">S.No.</th>
-                                    <th class="text-center uppercase">Location Name</th>
-                                    <th class="text-center uppercase">Cost-Center / Company Name</th>
-                                    <th class="text-center uppercase">Created At</th>
-                                    <th class="text-center uppercase">Created By</th>
-                                    <th class="text-center uppercase">Action</th>
+                                    <th class="text-center align-middle uppercase">S.No.</th>
+                                    <th class="text-center align-middle uppercase">Location Name</th>
+                                    <th class="text-center align-middle uppercase">Cost-Center / Company Name</th>
+                                    <th class="text-center align-middle uppercase">Created At</th>
+                                    <th class="text-center align-middle uppercase">Created By</th>
+                                    <th class="text-center align-middle uppercase">Action</th>
                                   </tr>
                               </thead>
                               <tbody id="locationList">
@@ -81,7 +93,20 @@
     <script>
     const baseUrl = $('#base_url').val();
     
+    $(document).on('click','#location-create,#location-update',function(){
+   		$('#loaderModal').modal({
+   			'show':true
+   		});
+   });
+    
       $(document).on('click','.location_edit',function(){
+      	
+      	$('#loaderModal').modal({
+   			'show':true,
+   			'backdrop' :'static',
+   			'keyboard' : false
+   		});
+   		
         var request = $.ajax({
                 url: `${baseUrl}Location_ctrl/getLocationById`,
                 method: "POST",
@@ -89,6 +114,7 @@
                 dataType: "json"
                 });    
             request.done(function( response ) {
+            	$('#loaderModal').modal('toggle');
                 console.log(response);
                 if(response.status == 200){
                 	$('#page-heading').html('Update Location');
@@ -117,25 +143,61 @@
 
 
       $(document).on('click','.location_delete',function(){
-        $.ajax({
-            url: `${baseUrl}Location_ctrl/delete_location`,
-            method: "POST",
-            dataType: "json",
-            data : {
-                lid : $(this).data('id')
-            },
-            beforeSend(){
-                $('#locationList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
-            },
-            success(response){
-                alert(response.msg);
-                if(response.status == 200){
-                    reload();
+      	if(confirm('Are you sure?')){
+            $.ajax({
+                url: `${baseUrl}Location_ctrl/delete_location`,
+                method: "POST",
+                dataType: "json",
+                data : {
+                    lid : $(this).data('id')
+                },
+                beforeSend(){
+                    $('#locationList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
+                },
+                success(response){
+                    alert(response.msg);
+                    if(response.status == 200){
+                        reload();
+                    } else {
+                    	reload();
+                    }
                 }
-            }
-        });
+            });
+        }
       });
 
+
+	 $(document).on('change','#company',function(){
+	 	let cid = $(this).val();
+	 	if(cid){
+    	 	$.ajax({
+                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
+                method: "GET",
+                dataType: "json",
+                beforeSend(){
+                    $('#loaderModal').modal({
+               			'show':true,
+               			'backdrop' :'static',
+               			'keyboard' : false
+               		});
+                },
+                success(response){
+                	console.log(response);
+                    if(response.status == 200){
+                        var x = '<option value="">Select Cost-Center</option>';
+                        $.each(response.data,function(key,value){
+                        	x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>'; 
+                            $('#cost_center').html(x);
+                        })
+                    }
+                    
+                    $('#loaderModal').modal('toggle');
+                }
+            });
+        } else {
+        	$('#cost_center').html('<option value="">Select Cost-Center</option>');
+        }
+	 });
 
       
 
@@ -171,4 +233,11 @@
       }
 
 
+	$('#locationListTable').DataTable({
+   	"searching": false,
+    "bPaginate": false,
+    "bLengthChange": false,
+    "bFilter": true,
+    "bInfo": false,
+    "bAutoWidth": false });
     </script>

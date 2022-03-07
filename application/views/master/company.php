@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Company</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/company">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
@@ -58,16 +58,17 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
+          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Company List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered ">
-                        <thead class="bg-light">
+                    <table class="table table-bordered" id="companyListTable">
+                        <thead class="bg-info">
                             <tr>
-                            <th class="text-center uppercase">S.No.</th>
-                            <th class="text-center uppercase">Company Name</th>
-                            <th class="text-center uppercase">Contact No.</th>
-                            <th class="text-center uppercase">Alternet No.</th>
-                            <th class="text-center uppercase">Email</th>
-                            <th class="text-center uppercase">Action</th>
+                            <th class="text-center align-middle uppercase">S.No.</th>
+                            <th class="text-center align-middle uppercase">Company Name</th>
+                            <th class="text-center align-middle uppercase">Contact No.</th>
+                            <th class="text-center align-middle uppercase">Alternet No.</th>
+                            <th class="text-center align-middle uppercase">Email</th>
+                            <th class="text-center align-middle uppercase">Action</th>
                             </tr>
                         </thead>
                         <tbody id="companyList">
@@ -91,18 +92,35 @@
                   </div>
           	</div>
           </div>
-          
         </div>
-        
       </div>
-      <!-- /.card -->
     </section>
     
 
     <script>
-    const baseUrl = $('#base_url').val();
+   const baseUrl = $('#base_url').val();
+   
+   $('#companyListTable').DataTable({
+   	"searching": false,
+    "bPaginate": false,
+    "bLengthChange": false,
+    "bFilter": true,
+    "bInfo": false,
+    "bAutoWidth": false });
+   
+   $(document).on('click','#company-create,#company-update',function(){
+   		$('#loaderModal').modal({
+   			'show':true
+   		});
+   });
     
       $(document).on('click','.company_edit',function(){
+      	$('#loaderModal').modal({
+   			'show':true,
+   			'backdrop' :'static',
+   			'keyboard' : false
+   		});
+   		
         var request = $.ajax({
                 url: `${baseUrl}Company_ctrl/getCompanyById`,
                 method: "POST",
@@ -124,6 +142,8 @@
                     $('#contact').val(response.data['contact_no']);
                     $('#alternet_no').val(response.data['alternet_no']);
                 }
+                
+                $('#loaderModal').modal('toggle');
             });
             request.fail(function( jqXHR, textStatus ) {
             alert( "Request failed: " + textStatus );
@@ -140,23 +160,33 @@
 
 
       $(document).on('click','.company_delete',function(){
-        $.ajax({
-            url: `${baseUrl}Company_ctrl/delete_company`,
-            method: "POST",
-            dataType: "json",
-            data : {
-                cid : $(this).data('id')
-            },
-            beforeSend(){
-                $('#companyList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
-            },
-            success(response){
-                alert(response.msg);
-                if(response.status == 200){
-                    reload();
+      	if(confirm('Are you sure?')){
+            $.ajax({
+                url: `${baseUrl}Company_ctrl/delete_company`,
+                method: "POST",
+                dataType: "json",
+                data : {
+                    cid : $(this).data('id')
+                },
+                beforeSend(){
+                    $('#companyList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
+                    $('#loaderModal').modal({
+               			'show':true,
+               			'backdrop' :'static',
+               			'keyboard' : false
+               		});
+                },
+                success(response){
+                	$('#loaderModal').modal('toggle');
+                    alert(response.msg);
+                    if(response.status == 200){
+                        reload();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+        
+        }
       });
 
 

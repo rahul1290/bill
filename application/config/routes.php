@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 $route['default_controller'] = 'Auth_ctrl/login';
-$route['master/Company'] = 'company_ctrl';
-$route['master/Cost-Center'] = 'costcenter_ctrl';
+$route['master/company'] = 'company_ctrl';
+$route['master/cost-center'] = 'costcenter_ctrl';
 $route['master/Location'] = 'location_ctrl';
 $route['master/Meter'] = 'meter_ctrl';
 $route['master/User'] = 'user_ctrl';

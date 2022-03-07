@@ -40,8 +40,9 @@ class Location_ctrl extends CI_Controller {
 
   function index(){
 	  	$data['locations'] = $this->Location_model->location_list();
-		$data['costceners'] = $this->Costcenter_model->costcenter_list();
+		//$data['costceners'] = $this->Costcenter_model->costcenter_list();
 		$data['companies'] = $this->Company_model->Company_list();
+		
 		
 		if ($this->input->server('REQUEST_METHOD') === 'GET') {
 			$data['main_content'] = $this->load->view('master/location',$data,true);
