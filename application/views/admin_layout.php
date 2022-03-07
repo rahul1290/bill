@@ -191,20 +191,81 @@
           </li>
           <?php } ?>
           
-          <li class="nav-item">
-            <a href="<?php echo base_url('Bill-upload'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Bill-upload'){
-                    echo 'active';
-                }?>">
-              <i class="nav-icon fas fa-upload"></i>
+          
+           <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload'){ echo 'menu-is-opening menu-open'; }?>">
+            <a href="#" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
+                echo "active";
+            }?>">
+              <i class="nav-icon fas nav-icon fas fa-upload"></i>
               <p>
-                Bill Upload
+                Bill
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-          </li>
+            <ul class="nav nav-treeview ml-3">
+              <li class="nav-item">
+                <a href="<?php echo base_url('bill-upload'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
+                echo "active";
+            }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Bill Upload
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('pending-bill'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'pending-bill'){
+                    echo "active";
+                }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Pending Bill
+                  </p>
+                </a>
+              </li>
+            </ul>
+           </li>
+           
+           
+           <li class="nav-item <?php if($this->uri->segment(1) == 'payment'){ echo 'menu-is-opening menu-open'; }?>">
+            <a href="#" class="nav-link <?php if($this->uri->segment(2) == 'bill-upload'){
+                echo "active";
+            }?>">
+              <i class="nav-icon fas nav-icon fas fa-upload"></i>
+              <p>
+                Payment
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview ml-3">
+              <li class="nav-item">
+                <a href="<?php echo base_url('payment/add-payment'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'add-payment'){
+                echo "active";
+            }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Add Payment
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('payment/payment-detail'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'payment/payment-detail'){
+                    echo " active";
+                }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Payments Detail
+                  </p>
+                </a>
+              </li>
+            </ul>
+           </li>
+          
+          
           
           <li class="nav-item">
             <a href="<?php echo base_url('Meter-Reading'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Meter-Reading'){
-                    echo 'active';
+                    echo ' active';
                 }?>">
               
               <i class="nav-icon fas fa-bolt"></i>

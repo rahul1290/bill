@@ -13,8 +13,9 @@ class Meter_ctrl extends CI_Controller {
 	function getMeterById(){
 		$lid = $this->input->post('lid');
 		$result = $this->Meter_model->meter_list($lid);
+		
 		if(count($result)>0){
-			echo json_encode(array('data'=>$result[0],'status'=>200));
+		    echo json_encode(array('data'=>$result[0],'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));
 		}
@@ -23,8 +24,16 @@ class Meter_ctrl extends CI_Controller {
 	function getMeters($mid=null){
 		$result = $this->Meter_model->meter_list($mid);
 		
+		$this->db->select('max(bill_id) as bill_id');
+		$this->db->group_by('sno_id');
+		$last_bill_entry = $this->db->get_where('bill',array('sno_id'=>$result[0]['mid']))->result_array();
+		
+		$this->db->select('*');
+		$payment_detail = $this->db->get_where('bill',array('bill_id'=>$last_bill_entry[0]['bill_id']))->result_array();
+		
+		
 		if(!is_null($result) && count($result)>0){
-			echo json_encode(array('data'=>$result,'status'=>200));
+		    echo json_encode(array('data'=>$result,'payment_detail'=>$payment_detail,'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));
 		}
@@ -118,7 +127,12 @@ class Meter_ctrl extends CI_Controller {
   
   
   function bill_upload(){
-      $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
+          $data['service_no'] = $this->Meter_model->meterlistUserWise();
+      } else {
+          $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+      }
+      
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -201,11 +215,88 @@ class Meter_ctrl extends CI_Controller {
               $db_data['created_at'] = date('Y-m-d');
               $db_data['created_by'] = $this->session->userdata('user_id');
               $result = $this->Meter_model->bill_entry($db_data);
+              
               if(!is_null($result)){
                   redirect(current_url());
               }
           } else {
               $data['main_content'] = $this->load->view('bill-upload',$data,true);
+              $this->load->view('admin_layout',$data);
+          }
+      }
+  }
+  
+  
+  
+  function bill_pending(){
+      $uid = $this->session->userdata('user_id');
+      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
+          $data['service_no'] = $this->Meter_model->meterlistUserWise();
+          $data['companies'] = $this->db->query("select * from company_master where status = 1")->result_array();
+          $data['readings'] = $this->Meter_model->show_meter_readings();
+      }  else {
+          $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+          $data['companies'] = $this->db->query("select * from company_master where cid in (
+          select cid from meter_master
+          WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = $uid)
+          GROUP by cid)")->result_array();
+          $data['readings'] = $this->Meter_model->show_meter_readings($this->session->userdata('user_id'));
+          
+          $finalarray = array();
+          foreach($data['readings'] as $reading){
+              if($reading['last_reading_date'] != ''){
+                  if(date('Y-m-d') >= date('Y-m-d', strtotime($reading['last_reading_date']. ' + '.$reading['reading_frq'].' days'))){
+                      $finalarray[] = $reading;
+                  }
+              } else {
+                  $finalarray[] = $reading;
+              }
+          }
+          $data['readings'] = $finalarray;
+      }
+      if ($this->input->server('REQUEST_METHOD') === 'GET') {
+          $data['main_content'] = $this->load->view('meter-reading',$data,true);
+          $this->load->view('admin_layout',$data);
+      } else {
+          $this->form_validation->set_rules('serviceno', 'Service No', 'required|trim');
+          $this->form_validation->set_rules('company', 'Company', 'required|trim');
+          $this->form_validation->set_rules('costcenter', 'Cost-Center', 'required|trim');
+          $this->form_validation->set_rules('location', 'location', 'required|trim');
+          $this->form_validation->set_rules('reading_date', 'Reading Date', 'required|trim');
+          $this->form_validation->set_rules('reading_value', 'Reading Value', 'required|trim');
+          
+          $config = array(
+              'upload_path' => APPPATH."../upload/",
+              'allowed_types' => "gif|jpg|png|jpeg|pdf",
+              'encrypt_name' => TRUE,
+              // 'overwrite' => TRUE,
+              // 'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+              // 'max_height' => "768",
+              // 'max_width' => "1024"
+          );
+          $this->upload->initialize($config);
+          $this->load->library('upload', $config);
+          if($this->upload->do_upload('userfile')){
+              $fdata = array('upload_data' => $this->upload->data());
+              $db_data['image'] = $fdata['upload_data']['file_name'];
+          }
+          
+          $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+          if ($this->form_validation->run()){
+              $db_data['bpno'] = $this->input->post('serviceno');
+              $db_data['user_id'] = $this->session->userdata('user_id');
+              $db_data['reading_date'] = date('Y-m-d', strtotime(str_replace('/','-',$this->input->post('reading_date'))));
+              $db_data['reading_value'] = $this->input->post('reading_value');
+              $db_data['created_at'] = date('Y-m-d');
+              $db_data['created_by'] = $this->session->userdata('user_id');
+              if($this->Meter_model->meter_reading($db_data)){
+                  $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                Meter reading submitted.
+              </div>');
+                  redirect(current_url());
+              }
+          } else {
+              $data['main_content'] = $this->load->view('meter-reading',$data,true);
               $this->load->view('admin_layout',$data);
           }
       }

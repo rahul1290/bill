@@ -6,7 +6,7 @@
           	<div class="offset-sm-1 col-md-10 col-sm-12">
           		<h5 class="text-primary" id="page-heading">Meter Data Entry</h5>
           		<hr/>
-          		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Bill-upload">
+          		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>bill-upload">
           		
                     <div class="form-group row">
                     	<div class="col-md-4">

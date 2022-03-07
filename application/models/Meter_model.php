@@ -25,18 +25,20 @@ class Meter_model extends CI_Model {
 
 	function getMeterByLocationId($lid){
 		$this->db->select('*');
-		return $result = $this->db->get_where('meter_master',array('loc_id'=>$lid,'parent_meter'=>null,'status'=>1))->result_array();
+		$result = $this->db->get_where('meter_master',array('loc_id'=>$lid,'parent_meter'=>null,'status'=>1))->result_array();
+		return $result;
 	}
 
 	function getSubMeters($mid){
 		$this->db->select('*');
-		return $result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		$result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		return $result;
 	}
 
 	function meter_list($mid=null){
 	    $uid = $this->session->userdata('user_id');
 	    if($this->session->userdata('role') != 'super_admin' || $this->session->userdata('role') != 'admin'){
-	        $this->db->select('ta.reading_frq,max(reading_date) as last_reading_date');
+	        $this->db->select('ta.reading_frq,max(mr.reading_date) as last_reading_date');
 	    }
 		$this->db->select('m.*,ccm.name as cost_center,ccm.costc_id,cm.cid,cm.name as company_name,u.uid,u.fname,u.lname,lm.loc_id,lm.name as location_name');
 		$this->db->join('cost_center_master ccm','ccm.costc_id = m.costc_id AND ccm.status = 1');
