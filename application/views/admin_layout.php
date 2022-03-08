@@ -204,6 +204,16 @@
             </a>
             <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
+                <a href="<?php echo base_url('bill-list'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-list'){
+                echo "active";
+            }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Bill List 
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo base_url('bill-upload'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
                 echo "active";
             }?>">

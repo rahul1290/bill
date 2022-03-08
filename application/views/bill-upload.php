@@ -16,7 +16,7 @@
                               <select id="serviceno" name="serviceno" class="form-control">
                                 <option value="" selected>Select Service No.</option>
                                     <?php foreach($service_no as $serviceno){ ?>
-                                        <option value="<?php echo $serviceno['mid']; ?>"><?php echo $serviceno['bpno']; ?></option>
+                                        <option value="<?php echo $serviceno['mid']; ?>" <?php if(set_value('serviceno') == $serviceno['mid']){ echo "selected"; }?>><?php echo $serviceno['bpno']; ?></option>
                                     <?php } ?>
                                 </select>
                               <?php echo form_error('serviceno'); ?>
@@ -496,29 +496,30 @@
     <script>
     const baseUrl = $('#base_url').val();
     
-    function getCostCenter(cid){
-        $.ajax({
-            url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
-            method: "POST",
-            dataType: "json",
-            data : {
-                cid : $(this).data('id')
-            },
-            success(response){
-                var x = '<option value="">Select Cost-center</option>';
-                if(response.status == 200){
-                    $.each(response.data,function(key,value){
-                        x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
-                    });
-                    $('#costc_id').html(x);
-                }
-                $('#costc_id').html(x);
-            }
-        });
-	}
+//     function getCostCenter(cid){
+//         $.ajax({
+//             url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
+//             method: "POST",
+//             dataType: "json",
+//             data : {
+//                 cid : $(this).data('id')
+//             },
+//             success(response){
+//                 var x = '<option value="">Select Cost-center</option>';
+//                 if(response.status == 200){
+//                     $.each(response.data,function(key,value){
+//                         x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+//                     });
+//                     $('#costc_id').html(x);
+//                 }
+//                 $('#costc_id').html(x);
+//             }
+//         });
+// 	}
 	
-	
-	$(document).on('change','#serviceno',function(){
+	$('#serviceno').trigger('change');
+		
+	$(document).on('change','#serviceno',function(){	
 		var serviceNo = $(this).val();
 		$.ajax({
             url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,

@@ -37,9 +37,9 @@ class Assigntask_ctrl extends CI_Controller {
   function index(){
 		$data['companies'] = $this->Company_model->Company_list();
 		$data['users'] = $this->User_model->user_list();
-		$data['meters'] = $this->Meter_model->Meter_list();
+		$data['meters'] = $this->Meter_model->Meter_list();   
 	
-		$totalLength = count($data['meters']);
+		$totalLength = is_null($data['meters']) ? null : count($data['meters']);
 
 		$main_meters = array();
 		
@@ -76,13 +76,19 @@ class Assigntask_ctrl extends CI_Controller {
 					$data['users'] = $this->User_model->user_list();
 					$data['tasks'] = $this->Assigntask_model->task_list();
 					if($utid == ''){
-						$this->session->set_flashdata('msg','task created successfully.');
+						$this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                            task created successfully.
+                          </div>');
 					} else {
-						$this->session->set_flashdata('msg','task updated successfully.');
+						$this->session->set_flashdata('msg','<div class="alert alert-warning" role="alert">
+                            task updated successfully.
+                          </div>');
 					}
 					redirect(current_url());
 				} else{
-					$this->session->set_flashdata('msg','Something went wrong.');
+					$this->session->set_flashdata('msg','<div class="alert alert-danger" role="alert">
+                        Something went wrong.
+                      </div>');
 
 					$data['main_content'] = $this->load->view('assigntask',$data,true);
 	  				$this->load->view('admin_layout',$data);

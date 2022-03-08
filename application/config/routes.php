@@ -11,6 +11,7 @@ $route['master/User'] = 'user_ctrl';
 $route['Assign-meter'] = 'Assigntask_ctrl';
 $route['Assign-meter-show'] = 'Assigntask_ctrl/assign_user_list';
 $route['bill-upload'] = 'Meter_ctrl/bill_upload';
+$route['bill-list'] = 'Meter_ctrl/bill_list';
 //$route['pending-bill'] = 'Meter_ctrl/bill_pending';
 
 $route['payment/add-payment'] = 'Payment_ctrl/payment';

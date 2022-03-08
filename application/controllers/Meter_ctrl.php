@@ -23,14 +23,17 @@ class Meter_ctrl extends CI_Controller {
 
 	function getMeters($mid=null){
 		$result = $this->Meter_model->meter_list($mid);
+		$payment_detail = array();
 		
-		$this->db->select('max(bill_id) as bill_id');
-		$this->db->group_by('sno_id');
-		$last_bill_entry = $this->db->get_where('bill',array('sno_id'=>$result[0]['mid']))->result_array();
-		
-		$this->db->select('*');
-		$payment_detail = $this->db->get_where('bill',array('bill_id'=>$last_bill_entry[0]['bill_id']))->result_array();
-		
+		if(!is_null($result) && count($result)>0){
+    		$this->db->select('max(bill_id) as bill_id');
+    		$this->db->group_by('sno_id');
+    		$last_bill_entry = $this->db->get_where('bill',array('sno_id'=>$result[0]['mid']))->result_array();
+    		if(count($last_bill_entry)>0){
+        		$this->db->select('*');
+        		$payment_detail = $this->db->get_where('bill',array('bill_id'=>$last_bill_entry[0]['bill_id']))->result_array();
+    		}
+		}
 		
 		if(!is_null($result) && count($result)>0){
 		    echo json_encode(array('data'=>$result,'payment_detail'=>$payment_detail,'status'=>200));
@@ -80,7 +83,7 @@ class Meter_ctrl extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$mid = $this->input->post('mid');
-				$db_data['parent_meter'] = $this->input->post('main_meter');
+				$db_data['parent_meter'] = $this->input->post('main_meter') == '' ? null : $this->input->post('main_meter');
 				$db_data['bpno'] = $this->input->post('bpno');
 				$db_data['mtype'] = $this->input->post('mtype');
 				$db_data['cid'] = $this->input->post('cid');
@@ -88,6 +91,7 @@ class Meter_ctrl extends CI_Controller {
 				$db_data['loc_id'] = $this->input->post('loc_id');
 				$db_data['created_by'] = $this->session->userdata('user_id');
 				$db_data['created_at'] = date('Y-m-d');
+				
 				if($mid == ''){
 					$result = $this->Meter_model->create_meter($db_data);
 				} else {
@@ -146,6 +150,8 @@ class Meter_ctrl extends CI_Controller {
           $this->form_validation->set_rules('current_reading', 'Current Reading', 'required|trim');
           $this->form_validation->set_rules('current_reading_date', 'Current Reading Date', 'required|trim');
           $this->form_validation->set_rules('previous_reading', 'Previous Reading', 'required|trim');
+          $this->form_validation->set_rules('previous_reading_date', 'Previous Reading Date', 'required|trim');
+          
           $this->form_validation->set_rules('total_consumption', 'Total Consumption', 'required|trim');
           $this->form_validation->set_rules('highest_demand_rating', 'Highest Demand Rating', 'trim');
           $this->form_validation->set_rules('sum', 'Sum', 'required|trim');
@@ -184,6 +190,10 @@ class Meter_ctrl extends CI_Controller {
               $db_data['due_date'] = $this->input->post('due_date');
               $db_data['reading'] = $this->input->post('current_reading');
               $db_data['reading_date'] = $this->input->post('current_reading_date');
+              
+              $db_data['previous_reading'] = $this->input->post('previous_reading');
+              $db_data['previous_reading_date'] = $this->input->post('previous_reading_date');
+              
               $db_data['power_consumption'] = $this->input->post('power_consumption');
               $db_data['power_factor'] =   $this->input->post('power_factor');
               $db_data['total_consumption'] = $this->input->post('total_consumption');
@@ -217,8 +227,19 @@ class Meter_ctrl extends CI_Controller {
               $result = $this->Meter_model->bill_entry($db_data);
               
               if(!is_null($result)){
+                  $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                            Bill entry successfully.
+                          </div>');
+                  } else {
+                      $this->session->set_flashdata('msg','<div class="alert alert-warning" role="alert">
+                                    something went wrong.
+                                  </div>');
+                  }
+              
+              if(!is_null($result)){
                   redirect(current_url());
               }
+              
           } else {
               $data['main_content'] = $this->load->view('bill-upload',$data,true);
               $this->load->view('admin_layout',$data);
@@ -227,6 +248,20 @@ class Meter_ctrl extends CI_Controller {
   }
   
   
+  function bill_list(){
+      $this->db->select('b.*,mm.bpno,cm.name as companyName,costc.name as costcenterName,lm.name as locationName');
+      if($this->session->userdata('role') != 'super_admin'){
+        $this->db->where('b.created_by',$this->session->userdata('userid'));
+      }
+      $this->db->join('meter_master mm','mm.mid = b.sno_id');
+      $this->db->join('company_master cm','cm.cid = mm.cid');
+      $this->db->join('cost_center_master costc','costc.costc_id = mm.costc_id');
+      $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
+      $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
+      
+      $data['main_content'] = $this->load->view('bill-list',$data,true);
+      $this->load->view('admin_layout',$data);
+  }
   
   function bill_pending(){
       $uid = $this->session->userdata('user_id');

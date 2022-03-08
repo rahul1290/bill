@@ -1,15 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2022 at 04:34 PM
--- Server version: 10.1.30-MariaDB
--- PHP Version: 5.6.33
+-- Generation Time: Mar 08, 2022 at 01:19 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.3.23
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -39,6 +38,8 @@ CREATE TABLE `bill` (
   `due_date` date NOT NULL,
   `reading` float(10,2) NOT NULL,
   `reading_date` date NOT NULL,
+  `previous_reading` varchar(20) DEFAULT NULL,
+  `previous_reading_date` date DEFAULT NULL,
   `power_consumption` float(10,2) DEFAULT NULL,
   `power_factor` varchar(200) DEFAULT NULL,
   `total_consumption` float(10,2) NOT NULL,
@@ -74,8 +75,15 @@ CREATE TABLE `bill` (
   `check_no` varchar(100) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bill`
+--
+
+INSERT INTO `bill` (`bill_id`, `sno_id`, `from_date`, `to_date`, `bill_no`, `date_of_bill`, `due_date`, `reading`, `reading_date`, `previous_reading`, `previous_reading_date`, `power_consumption`, `power_factor`, `total_consumption`, `highest_demand_reading`, `je_ae_name`, `je_ae_contact_no`, `ae_ee_name`, `ae_ee_contact_no`, `fixed_demand_charges`, `minimum_charges`, `energy_charges`, `total_charges`, `electricity_duty`, `cess`, `welding_capacitor_overload`, `meter_fare`, `vca_charge`, `security_deposit`, `concession_amount`, `total_bill`, `deviation_adjustment`, `past_dues`, `security_fund_outstanding`, `payable_amount`, `extra`, `gross_amount`, `overload`, `image`, `payment_amount`, `payment_date`, `payment_by`, `payment_type`, `check_no`, `created_at`, `created_by`, `status`) VALUES
+(1, 1, '2022-02-01', '2022-02-28', 'bno123', '2022-03-08', '2022-03-01', 2300.00, '2022-03-05', '200', '2022-03-01', 0.00, '', 5600.00, 0.00, '', '', '', '', 0.00, 0.00, 0.00, 2000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2300.00, 0.00, 0.00, 0.00, 2300.00, 0.00, 3000.00, 0.00, '', NULL, NULL, NULL, NULL, NULL, '2022-03-08 00:00:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -92,7 +100,7 @@ CREATE TABLE `company_master` (
   `email` varchar(200) DEFAULT NULL,
   `created_at` date NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -100,7 +108,8 @@ CREATE TABLE `company_master` (
 --
 
 INSERT INTO `company_master` (`cid`, `name`, `address`, `contact_no`, `alternet_no`, `email`, `created_at`, `created_by`, `status`) VALUES
-(1, 'vnr', 'corporate Center, Raipur', '9770866241', '', 'vnr@gmail.com', '2022-03-07', 1, 1);
+(1, 'vnr', 'corporate Center, Raipur', '9770866241', '', 'vnr@gmail.com', '2022-03-07', 1, 1),
+(2, '123', 'sdq', '9770866241', '', 'rahul@gmail.com', '2022-03-08', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -114,7 +123,7 @@ CREATE TABLE `cost_center_master` (
   `name` varchar(50) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -136,7 +145,7 @@ CREATE TABLE `location_master` (
   `name` varchar(200) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -165,8 +174,15 @@ CREATE TABLE `meter_master` (
   `loc_id` int(255) NOT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `meter_master`
+--
+
+INSERT INTO `meter_master` (`mid`, `parent_meter`, `sort_code`, `bpno`, `mtype`, `cid`, `costc_id`, `loc_id`, `created_by`, `created_at`, `status`) VALUES
+(1, NULL, NULL, 'bp101', 'main-meter', 1, 1, 3, 1, '2022-03-07', 1);
 
 -- --------------------------------------------------------
 
@@ -183,7 +199,7 @@ CREATE TABLE `meter_reading` (
   `image` varchar(500) DEFAULT NULL,
   `created_at` date NOT NULL,
   `created_by` int(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -197,14 +213,21 @@ CREATE TABLE `task_assign` (
   `sno_id` int(255) NOT NULL,
   `sub_meter_id` int(255) DEFAULT NULL,
   `user_id` int(255) NOT NULL,
-  `meter_reading` tinyint(1) NOT NULL DEFAULT '0',
+  `meter_reading` tinyint(1) NOT NULL DEFAULT 0,
   `reading_frq` int(11) DEFAULT NULL,
-  `bill_upload` tinyint(1) NOT NULL DEFAULT '0',
+  `bill_upload` tinyint(1) NOT NULL DEFAULT 0,
   `upload_frq` int(11) DEFAULT NULL,
   `created_by` int(255) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `task_assign`
+--
+
+INSERT INTO `task_assign` (`task_id`, `sno_id`, `sub_meter_id`, `user_id`, `meter_reading`, `reading_frq`, `bill_upload`, `upload_frq`, `created_by`, `created_at`, `status`) VALUES
+(2, 1, NULL, 2, 1, 1, 1, 1, 1, '2022-03-08', 1);
 
 -- --------------------------------------------------------
 
@@ -223,7 +246,7 @@ CREATE TABLE `users` (
   `sex` enum('male','female') NOT NULL,
   `created_by` int(255) DEFAULT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -231,7 +254,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `password`, `sex`, `created_by`, `created_at`, `status`) VALUES
-(1, 1, 'admin', 'istator', 'admin@gmail.com', '9770866241', '8cb2237d0679ca88db6464eac60da96345513964', 'male', NULL, '2022-02-17', 1);
+(1, 1, 'admin', 'istator', 'admin@gmail.com', '9770866241', '8cb2237d0679ca88db6464eac60da96345513964', 'male', NULL, '2022-02-17', 1),
+(2, 2, 'fa', '1', 'fa1@gmail.com', '9770866241', '50a12dd50d40e23444069e97d689c74f3a39a787', 'male', 1, '2022-03-08', 1);
 
 -- --------------------------------------------------------
 
@@ -242,7 +266,7 @@ INSERT INTO `users` (`uid`, `utype`, `fname`, `lname`, `email`, `contact_no`, `p
 CREATE TABLE `user_type` (
   `utype_id` int(255) NOT NULL,
   `type_name` varchar(100) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -340,13 +364,13 @@ ALTER TABLE `user_type`
 -- AUTO_INCREMENT for table `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `bill_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `bill_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `company_master`
 --
 ALTER TABLE `company_master`
-  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cost_center_master`
@@ -364,7 +388,7 @@ ALTER TABLE `location_master`
 -- AUTO_INCREMENT for table `meter_master`
 --
 ALTER TABLE `meter_master`
-  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `mid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `meter_reading`
@@ -376,13 +400,13 @@ ALTER TABLE `meter_reading`
 -- AUTO_INCREMENT for table `task_assign`
 --
 ALTER TABLE `task_assign`
-  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `task_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_type`

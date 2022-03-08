@@ -8,7 +8,7 @@ class Auth extends CI_Controller {
 			$this->load->database();
 		$this->load->model('Auth_model');
 		if($this->session->userdata('user_id') != null){
-		  redirect('/master/Company');
+		  redirect('/master/company');
 		}
 	  }
 
@@ -30,7 +30,7 @@ class Auth extends CI_Controller {
 				  'name' => $result[0]['fname'].' '.$result[0]['lname'],
 				  'role' => $result[0]['type_name'],
 				));
-				redirect('/master/Company');
+				redirect('/master/company');
 			  } else {
 				$this->session->set_flashdata('msg', '<p class="text-danger text-center">Login Failed. Please try again.</p>');
 				$this->load->view('login');	  
