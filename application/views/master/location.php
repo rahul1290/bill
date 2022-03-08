@@ -25,7 +25,6 @@
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Cost-Center<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
-                          <input id="lid" name="lid" type="hidden" class="form-control" value="<?php echo set_value('lid'); ?>">
                           <select id="cost_center" name="cost_center" class="form-control">
                             <option value="" selected>Select Cost-Center</option>
                           </select>
@@ -34,6 +33,19 @@
                     </div>
                     
                     <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Location Name<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <select id="location" name="location" class="form-control">
+                            <option value="" selected>Select Location</option>
+                            <?php foreach($locations2 as $location){ ?>
+                            	<option value="<?php echo $location['lc_id']; ?>"><?php echo $location['lc_name']; ?></option>
+                            <?php }?>
+                          </select>
+                            <?php echo form_error('location'); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row" style="display:none;">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Location Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="lname" name="lname" type="text" class="form-control" value="<?php echo set_value('lname'); ?>">
@@ -98,6 +110,9 @@
    			'show':true
    		});
    });
+   
+   
+   
     
       $(document).on('click','.location_edit',function(){
       	
@@ -122,7 +137,27 @@
                     $('#cancel-btn').show();
                     $('#location-create').hide();
                     $('#reset-btn').hide();
-
+                    
+                    $.ajax({
+                        url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${response.data['cid']}`,
+                        method: "GET",
+                        dataType: "json",
+                        async: false,
+                        beforeSend(){},
+                        success(response){
+                        	console.log(response);
+                            if(response.status == 200){
+                                var x = '<option value="">Select Cost-Center</option>';
+                                $.each(response.data,function(key,value){
+                                	x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+                                });
+                                $('#cost_center').html(x);
+                            }
+                        }
+                    });
+					
+					$('#location').val(response.data['lc_id']);
+					$('#company').val(response.data['cid'])
                     $('#lid').val(response.data['loc_id']);
                     $('#cost_center').val(response.data['cost_center_id']);
                     $('#lname').val(response.data['name']);
@@ -231,13 +266,19 @@
             }
         });
       }
+      
+      
+      $(document).on('change','#location',function(){
+      	$('#lname').val($('#location option:selected').text());
+      });
 
 
 	$('#locationListTable').DataTable({
-   	"searching": false,
-    "bPaginate": false,
-    "bLengthChange": false,
-    "bFilter": true,
-    "bInfo": false,
-    "bAutoWidth": false });
+   		"searching": false,
+//         "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false  
+    });
     </script>

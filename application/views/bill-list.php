@@ -4,11 +4,12 @@
         <div class="card-body">
           <div class="row">
           	<div class="col-sm-12">
-          		<h5 class="text-primary" id="page-heading">My Bills</h5>
+          		<h5 class="text-primary" id="page-heading">My Bill Entries</h5>
           		<hr/>
+          		<div class="table-responsive">
           		<table border="1">
           			<thead>
-          				<tr>
+          				<tr class="bg-info">
           					<th>Sno.</th>
           					<th>Company</th>
           					<th>Cost-Center</th>
@@ -52,9 +53,12 @@
 								<td><?php echo $bill['payable_amount']; ?></td>
 								<td><?php echo $bill['gross_amount']; ?></td>
           					</tr>
-          				<?php }} ?>
+          				<?php }} else { ?>
+          					<tr><td colspan="18" class="text-center">No Entries found.</td></tr>
+          				<?php } ?>
           			</tbody>
           		</table>
+          		</div>
           	</div>
           </div>
           

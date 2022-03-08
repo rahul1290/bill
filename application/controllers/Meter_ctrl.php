@@ -36,7 +36,7 @@ class Meter_ctrl extends CI_Controller {
 		}
 		
 		if(!is_null($result) && count($result)>0){
-		    echo json_encode(array('data'=>$result,'payment_detail'=>$payment_detail,'status'=>200));
+		    echo json_encode(array('data'=>$result,'last_bill_entry'=>$last_bill_entry,'payment_detail'=>$payment_detail,'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));
 		}
@@ -76,6 +76,10 @@ class Meter_ctrl extends CI_Controller {
 			$this->form_validation->set_rules('mtype', 'Meter type', 'required|trim');
 			if($this->input->post('mtype') == 'sub-meter'){
 			    $this->form_validation->set_rules('main_meter', 'Main Meter', 'required|trim');
+			} else if($this->input->post('mtype') == 'main-meter'){
+// 			    $this->form_validation->set_rules('connection_type', 'Connection Type', 'required|trim');
+// 			    $this->form_validation->set_rules('connection_from_date', 'Connection from date', 'required|trim');
+// 			    $this->form_validation->set_rules('connection_to_date', 'Connection to date', 'required|trim');
 			}
 			$this->form_validation->set_rules('cid', 'Company', 'required|trim');
 			$this->form_validation->set_rules('costc_id', 'Cost-center', 'required|trim');
@@ -91,7 +95,9 @@ class Meter_ctrl extends CI_Controller {
 				$db_data['loc_id'] = $this->input->post('loc_id');
 				$db_data['created_by'] = $this->session->userdata('user_id');
 				$db_data['created_at'] = date('Y-m-d');
-				
+				$db_data['connection_type'] = $this->input->post('connection_type');
+				$db_data['connection_from_date'] = $this->input->post('connection_from_date');
+				$db_data['connection_to_date'] = $this->input->post('connection_to_date');
 				if($mid == ''){
 					$result = $this->Meter_model->create_meter($db_data);
 				} else {
@@ -228,17 +234,15 @@ class Meter_ctrl extends CI_Controller {
               
               if(!is_null($result)){
                   $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
-                            Bill entry successfully.
-                          </div>');
+                        Bill entry successfully.
+                      </div>');
+                  redirect('/bill-list');
                   } else {
                       $this->session->set_flashdata('msg','<div class="alert alert-warning" role="alert">
-                                    something went wrong.
-                                  </div>');
+                            something went wrong.
+                          </div>');
+                      redirect(current_url());
                   }
-              
-              if(!is_null($result)){
-                  redirect(current_url());
-              }
               
           } else {
               $data['main_content'] = $this->load->view('bill-upload',$data,true);

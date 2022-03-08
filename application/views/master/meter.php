@@ -73,6 +73,45 @@
                         </div>
                     </div>
                     
+                    <div id="connection-type-box" style="display:<?php 
+                            if(set_value('connection_type') == ''){ 
+                                echo "none"; 
+                            } else { 
+                                if(set_value('connection_type') == 'permanent'){
+                                    echo "";
+                                } else {
+                                    echo "none";
+                                }
+                            }?>">
+                        <div class="form-group row" id="main-meter-block">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Connection Type</label>
+                            <div class="col-sm-8">
+                              <select id="connection_type" name="connection_type" class="form-control">
+                              	<option value="">Select Connection Type</option>
+                              	<option value="permanent">Permanent</option>
+                              	<option value="temporary">Temporary</option>
+                              </select>
+                              <?php echo form_error('connection_type'); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row" id="main-meter-block">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">From Date</label>
+                            <div class="col-sm-8">
+                              <input type="date" name="connection_from_date" id="connection_from_date" class="form-control" />
+                              <?php echo form_error('connection_from_date'); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row" id="main-meter-block">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">To Date</label>
+                            <div class="col-sm-8">
+                              <input type="date" name="connection_to_date" id="connection_to_date" class="form-control" />
+                              <?php echo form_error('connection_to_date'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">BP No.<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
@@ -91,9 +130,10 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
+          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Meter List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered">
-                          <thead class="bg-light">
+                    <table class="table table-bordered" id="meterTable">
+                          <thead class="bg-info">
                               <tr>
                                 <th class="text-center uppercase">S.No.</th>
                                 <th class="text-center uppercase">BP No.</th>
@@ -162,6 +202,7 @@
 	  $(document).on('change','#mtype',function(){
 	  	if($(this).val() == 'sub-meter'){
 	  		$('#main-meter-block').show();
+	  		$('#connection-type-box').hide(); 
 	  			
 	  		$.ajax({
             url: `${baseUrl}Meter_ctrl/getMeterByLocationId/${$('#loc_id').val()}`,
@@ -178,11 +219,20 @@
                 }
             }
         });
-	  	} else {
+	  	} 
+	  	else if($(this).val() == 'main-meter') {
 	  		$('#main-meter-block').hide();
+	  		$('#connection-type-box').show();
+	  		 
 	  		var x = '<option value="">Select Main Meter</option>';
             $('#main_meter').html(x);
 	  	}
+	  	
+	  	else {
+	  		$('#main-meter-block').hide();
+	  		$('#connection-type-box').hide();
+	  	}
+	  	
 	  	
 	  });
 
@@ -284,6 +334,13 @@
                         debugger;
                         $('#main-meter-block').show();
                     }
+                    if(response.data['mtype'] == 'main-meter'){
+                    	$('#connection-type-box').show();
+                    	$('#connection_type').val(response.data['connection_type']);
+                    	$('#connection_from_date').val(response.data['connection_from_date']);
+                    	$('#connection_to_date').val(response.data['connection_to_date']);
+                    }
+                    
                     $('#main_meter').val(response.data['parent_meter']);
                     $('#bpno').val(response.data['bpno']);
                 }
@@ -299,6 +356,7 @@
             $('#cancel-btn').hide();
             $('#meter-create').show();
             $('#reset-btn').show();
+            $('#connection-type-box').hide();
       });
 
 
@@ -357,5 +415,13 @@
         });
       }
 
+	$('#meterTable').DataTable({
+       	"searching": false,
+//         "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 
     </script>

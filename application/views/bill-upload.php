@@ -517,7 +517,27 @@
 //         });
 // 	}
 	
-	$('#serviceno').trigger('change');
+	fun();
+	
+	function fun(){
+		var serviceNo = $('#serviceno').val();
+		if(serviceNo){
+    		$.ajax({
+                url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
+                method: "GET",
+                dataType: "json",
+                success(response){
+                    if(response.status == 200){
+                        $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
+                        $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
+                        $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
+                    }
+                }
+            });
+        }
+	}
+	
+	
 		
 	$(document).on('change','#serviceno',function(){	
 		var serviceNo = $(this).val();

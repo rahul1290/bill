@@ -166,6 +166,7 @@
                   <p>Meter</p>
                 </a>
               </li>
+              <?php if($this->session->userdata('role') == 'super_admin'){ ?>
               <li class="nav-item">
                 <a href="<?php echo base_url('master/User')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
                         echo 'active';
@@ -174,6 +175,7 @@
                   <p>User</p>
                 </a>
               </li>
+              <?php } ?>
             </ul>
           </li>
           <?php } ?>
@@ -192,7 +194,7 @@
           <?php } ?>
           
           
-           <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload'){ echo 'menu-is-opening menu-open'; }?>">
+           <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload' || $this->uri->segment(1) =='bill-list'){ echo 'menu-is-opening menu-open'; }?>">
             <a href="#" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
                 echo "active";
             }?>">
@@ -223,6 +225,7 @@
                   </p>
                 </a>
               </li>
+              <?php /* 
               <li class="nav-item">
                 <a href="<?php echo base_url('pending-bill'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'pending-bill'){
                     echo "active";
@@ -233,6 +236,7 @@
                   </p>
                 </a>
               </li>
+              */ ?>
             </ul>
            </li>
            

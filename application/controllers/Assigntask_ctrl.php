@@ -31,7 +31,8 @@ class Assigntask_ctrl extends CI_Controller {
 
 	function getSubMeterDetail($mid){
 		$this->db->select('*');
-		return $result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		$result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		return $result;
 	}
 
   function index(){
