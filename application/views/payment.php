@@ -11,9 +11,10 @@
                 <div class="col-12">
                 <?php echo $this->session->flashdata('msg'); ?>
                 <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>payment/add-paymet">
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-3 col-form-label">Company</label>
-                        <div class="col-sm-9">
+                <div class="form-group row">  
+                <div class="col-md-3">
+                        <label for="inputEmail3" class="col-sm-12 col-form-label">Company</label>
+                        <div class="col-sm-12">
                           <select id="company" name="company" class="form-control">
                             <option value="">Select Company</option>
                             <?php foreach($companies as $company){ ?>
@@ -23,10 +24,11 @@
                         <?php echo form_error('company'); ?>
                         </div>
                     </div>
-                  
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-3 col-form-label ">Service No.</label>
-                        <div class="col-sm-9">
+                    
+                            <div class="col-md-3">
+                    
+                        <label for="inputEmail3" class="col-sm-12 col-form-label ">Service No.</label>
+                        <div class="col-sm-12">
                           <select id="serviceno" name="serviceno" class="form-control">
                             <option value="">Select Service No</option>
                             <?php foreach($service_no as $sno){ ?>
@@ -35,31 +37,33 @@
                           </select>
                         <?php echo form_error('serviceno'); ?>
                         </div>
-                    </div>
-                        
+                    
+                            </div>
                       
-                      <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-3 col-form-label">Cost-Center</label>
-                          <div class="col-sm-9">
+                      <div class="col-md-3">
+                          <label for="inputEmail3" class="col-sm-12 col-form-label">Cost-Center</label>
+                          <div class="col-sm-12">
                             <select id="costcenter" name="costcenter" class="form-control">
                               <option value="">Select Cost-Center</option>
                             </select>
                           <?php echo form_error('costcenter'); ?>
                           </div>
                       </div>
-                      <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-3 col-form-label">Location</label>
-                          <div class="col-sm-9">
+                      <div class="col-md-3">
+                          <label for="inputEmail3" class="col-sm-12 col-form-label">Location</label>
+                          <div class="col-sm-12">
                             <select id="location" name="location" class="form-control">
                               <option value="">Select Location</option>
                             </select>
                           <?php echo form_error('location'); ?>
                           </div>
                       </div>
-                      <hr/>
                       
+                            </div>
+                            <hr/>
+                      <div class="form-group">
                       <div class="row">
-                      	<div class="col">
+                      	<div class="col-md-6">
                           	 <div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Bill No.</label>
                                   <div class="col-sm-9">
@@ -68,7 +72,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col">
+                          <div class="col-md-6">
                               <div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Bill</label>
                                   <div class="col-sm-9">
@@ -81,7 +85,7 @@
                       
                       
                       <div class="row">
-                      	<div class="col">
+                      	<div class="col-md-6">
                       		<div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Bill Amount</label>
                                   <div class="col-sm-9">
@@ -90,7 +94,7 @@
                                   </div>
                               </div>
                       	</div>
-                      	<div class="col">
+                      	<div class="col-md-6">
                       		<div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Due Date</label>
                                   <div class="col-sm-9">
@@ -101,7 +105,8 @@
                       	</div>
                       </div>
                       <hr/>
-                      
+                      <div class="row">
+                      <div class="col-md-6">
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-3 col-form-label">Payment Amount</label>
                           <div class="col-sm-9">
@@ -109,6 +114,8 @@
                           <?php echo form_error('payment_amount'); ?>
                           </div>
                       </div>
+                            </div>
+                            <div class="col-md-6">
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-3 col-form-label">Payment Date</label>
                           <div class="col-sm-9">
@@ -116,6 +123,8 @@
                           <?php echo form_error('payment_date'); ?>
                           </div>
                       </div>
+                            </div>
+                            <div class="col-md-6">
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-3 col-form-label">Payment Type</label>
                           <div class="col-sm-9">
@@ -125,14 +134,16 @@
                             </select>
                           </div>
                       </div>
-                      
+                            </div>
+                            <div class="col-md-6">
                       <div class="form-group row">
                           <label for="inputEmail3" class="col-sm-3 col-form-label">Check No.</label>
                           <div class="col-sm-9">
                             <input type="text" id="checkno" name="checkno" class="form-control" placeholder="Check no" />
                           </div>
                       </div>
-                      
+                            </div>
+                            </div>
                       
                       <div class="offset-1 mt-3">
                         <input type="submit" class="btn btn-success uppercase" id="assign-create" value="Submit">
@@ -141,6 +152,7 @@
                         <input type="reset" class="btn btn-secondary uppercase" id="cancel-btn" style="display:none;" value="Cancel">
                         <input type="reset" class="btn btn-secondary uppercase" id="reset-btn" value="Reset">
                       </div>
+                            </div>
                   </form>
                 </div>
               </div>
