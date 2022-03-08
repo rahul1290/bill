@@ -40,6 +40,7 @@ class Costcenter_ctrl extends CI_Controller {
 	}
 
   function index(){
+        $data['ccids'] = $this->db->get_where('cost_center',array('status'=>1))->result_array();
 		$data['costceners'] = $this->Costcenter_model->costcenter_list();
 		$data['companies'] = $this->Company_model->Company_list();
 		
@@ -47,12 +48,14 @@ class Costcenter_ctrl extends CI_Controller {
 			$data['main_content'] = $this->load->view('master/cost-center',$data,true);
 	  		$this->load->view('admin_layout',$data);
 		} else {
+		    $this->form_validation->set_rules('cost_center', 'Select Cost Center', 'required|trim');
 			$this->form_validation->set_rules('cname', 'Cost-Center name', 'required|trim');
 			$this->form_validation->set_rules('company', 'Compnay', 'required|trim');
 			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$cid = $this->input->post('cid');
 				$db_data['name'] = $this->input->post('cname');
+				$db_data['cc_id'] = $this->input->post('cost_center');
 				$db_data['company_id'] = $this->input->post('company');
 				$db_data['created_by'] = $this->session->userdata('user_id');
 				$db_data['created_at'] = date('Y-m-d');

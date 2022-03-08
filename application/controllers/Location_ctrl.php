@@ -39,23 +39,28 @@ class Location_ctrl extends CI_Controller {
 	}
 
   function index(){
+        $data['locations2'] = $this->db->get_where('location',array('status'=>1))->result_array();
 	  	$data['locations'] = $this->Location_model->location_list();
-		$data['costceners'] = $this->Costcenter_model->costcenter_list();
+		//$data['costceners'] = $this->Costcenter_model->costcenter_list();
 		$data['companies'] = $this->Company_model->Company_list();
+		
 		
 		if ($this->input->server('REQUEST_METHOD') === 'GET') {
 			$data['main_content'] = $this->load->view('master/location',$data,true);
 	  		$this->load->view('admin_layout',$data);
 		} else {
-			$this->form_validation->set_rules('lname', 'Location name', 'required|trim');
+		    $this->form_validation->set_rules('location', 'Location name', 'required|trim');
+			//$this->form_validation->set_rules('lname', 'Location name', 'required|trim');
 			$this->form_validation->set_rules('cost_center', 'Cost center', 'required|trim');
 			$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 			if ($this->form_validation->run()){
 				$lid = $this->input->post('lid');
+				$db_data['lc_id'] = $this->input->post('location');
 				$db_data['name'] = $this->input->post('lname');
 				$db_data['cost_center_id'] = $this->input->post('cost_center');
 				$db_data['created_by'] = $this->session->userdata('user_id');
 				$db_data['created_at'] = date('Y-m-d');
+				
 				if($lid == ''){
 					$result = $this->Location_model->create_location($db_data);
 				} else {

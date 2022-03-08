@@ -26,9 +26,10 @@
                     <th>Task</th>
                     <th>Assign User</th>
                     <th>Frequency of Upload</th>
+                    <th>Operations</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody>	
                   <?php $c=1; foreach($records as $record){
                       if($record['mtype'] != 'main-meter'){
                           continue;
@@ -97,7 +98,8 @@
                         	<table width="100%">
                         		<tr>
                         			<td style='' class='m-0 p-0'>
-                                      <select style='width:100%;height:30px;'>
+                        			
+                                      <select style='width:100%;height:30px;' id="assign_user_meter_reading_<?php echo $record['mid']; ?>_<?php echo $record['mid']; ?>">
                                         <option value=''>Select User</option>
                                         <?php foreach($users as $user){
                                           if($user['uid'] == $record['user_id']){
@@ -111,7 +113,7 @@
                         		</tr>
                         		<tr>
                         			<td style='' class='m-0 p-0'>
-                                      <select style='width:100%;height:30px;'>
+                                      <select style='width:100%;height:30px;' id="assign_user_bill_uploading_<?php echo $record['mid']; ?>_<?php echo $record['mid']; ?>">
                                         <option value=''>Select User</option>
                                         <?php foreach($users as $user){
                                           if($user['uid'] == $record['user_id']){
@@ -124,12 +126,12 @@
                                     </td>
                         		</tr>
                         	</table>
-                            <?php foreach($records as $r) { 
+                            <?php foreach($records as $key =>$r) { 
                               if($r['parent_meter'] == $record['mid']){
                                 echo "<table width='100%' style='height:100%'>
                                   <tr>
                                     <td style='' class='m-0 p-0'>
-                                      <select style='width:100%;height:28px;'>
+                                      <select style='width:100%;height:28px;' id='assign_user_meter_reading_".$r['mid']."_".$record['mid']."'>
                                         <option value=''>Select User</option>";
                                         foreach($users as $user){
                                           if($user['uid'] == $r['user_id']){
@@ -143,7 +145,7 @@
                                   </tr>
                                   <tr>
                                   <td style='' class='m-0 p-0'>
-                                    <select style='width:100%;height:28px;'>
+                                    <select style='width:100%;height:28px;' id='assign_user_bill_uploading_".$r['mid']."_".$record['mid']."'>
                                       <option value=''>Select User</option>";
                                       foreach($users as $user){
                                         if($user['uid'] == $r['user_id']){
@@ -165,25 +167,25 @@
                         	<table style='height:100%'>
                               <tr>
                                 <td class='m-0 p-0'>
-                                  <input style='height:28px;' type='number' value="<?php if($record['meter_reading'] == 1){
+                                  <input style='height:28px;' type='number' id='reading_freq_<?php echo $record['mid']; ?>_<?php echo $record['mid']; ?>' value="<?php if($record['meter_reading'] == 1){
                                       echo $record['reading_frq'];
                                   }?>"/>
                                 </td>
                               </tr>
                               <tr>
                                 <td class='m-0 p-0'>
-                                  <input style='height:28px;' type='number' value="<?php if($record['bill_upload'] == 1){
+                                  <input style='height:28px;' type='number' id='bill_upload_freq_<?php echo $record['mid']; ?>_<?php echo $record['mid']; ?>' value="<?php if($record['bill_upload'] == 1){
                                       echo $record['upload_frq'];
                                   }?>"/>
                                 </td>
                               </tr>
                             </table>
-                            <?php foreach($records as $r) { 
+                            <?php foreach($records as $key => $r) { 
                               if($r['parent_meter'] == $record['mid']){ ?>
                                 <table style='height:100%'>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input style='height:28px;' type='number' value="<?php
+                                      <input style='height:28px;' type='number' id='reading_freq_<?php echo $r['mid']; ?>_<?php echo $record['mid']; ?>' value="<?php
                                       if($r['meter_reading'] == 1){
                                           echo $r['reading_frq'];
                                       }
@@ -192,7 +194,7 @@
                                   </tr>
                                   <tr>
                                     <td class='m-0 p-0'>
-                                      <input style='height:28px;' type='number' value="<?php
+                                      <input style='height:28px;' id='bill_upload_freq_<?php echo $r['mid']; ?>_<?php echo $record['mid']; ?>' type='number' value="<?php
                                       if($r['bill_upload'] == 1){
                                           echo $r['upload_frq'];
                                       }
@@ -202,6 +204,25 @@
                                 </table>
                              <?php  }
                             } ?> 
+                        </td>
+                        <td class="m-0 p-0 text-center">
+                        	<table width="100%" class="m-0 p-0">
+                        		<tr>
+                        			<td>
+                        				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['loc_id']; ?>_<?php echo $record['mid']; ?>_<?php echo $record['mid']; ?>" type="button" value="Assign" />
+                        			</td>
+                        		</tr>
+                        	</table>
+                        	<?php foreach($records as $key => $r) { 
+                        	    if($r['parent_meter'] == $record['mid']){ ?>
+                        	    <table width="100%" class="m-0 p-0">
+                            		<tr>
+                            			<td>
+                            				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['loc_id']; ?>_<?php echo $r['mid']; ?>_<?php echo $record['mid']; ?>" type="button" value="Assign" />
+                            			</td>
+                            		</tr>
+                            	</table>
+                        	<?php } } ?>
                         </td>
                       </tr>
                   <?php } ?>
@@ -235,6 +256,17 @@
                 }
             }
         });
+    });
+    
+    
+    $(document).on('click','.assign_btn',function(){
+    	let str = $(this).data('id');
+    	const x = str.split('_');
+    	const mainMeter = x[2];
+    	const subMeter = x[1];
+    	
+    	console.log($('#assign_user_meter_reading_'+ x[2] +'_'+ x[1]).val());
+    	console.log($('#reading_freq_'+ x[2] +'_'+ x[1]).val());
     });
 	
     </script>

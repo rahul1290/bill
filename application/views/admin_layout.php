@@ -134,7 +134,7 @@
             </a>
             <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
-                <a href="<?php echo base_url()?>master/Company" class="nav-link <?php if($this->uri->segment('2') == 'Company'){
+                <a href="<?php echo base_url()?>master/company" class="nav-link <?php if($this->uri->segment('2') == 'company'){
                         echo "active";
                     }?>">
                   <i class="far fa-building nav-icon"></i>
@@ -143,7 +143,7 @@
               </li>
               
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Cost-Center')?>" class="nav-link <?php if($this->uri->segment('2') == 'Cost-Center'){
+                <a href="<?php echo base_url('master/cost-center')?>" class="nav-link <?php if($this->uri->segment('2') == 'cost-center'){
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -166,6 +166,7 @@
                   <p>Meter</p>
                 </a>
               </li>
+              <?php if($this->session->userdata('role') == 'super_admin'){ ?>
               <li class="nav-item">
                 <a href="<?php echo base_url('master/User')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
                         echo 'active';
@@ -174,6 +175,7 @@
                   <p>User</p>
                 </a>
               </li>
+              <?php } ?>
             </ul>
           </li>
           <?php } ?>
@@ -192,7 +194,7 @@
           <?php } ?>
           
           
-           <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload'){ echo 'menu-is-opening menu-open'; }?>">
+           <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload' || $this->uri->segment(1) =='bill-list'){ echo 'menu-is-opening menu-open'; }?>">
             <a href="#" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
                 echo "active";
             }?>">
@@ -204,6 +206,16 @@
             </a>
             <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
+                <a href="<?php echo base_url('bill-list'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-list'){
+                echo "active";
+            }?>">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>
+                    Bill List 
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo base_url('bill-upload'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
                 echo "active";
             }?>">
@@ -213,6 +225,7 @@
                   </p>
                 </a>
               </li>
+              <?php /* 
               <li class="nav-item">
                 <a href="<?php echo base_url('pending-bill'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'pending-bill'){
                     echo "active";
@@ -223,6 +236,7 @@
                   </p>
                 </a>
               </li>
+              */ ?>
             </ul>
            </li>
            
@@ -343,6 +357,19 @@
     </div>
     <strong>Copyright &copy; 2021-2022 <a href="<?php echo base_url(); ?>">Electricity Bill</a>.</strong> All rights reserved.
   </footer>
+  
+  
+  
+  <div class="modal" id="loaderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+  
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

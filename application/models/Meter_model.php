@@ -51,7 +51,8 @@ class Meter_model extends CI_Model {
 		if($this->session->userdata('role') != 'super_admin' || $this->session->userdata('role') != 'admin'){
 		  $this->db->join('task_assign ta',"ta.user_id = $uid AND ta.meter_reading = 1 AND (ta.sno_id = m.mid OR ta.sub_meter_id = m.mid)",'left');
 		  $this->db->join('meter_reading mr','mr.bpno = m.mid','left');
-		  $this->db->group_by('mr.bpno');
+		  $this->db->order_by('m.mid','DESC');
+		  $this->db->group_by('m.bpno');
 		}
 		$result = $this->db->get_where('meter_master m',array('m.status'=>1))->result_array();
 		

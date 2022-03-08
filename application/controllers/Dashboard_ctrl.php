@@ -10,14 +10,10 @@ class Dashboard_ctrl extends CI_Controller {
   }
 
   function index(){
-      $role = $this->session->userdata('role'); 
-      if($role != 'super_admin'){
-
-      } else {
-        $data['pending_reading'] = '';
-        $data['pending_billupload'] = '';
-        $data['main_content'] = $this->load->view('user-dashboard',$data,true);
-	  		$this->load->view('admin_layout',$data);
-      }
+    $role = $this->session->userdata('role');
+    $data['pending_reading'] = '';
+    $data['pending_billupload'] = '';
+    $data['main_content'] = $this->load->view('dashboard',$data,true);
+  	$this->load->view('admin_layout',$data);
   }
 }

@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Cost-Center</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Cost-Center">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/cost-center">
           		
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Company<label class="text-danger">*</label></label>
@@ -23,6 +23,19 @@
                     </div>
                     
                     <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Cost Center<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <select id="cost_center" name="cost_center" class="form-control">
+                            <option value="" selected>Select Cost Center</option>
+                                <?php foreach($ccids as $ccid){ ?>
+                                    <option value="<?php echo $ccid['cc_id']; ?>"><?php echo $ccid['cc_name']; ?></option>
+                                <?php } ?>
+                          </select>
+                          <?php echo form_error('cost_center'); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row" style="display:none;">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Cost Center Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
                           <input id="cname" name="cname" type="text" class="form-control" value="<?php echo set_value('cname'); ?>">
@@ -40,16 +53,17 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
+          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Cost-Center List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered">
-                          <thead class="bg-light">
+                    <table class="table table-bordered" id="cost-centerTable">
+                          <thead class="bg-info">
                               <tr>
-                                <th class="text-center uppercase">S.No.</th>
-                                <th class="text-center uppercase">Cost Center Name</th>
-                                <th class="text-center uppercase">Company Name</th>
-                                <th class="text-center uppercase">Created At</th>
-                                <th class="text-center uppercase">Created By</th>
-                                <th class="text-center uppercase">Action</th>
+                                <th class="text-center align-middle uppercase">S.No.</th>
+                                <th class="text-center align-middle uppercase">Cost Center Name</th>
+                                <th class="text-center align-middle uppercase">Company Name</th>
+                                <th class="text-center align-middle uppercase">Created At</th>
+                                <th class="text-center align-middle uppercase">Created By</th>
+                                <th class="text-center align-middle uppercase">Action</th>
                               </tr>
                           </thead>
                           <tbody id="costcenterList">
@@ -81,7 +95,21 @@
     <script>
     const baseUrl = $('#base_url').val();
     
+    
+    
+    $(document).on('click','#costcenter-create,#costcenter-update',function(){
+    	$('#loaderModal').modal({
+   			'show':true
+   		});
+   });
+    
       $(document).on('click','.costcenter_edit',function(){
+      	$('#loaderModal').modal({
+   			'show':true,
+   			'backdrop' :'static',
+   			'keyboard' : false
+   		});
+   		
         var request = $.ajax({
                 url: `${baseUrl}Costcenter_ctrl/getCostCenterById`,
                 method: "POST",
@@ -89,6 +117,7 @@
                 dataType: "json"
                 });    
             request.done(function( response ) {
+            	$('#loaderModal').modal('toggle');
                 console.log(response);
                 if(response.status == 200){
                 	$('#page-heading').html('Update Cost-Center');
@@ -96,8 +125,9 @@
                     $('#cancel-btn').show();
                     $('#costcenter-create').hide();
                     $('#reset-btn').hide();
-
-                    $('#cid').val(response.data['costc_id']);
+                    
+                    $('#cost_center').val(response.data['cc_id']);
+					$('#cid').val(response.data['costc_id']);
                     $('#company').val(response.data['company_id']);
                     $('#cname').val(response.data['name']);
                 }
@@ -117,26 +147,26 @@
 
 
       $(document).on('click','.costcenter_delete',function(){
-        $.ajax({
-            url: `${baseUrl}Costcenter_ctrl/delete_costcenter`,
-            method: "POST",
-            dataType: "json",
-            data : {
-                cid : $(this).data('id')
-            },
-            beforeSend(){
-                $('#costcenterList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
-            },
-            success(response){
-                alert(response.msg);
-                if(response.status == 200){
-                    reload();
+      	if(confirm('Are you sure?')){
+            $.ajax({
+                url: `${baseUrl}Costcenter_ctrl/delete_costcenter`,
+                method: "POST",
+                dataType: "json",
+                data : {
+                    cid : $(this).data('id')
+                },
+                beforeSend(){
+                    $('#costcenterList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
+                },
+                success(response){
+                    alert(response.msg);
+                    if(response.status == 200){
+                        reload();
+                    }
                 }
-            }
-        });
+            });
+        }
       });
-
-
       
 
       function reload(){
@@ -169,6 +199,21 @@
             }
         });
       }
+		
+		
+	$(document).on('change','#cost_center',function(){
+		let costcenter = $('#cost_center option:selected').text();
+		$('#cname').val(costcenter);
+	});	
+
+	$('#cost-centerTable').DataTable({
+       	"searching": false,
+//         "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 
 
     </script>

@@ -9,7 +9,7 @@ class Auth_ctrl extends CI_Controller {
     $this->load->model('Auth_model');
     if($this->session->userdata('user_id') != null){
       if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
-        redirect('/Company_ctrl');
+        redirect('/master/company');
       } else {
         redirect('/Bill-upload');
       }
@@ -35,7 +35,8 @@ class Auth_ctrl extends CI_Controller {
             'role' => $result[0]['type_name'],
           ));
           if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
-            redirect('/Company_ctrl');
+               echo "welcome"; die; 
+              redirect('/master/company');
           } else {
             redirect('/Bill-upload');
           }
