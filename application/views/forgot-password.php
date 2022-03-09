@@ -9,8 +9,8 @@
           		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Forgot-Password">
           		<?php echo $this->session->flashdata('msg');?>
                         <div class="row mb-3">
-                              <label for="inputEmail3" class="col-3">Old Password<label class="text-danger">*</label></label>
-                              <div class="col-8">
+                              <label for="inputEmail3" class="col-md-3">Old Password<label class="text-danger">*</label></label>
+                              <div class="col-md-8">
                                     <input type="password" name="old_password" id="old_password" class="form-control" placeholder="Old Password" autocomplete="off" />
                                     <?php echo form_error('old_password'); ?>
                               </div>
@@ -18,15 +18,15 @@
                               <div id="old_password_error" style="display:none;">InValid</div>
                         </div>
                         <div class="row mb-3">
-                              <label for="inputEmail3" class="col-3">New Password<label class="text-danger">*</label></label>
-                              <div class="col-8">
+                              <label for="inputEmail3" class="col-md-3">New Password<label class="text-danger">*</label></label>
+                              <div class="col-md-8">
                                     <input type="password" name="new_password" id="new_password" class="form-control" placeholder="New Password" autocomplete="off" />
                                     <?php echo form_error('new_password'); ?>
                               </div>
                         </div>
                         <div class="row mb-3">
-                              <label for="inputEmail3" class="col-3">Confirm Password<label class="text-danger">*</label></label>
-                              <div class="col-8">
+                              <label for="inputEmail3" class="col-md-3">Confirm Password<label class="text-danger">*</label></label>
+                              <div class="col-md-8">
                                     <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" autocomplete="off" />
                                     <?php echo form_error('confirm_password'); ?>
                               </div>

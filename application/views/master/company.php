@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Company</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/company">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
@@ -58,69 +58,49 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
-          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Company List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered" id="companyListTable">
-                        <thead class="bg-info">
+                    <table class="table table-bordered text-sm">
+                        <thead class="bg-light">
                             <tr>
-                            <th class="text-center align-middle uppercase">S.No.</th>
-                            <th class="text-center align-middle uppercase">Company Name</th>
-                            <th class="text-center align-middle uppercase">Contact No.</th>
-                            <th class="text-center align-middle uppercase">Alternet No.</th>
-                            <th class="text-center align-middle uppercase">Email</th>
-                            <th class="text-center align-middle uppercase">Action</th>
+                            <th class="text-center uppercase">S.No.</th>
+                            <th class="text-center uppercase">Company Name</th>
+                            <th class="text-center uppercase">Contact No.</th>
+                            <th class="text-center uppercase">Alternet No.</th>
+                            <th class="text-center uppercase">Email</th>
+                            <th class="text-center uppercase">Action</th>
                             </tr>
                         </thead>
                         <tbody id="companyList">
-                            <?php if(count($companies)>0){ $c=1; foreach($companies as $company){ ?>
+                            <?php $c=1; foreach($companies as $company){ ?>
                                 <tr>
                                     <td class="text-center"><?= $c++; ?></td>
-                                    <td class="text-center"><?= $company['name']; ?></td>
+                                    <td class="text-left"><?= $company['name']; ?></td>
                                     <td class="text-center"><?= $company['contact_no']; ?></td>
                                     <td class="text-center"><?= $company['alternet_no']; ?></td>
                                     <td class="text-center"><?= $company['email']; ?></td>
-                                    <td class="text-center">
-                                        <a href="javascript:void(0);" class="company_edit" data-id="<?= $company['cid']; ?>"><i class="fas fa-edit"></i></a>
-                                        <a href="javascript:void(0);" class="company_delete ml-2" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash"></i></a>
+                                    <td style="width:70px;" class="text-center">
+                                        <a title="Edit" href="javascript:void(0);" class="company_edit mr-1" data-id="<?= $company['cid']; ?>"><i class="fas fa-edit"></i></a> | 
+                                        <a title="Delete" href="javascript:void(0);" class="company_delete ml-1" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                     </td>
                                 </tr>
-                            <?php } } else { ?>
-                                <tr><td colspan="6" class="text-center">No Record Found</td></tr>
+                            
                             <?php } ?>
                         </tbody>
                     </table>
                   </div>
           	</div>
           </div>
+          
         </div>
       </div>
+      <!-- /.card -->
     </section>
     
 
     <script>
-   const baseUrl = $('#base_url').val();
-   
-   $('#companyListTable').DataTable({
-   	"searching": false,
-    "bPaginate": false,
-    "bLengthChange": false,
-    "bFilter": true,
-    "bInfo": false,
-    "bAutoWidth": false });
-   
-   $(document).on('click','#company-create,#company-update',function(){
-   		$('#loaderModal').modal({
-   			'show':true
-   		});
-   });
+    const baseUrl = $('#base_url').val();
     
       $(document).on('click','.company_edit',function(){
-      	$('#loaderModal').modal({
-   			'show':true,
-   			'backdrop' :'static',
-   			'keyboard' : false
-   		});
-   		
         var request = $.ajax({
                 url: `${baseUrl}Company_ctrl/getCompanyById`,
                 method: "POST",
@@ -142,8 +122,6 @@
                     $('#contact').val(response.data['contact_no']);
                     $('#alternet_no').val(response.data['alternet_no']);
                 }
-                
-                $('#loaderModal').modal('toggle');
             });
             request.fail(function( jqXHR, textStatus ) {
             alert( "Request failed: " + textStatus );
@@ -160,33 +138,23 @@
 
 
       $(document).on('click','.company_delete',function(){
-      	if(confirm('Are you sure?')){
-            $.ajax({
-                url: `${baseUrl}Company_ctrl/delete_company`,
-                method: "POST",
-                dataType: "json",
-                data : {
-                    cid : $(this).data('id')
-                },
-                beforeSend(){
-                    $('#companyList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
-                    $('#loaderModal').modal({
-               			'show':true,
-               			'backdrop' :'static',
-               			'keyboard' : false
-               		});
-                },
-                success(response){
-                	$('#loaderModal').modal('toggle');
-                    alert(response.msg);
-                    if(response.status == 200){
-                        reload();
-                    }
+        $.ajax({
+            url: `${baseUrl}Company_ctrl/delete_company`,
+            method: "POST",
+            dataType: "json",
+            data : {
+                cid : $(this).data('id')
+            },
+            beforeSend(){
+                $('#companyList').html('<tr><td colspan="6"><p class="text-center">Loading..</p></td></tr>');
+            },
+            success(response){
+                alert(response.msg);
+                if(response.status == 200){
+                    reload();
                 }
-            });
-        } else {
-        
-        }
+            }
+        });
       });
 
 
