@@ -16,7 +16,9 @@
                               <select id="serviceno" name="serviceno" class="form-control">
                                 <option value="" selected>Select Service No.</option>
                                     <?php foreach($service_no as $serviceno){ ?>
-                                        <option value="<?php echo $serviceno['mid']; ?>" <?php if(set_value('serviceno') == $serviceno['mid']){ echo "selected"; }?>><?php echo $serviceno['bpno']; ?></option>
+                                        <option value="<?php echo $serviceno['mid']; ?>" <?php if(set_value('serviceno') == $serviceno['mid']){ echo "selected"; }?>>
+                                        	<?php echo $serviceno['bpno']; ?> <?php echo substr($serviceno['company_name'],0,3); ?>-<?php echo substr($serviceno['location_name'],0,3); ?>-<?php echo substr($serviceno['costcenter_name'],0,3); ?> 
+                                        </option>
                                     <?php } ?>
                                 </select>
                               <?php echo form_error('serviceno'); ?>
@@ -547,9 +549,13 @@
             dataType: "json",
             success(response){
                 if(response.status == 200){
+                	console.log(response.payment_detail[0].from_date);
                     $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
                     $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
                     $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
+                    
+                    $('#previous_reading').val(response.payment_detail[0].reading);
+                    $('#previous_reading_date').val(response.payment_detail[0].reading_date);
                 }
             }
         });

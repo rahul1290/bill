@@ -1,4 +1,4 @@
-    <section class="content mt-2">
+   <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
@@ -29,6 +29,8 @@
           					<th>Past Dues</th>
           					<th>Payable Amount</th>
           					<th>Gross Payable Amount</th>
+          					<th>Next Date</th>
+          					<th>Status</th>
           				</tr>
           			</thead>
           			<tbody>
@@ -53,7 +55,11 @@
 								<td><?php echo $bill['past_dues']; ?></td>
 								<td><?php echo $bill['payable_amount']; ?></td>
 								<td><?php echo $bill['gross_amount']; ?></td>
+								<td><?php echo date('Y-m-d', strtotime('+1 month'));?></td>
+								<td><?php echo date('Y-m-d', strtotime($bill['date_of_bill'].'+1 month')); ?></td>
+								<td><?php echo $bill['date_of_bill'];?>_<?php echo $bill['bill_upload']; ?>_<?php echo $bill['upload_frq']; ?></td>
           					</tr>
+          					
           				<?php }} else { ?>
           					<tr><td colspan="18" class="text-center">No Entries found.</td></tr>
           				<?php } ?>

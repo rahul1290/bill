@@ -142,7 +142,7 @@ class Meter_ctrl extends CI_Controller {
       } else {
           $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
       }
-      
+//      print_r($data['service_no']); die;
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -253,16 +253,41 @@ class Meter_ctrl extends CI_Controller {
   
   
   function bill_list(){
-      $this->db->select('b.*,mm.bpno,cm.name as companyName,costc.name as costcenterName,lm.name as locationName');
-      if($this->session->userdata('role') != 'super_admin'){
-        $this->db->where('b.created_by',$this->session->userdata('user_id'));
+//       $this->db->select('b.*,mm.bpno,cm.name as companyName,costc.name as costcenterName,lm.name as locationName');
+//       if($this->session->userdata('role') != 'super_admin'){
+//         $this->db->where('b.created_by',$this->session->userdata('user_id'));
+//       }
+//       $this->db->join('meter_master mm','mm.mid = b.sno_id');
+//       $this->db->join('company_master cm','cm.cid = mm.cid');
+//       $this->db->join('cost_center_master costc','costc.costc_id = mm.costc_id');
+//       $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
+//       $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
+
+      if($this->session->userdata('role') == 'super_admin'){
+      $data['bills'] =  $this->db->query("select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+                    join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
+                    LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
+                    LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
+                    JOIN company_master cm on cm.cid = t1.cid
+                    JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
+                    JOIN location_master lm on lm.loc_id = t1.loc_id
+                    LEFT JOIN (SELECT *,if(isnull(sub_meter_id),sno_id,sub_meter_id) as snoid FROM task_assign
+                    WHERE user_id = 2 and status = 1) t3 on t3.snoid = t1.mid
+                    WHERE t1.mid = t2.mid")->result_array();
+      } else{ 
+      $data['bills'] = $this->db->query("SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq 
+                    FROM task_assign ta
+                    join (select t1.mid,t1.bpno,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+                    join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
+                    LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
+                    LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
+                    JOIN company_master cm on cm.cid = t1.cid
+                    JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
+                    JOIN location_master lm on lm.loc_id = t1.loc_id
+                    WHERE t1.mid = t2.mid) as t3 on t3.mid = ta.sno_id
+                    WHERE ta.user_id = 2 and ta.status = 1")->result_array();
       }
-      $this->db->join('meter_master mm','mm.mid = b.sno_id');
-      $this->db->join('company_master cm','cm.cid = mm.cid');
-      $this->db->join('cost_center_master costc','costc.costc_id = mm.costc_id');
-      $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
-      $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
-      //print_r($this->db->last_query()); die;
+      
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }

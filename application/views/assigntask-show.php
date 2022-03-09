@@ -12,7 +12,14 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-
+			<select id="com_filter">
+				<option value="">Select Company</option>
+				<?php foreach($companies as $company) { ?>
+					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>><?php echo $company['name']; ?></option>
+				<?php } ?>
+			</select>
+			<input type="button" id="filter" value="Search" />
+				
           	<div class="table-responsive">
           		<span class="text-primary" id="page-heading">Assigned Users</span>
           		
@@ -47,7 +54,7 @@
                         } 
                         ?> 
                         <!-- Service No. -->
-                        <td class="text-center m-0 p-0" style="vertical-align: middle;height:<?php echo ($ic * 2) * 30; ?>px;"><?php echo $record['bpno']; ?></td>
+                        <td class="text-center m-0 p-0" style="vertical-align: middle;height:<?php echo ($ic * 2) * 30; ?>px;"><?php echo $record['bpno']; ?><br/><?php echo $record['fname']; ?></td>
                         
                         <!-- Sub Meter -->
                         <td class="text-center m-0 p-0">
@@ -64,10 +71,10 @@
                         <!-- company -->
                         <td class="text-center m-0 p-0">
                           <table class="table-fd" width="100%">
-                          		<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><?php echo substr($r['company'], 0,5); ?></td></tr>
+                          		<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><span title="<?php echo $r['company'];?>"><?php echo substr($r['company'], 0,5); ?></span></td></tr>
                             <?php foreach($records as $r) {
                               if($r['parent_meter'] == $record['mid']){
-                                  echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'>".substr($r['company'], 0,5)."</td></tr>";
+                                  echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'><span title='".$r['company']."'>".substr($r['company'], 0,5)."</span></td></tr>";
                               }
                             } ?> 
                           </table>
@@ -76,10 +83,10 @@
                         <!-- costcenter -->
                         <td class="text-center m-0 p-0">
                           <table class="table-fd" width="100%">
-                          		<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><?php echo substr($record['cost_center_name'], 0,5); ?></td></tr>
+                          		<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic) ?>px;vertical-align: middle;'><span title="<?php echo $record['cost_center_name']; ?>"><?php echo substr($record['cost_center_name'], 0,5); ?></span></td></tr>
                             <?php foreach($records as $r) {
                               if($r['parent_meter'] == $record['mid']){
-                                  echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'>".substr($r['cost_center_name'], 0,5)."</td></tr>";
+                                  echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'><span title='".$r['cost_center_name']."'>".substr($r['cost_center_name'], 0,5)."</span></td></tr>";
                               }
                             } ?> 
                           </table>
@@ -89,10 +96,10 @@
                         <!-- Location -->
                         <td class="text-center m-0 p-0">
                           <table class="table-fd" width="100%">
-                          	<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic); ?>px;vertical-align: middle;'><?php echo $record['location']; ?></td></tr>
+                          	<tr><td class='m-0 p-0' style='height:<?php echo ((($ic * 2) * 30)/$ic); ?>px;vertical-align: middle;'><span title="<?php echo $record['location']; ?>"><?php echo $record['location']; ?></span></td></tr>
                             <?php foreach($records as $r) { 
                               if($r['parent_meter'] == $record['mid']){
-                                echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'>".$r['location']."</td></tr>";
+                                  echo "<tr><td class='m-0 p-0' style='height:".((($ic * 2) * 30)/$ic)."px;vertical-align: middle;'><span title='".$r['location']."'>".$r['location']."</span></td></tr>";
                               }
                             } ?> 
                           </table>
@@ -373,6 +380,16 @@
         } else {
         	alert('Please fill all required fields.');
         }
+    });
+    
+    
+    $(document).on('click','#filter',function(){
+    	const company = $('#com_filter').val();
+    	if(company){
+    		window.location.href = `${baseUrl}Assign-meter-show/${company}`;
+    	} else {
+    		window.location.href = `${baseUrl}Assign-meter-show`;
+    	}
     });
 	
     </script>

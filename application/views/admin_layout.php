@@ -48,6 +48,34 @@
         </a>
       </li>
       <!-- Notifications Dropdown Menu -->
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-bell"></i>
+        <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <span class="dropdown-item dropdown-header">15 Notifications</span>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item">
+        <i class="fas fa-envelope mr-2"></i> 4 new messages
+        <span class="float-right text-muted text-sm">3 mins</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item">
+        <i class="fas fa-users mr-2"></i> 8 friend requests
+        <span class="float-right text-muted text-sm">12 hours</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item">
+        <i class="fas fa-file mr-2"></i> 3 new reports
+        <span class="float-right text-muted text-sm">2 days</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+	  </li>
+      
       <li class="nav-item dropdown">
         <a class="nav-link text-capitalize" data-toggle="dropdown" href="#">
           <i class="fa fa-user-cog"></i>
@@ -122,7 +150,7 @@
             </a>
           </li>     
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
-            <li class="nav-item <?php if($this->uri->segment('1') == 'master'){
+            <li class="nav-item <?php if($this->uri->segment('1') == 'master' || $this->uri->segment('1') == 'Assign-meter-show'){
               echo "menu-is-opening menu-open";
           }?>">
             <a href="#" class="nav-link">
@@ -175,10 +203,20 @@
                   <p>User</p>
                 </a>
               </li>
+              
+              <li class="nav-item">
+                <a href="<?php echo base_url('Assign-meter-show')?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter-show'){
+                        echo 'active';
+                    }?>">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>Assign User Task</p>
+                </a>
+              </li>
               <?php } ?>
             </ul>
           </li>
           <?php } ?>
+          <?php /* ?>
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url('Assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter'){
@@ -192,6 +230,7 @@
             </a>
           </li>
           <?php } ?>
+          <?php */ ?>
           
           
            <li class="nav-item <?php if($this->uri->segment(1) == 'bill-upload' || $this->uri->segment(1) =='bill-list'){ echo 'menu-is-opening menu-open'; }?>">

@@ -67,11 +67,21 @@ class Meter_model extends CI_Model {
 	function meterlistUserWise($uid=null){
 	    $result = array();
 	    if(is_null($uid)){
-	        $result = $this->db->query("SELECT * from meter_master m
-                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
+	        $result = $this->db->query("SELECT m.*,cm.name as company_name,lm.name as location_name,ccm.name as costcenter_name 
+                            from meter_master m
+                            JOIN (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE status = 1) m2 on m2.mno = m.mid 
+                            JOIN company_master cm on cm.cid = m.cid
+                            JOIN location_master lm on lm.loc_id = m.loc_id
+                            JOIN cost_center_master ccm on ccm.costc_id = m.costc_id
+                            where m.status = 1")->result_array();
 	    } else {
-	       $result = $this->db->query("SELECT * from meter_master m
-                            join (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE user_id = $uid and status = 1) m2 on m2.mno = m.mid where m.status = 1")->result_array();
+	       $result = $this->db->query("SELECT m.*,cm.name as company_name,lm.name as location_name,ccm.name as costcenter_name 
+                            from meter_master m
+                            JOIN (SELECT  IFNULL(sub_meter_id,sno_id) as mno FROM `task_assign` WHERE user_id = $uid and status = 1) m2 on m2.mno = m.mid
+                            JOIN company_master cm on cm.cid = m.cid
+                            JOIN location_master lm on lm.loc_id = m.loc_id
+                            JOIN cost_center_master ccm on ccm.costc_id = m.costc_id
+                            where m.status = 1")->result_array();
 	    }
 	    
 	    if(count($result)>0){

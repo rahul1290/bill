@@ -201,18 +201,29 @@ class Assigntask_ctrl extends CI_Controller {
       echo json_encode(array('msg'=>'User Assign successfully.','status'=>200));
       
   }
-  function assign_user_list(){
-	$data['records'] = $this->db->query("SELECT mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
+  function assign_user_list($companyId=null,$costCenterId=null){
+      $data['companies'] = $this->Company_model->company_list();
+      
+      
+        $query = "SELECT u.fname,u.lname,mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
 								cm.cid,cm.name as company,ccm.costc_id,ccm.name as cost_center_name,lm.loc_id,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
 								ta.bill_upload,ta.upload_frq
 								FROM meter_master mm
-								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid
-								JOIN company_master cm on cm.cid = mm.cid
-								JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id
+								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid";
+                                if(is_null($companyId)){
+								    $query.= " JOIN company_master cm on cm.cid = mm.cid";
+                                } else {
+                                    $query.= " JOIN company_master cm on cm.cid = mm.cid AND cm.cid = ".$companyId;
+                                }
+                                $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id
 								JOIN location_master lm on lm.loc_id = mm.loc_id
+                                join users u on u.uid = mm.created_by
 								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
 								group by mm.bpno
-								order by mm.mid")->result_array();
+								order by mm.mid";
+    //echo $query; die;
+      
+                                $data['records'] = $this->db->query($query)->result_array();
     //print_r($data['records']); die; 
 	$this->db->select('*');
 	$data['users'] = $this->db->get_where('users',array('status'=>1))->result_array();
