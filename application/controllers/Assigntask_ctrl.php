@@ -201,8 +201,11 @@ class Assigntask_ctrl extends CI_Controller {
       echo json_encode(array('msg'=>'User Assign successfully.','status'=>200));
       
   }
-  function assign_user_list($companyId=null,$costCenterId=null){
+  function assign_user_list($companyId=null,$costCenterId=null,$location=null){
       $data['companies'] = $this->Company_model->company_list();
+      $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
+      
+      $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
       
       
         $query = "SELECT u.fname,u.lname,mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
@@ -215,9 +218,20 @@ class Assigntask_ctrl extends CI_Controller {
                                 } else {
                                     $query.= " JOIN company_master cm on cm.cid = mm.cid AND cm.cid = ".$companyId;
                                 }
-                                $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id
-								JOIN location_master lm on lm.loc_id = mm.loc_id
-                                join users u on u.uid = mm.created_by
+                                
+                                if(is_null($costCenterId)){
+                                    $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id";
+                                } else {
+                                    $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id AND ccm.costc_id = ".$costCenterId;
+                                }
+                                
+                                if(is_null($location)){
+                                    $query.= " JOIN location_master lm on lm.loc_id = mm.loc_id";
+                                } else {
+                                    $query.= " JOIN location_master lm on lm.loc_id = mm.loc_id AND lm.loc_id = ".$location;
+                                }
+                                
+                                $query .= " join users u on u.uid = mm.created_by
 								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
 								group by mm.bpno
 								order by mm.mid";

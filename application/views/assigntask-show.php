@@ -12,18 +12,46 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-			<select id="com_filter">
-				<option value="">Select Company</option>
-				<?php foreach($companies as $company) { ?>
-					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>><?php echo $company['name']; ?></option>
-				<?php } ?>
-			</select>
-			<input type="button" id="filter" value="Search" />
+        	<div class="row">
+        		<div class="col">
+        			<select id="com_filter">
+        				<option value="">Select Company</option>
+        				<?php foreach($companies as $company) { ?>
+        					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>><?php echo $company['name']; ?></option>
+        				<?php } ?>
+        			</select>
+        		</div>
+        		<div class="col">
+        			<select id="costc_filter">
+        				<option value="">Select Costcenter</option>
+        				<?php foreach ($cost_centers as $cost_center){ ?>
+        					<option value="<?php echo $cost_center['costc_id']; ?>" <?php if($cost_center['costc_id'] == $this->uri->segment('3')){ echo 'selected'; }?>><?php echo $cost_center['name']; ?></option>
+        				<?php } ?>
+        			</select>
+        		</div>
+        		<div class="col">
+        			<select id="location_filter">
+        				<option value="">Select Location</option>
+        				<?php foreach ($locations as $location){ ?>
+        					<option value="<?php echo $location['loc_id']; ?>" <?php if($location['loc_id'] == $this->uri->segment('4')){ echo 'selected'; }?>><?php echo $location['name']; ?></option>
+        				<?php } ?>
+        			</select>
+        		</div>
+        		<div class="col">
+        			<input type="button" id="filter" value="Search" />
+        		</div>
+        	</div>
+			
+			
+			
+			
+			
+			
 				
           	<div class="table-responsive">
           		<span class="text-primary" id="page-heading">Assigned Users</span>
           		
-              <table class="table table-bordered">
+              <table class="table table-bordered text-sm">
                 <thead class="bg-light">
                   <tr>
                     <th>Id</th>
@@ -243,8 +271,8 @@
                         	<table width="100%" class="m-0 p-0">
                         		<tr>
                         			<td>
-                        				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Assign" />
-                        				<input class="btn btn-sm btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Reset" />
+                        				<input class="btn btn-xs btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Assign" />
+                        				<input class="btn btn-xs btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Reset" />
                         			</td>
                         		</tr>
                         	</table>
@@ -253,8 +281,8 @@
                         	    <table width="100%" class="m-0 p-0">
                             		<tr>
                             			<td>
-                            				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Assign" />
-                            				<input class="btn btn-sm btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Reset" />
+                            				<input class="btn btn-xs btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Assign" />
+                            				<input class="btn btn-xs btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Reset" />
                             			</td>
                             		</tr>
                             	</table>
@@ -383,12 +411,72 @@
     });
     
     
+    $(document).on('change','#com_filter',function(){
+    	const comId = $(this).val();
+    	if(comId){
+        	$.ajax({
+                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
+                method: "GET",
+                dataType: "json",
+                beforeSend(){},
+                success(response){
+                	var x = '<option value="">Select Cost-center</option>';
+                    if(response.status == 200){
+                    	$.each(response.data,function(key,value){
+                    		x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+                    	});
+                    	$('#costc_filter').html(x);
+                    } else {
+                    	$('#costc_filter').html('<option value="">Select Cost-center</option>');
+                    }
+                    $('#location_filter').html('<option value="">Select Location</option>');
+                }
+            });
+        } else {
+        	$('#costc_filter').html('<option value="">Select Cost-center</option>');
+        	$('#location_filter').html('<option value="">Select Location</option>');
+        }
+    });
+    
+    $(document).on('change','#costc_filter',function(){
+    	const costId = $(this).val();
+    	$.ajax({
+            url: `${baseUrl}Location_ctrl/getLocationByCostcenterId/${costId}`,
+            method: "GET",
+            dataType: "json",
+            beforeSend(){},
+            success(response){
+            	var x = '<option value="">Select Location</option>';
+                if(response.status == 200){
+                	$.each(response.data,function(key,value){
+                		x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
+                	});
+                	$('#location_filter').html(x);
+                } else {
+                	$('#location_filter').html('<option value="">Select Location</option>');
+                }
+            }
+        });
+    });
+    
+    
     $(document).on('click','#filter',function(){
     	const company = $('#com_filter').val();
+    	const costcenter = $('#costc_filter').val();
+    	const location = $('#location_filter').val();
     	if(company){
-    		window.location.href = `${baseUrl}Assign-meter-show/${company}`;
+    		if(costcenter){
+    			if(location){
+    				window.location.href = `${baseUrl}assign-meter-show/${company}/${costcenter}/${location}`;
+    			}else{
+    				window.location.href = `${baseUrl}assign-meter-show/${company}/${costcenter}`;
+    			}
+    		} else {
+    			window.location.href = `${baseUrl}assign-meter-show/${company}`;
+    		}
+    		
     	} else {
-    		window.location.href = `${baseUrl}Assign-meter-show`;
+    		window.location.href = `${baseUrl}assign-meter-show`;
     	}
     });
 	

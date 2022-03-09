@@ -264,7 +264,7 @@ class Meter_ctrl extends CI_Controller {
 //       $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
 
       if($this->session->userdata('role') == 'super_admin'){
-      $data['bills'] =  $this->db->query("select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+      $bills =  $this->db->query("select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
                     LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
@@ -275,7 +275,7 @@ class Meter_ctrl extends CI_Controller {
                     WHERE user_id = 2 and status = 1) t3 on t3.snoid = t1.mid
                     WHERE t1.mid = t2.mid")->result_array();
       } else{ 
-      $data['bills'] = $this->db->query("SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq 
+      $bills = $this->db->query("SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq 
                     FROM task_assign ta
                     join (select t1.mid,t1.bpno,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
@@ -288,6 +288,31 @@ class Meter_ctrl extends CI_Controller {
                     WHERE ta.user_id = 2 and ta.status = 1")->result_array();
       }
       
+      $final_array = array();
+      foreach($bills as $bill){
+          $temp = array();
+          $temp = $bill;
+          $temp['next_ittration'] = date('Y-m-d', strtotime($bill['date_of_bill'].'+1 month'));
+          
+          $date1 = date('Y-m-d', strtotime($bill['date_of_bill'].'+1 month'));
+          $date2 = date('Y-m-d');
+          
+          $date1=date_create($date1);
+          $date2=date_create($date2);
+          $diff=date_diff($date2,$date1);
+          if($diff->format("%R") == '+'){
+              if($diff->format("%a")){
+                  $temp['status'] = $diff->format("%a").' Days left';
+              } else {
+                  $temp['status'] = 'Today';
+              }
+          } else {
+              $temp['status'] = 'Date passed';
+          }
+          
+          $final_array[] = $temp;
+      }
+      $data['bills'] = $final_array;
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }

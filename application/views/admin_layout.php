@@ -18,7 +18,9 @@
 <script src="<?php echo base_url('assets')?>/js/demo.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
+<style>
+  .form-control{background-color:#f9f4f4;}
+</style>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -88,11 +90,11 @@
             <i class="fas fa-user mr-2"></i> <?php echo $this->session->userdata('name'); ?>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="<?php echo base_url('Forgot-Password'); ?>" class="dropdown-item">
-            <i class="fas fa-power-off mr-2"></i> Change Password
+          <a href="<?php echo base_url('forgot-password'); ?>" class="dropdown-item">
+            <i class="fas fa-key mr-2"></i> Change Password
           </a>
           <div class="dropdown-divider"></div>
-          <a href="<?php echo base_url('Log-Out'); ?>" class="dropdown-item">
+          <a href="<?php echo base_url('log-out'); ?>" class="dropdown-item">
             <i class="fas fa-power-off mr-2"></i> LogOut
           </a>
           <!-- <div class="dropdown-divider"></div>
@@ -150,7 +152,7 @@
             </a>
           </li>     
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
-            <li class="nav-item <?php if($this->uri->segment('1') == 'master' || $this->uri->segment('1') == 'Assign-meter-show'){
+            <li class="nav-item <?php if($this->uri->segment('1') == 'master' || $this->uri->segment('1') == 'assign-meter-show'){
               echo "menu-is-opening menu-open";
           }?>">
             <a href="#" class="nav-link">
@@ -179,7 +181,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
+                <a href="<?php echo base_url('master/location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
                         echo 'active';
                     }?>">
                   <i class="far fa-map nav-icon"></i>
@@ -187,7 +189,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Meter')?>" class="nav-link <?php if($this->uri->segment('2') == 'Meter'){
+                <a href="<?php echo base_url('master/meter')?>" class="nav-link <?php if($this->uri->segment('2') == 'Meter'){
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -196,7 +198,7 @@
               </li>
               <?php if($this->session->userdata('role') == 'super_admin'){ ?>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/User')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
+                <a href="<?php echo base_url('master/user')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
                         echo 'active';
                     }?>">
                   <i class="far fa-user nav-icon"></i>
@@ -205,7 +207,7 @@
               </li>
               
               <li class="nav-item">
-                <a href="<?php echo base_url('Assign-meter-show')?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter-show'){
+                <a href="<?php echo base_url('assign-meter-show')?>" class="nav-link <?php if($this->uri->segment('1') == 'assign-meter-show'){
                         echo 'active';
                     }?>">
                   <i class="far fa-user nav-icon"></i>
@@ -219,7 +221,7 @@
           <?php /* ?>
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
           <li class="nav-item">
-            <a href="<?php echo base_url('Assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter'){
+            <a href="<?php echo base_url('assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'assign-meter'){
                     echo 'active';
                 }?>">
               <i class="nav-icon fas fa-user"></i>
@@ -248,7 +250,7 @@
                 <a href="<?php echo base_url('bill-list'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-list'){
                 echo "active";
             }?>">
-                  <i class="nav-icon fas fa-upload"></i>
+                  <i class="nav-icon fas fa-list"></i>
                   <p>
                     Bill List 
                   </p>
@@ -258,7 +260,7 @@
                 <a href="<?php echo base_url('bill-upload'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'bill-upload'){
                 echo "active";
             }?>">
-                  <i class="nav-icon fas fa-upload"></i>
+                  <i class="nav-icon fas fa-file-upload"></i>
                   <p>
                     Bill Upload
                   </p>
@@ -284,7 +286,7 @@
             <a href="#" class="nav-link <?php if($this->uri->segment(2) == 'bill-upload'){
                 echo "active";
             }?>">
-              <i class="nav-icon fas nav-icon fas fa-upload"></i>
+              <i class="nav-icon fas nav-icon fas fa-rupee-sign"></i>
               <p>
                 Payment
                 <i class="right fas fa-angle-left"></i>
@@ -295,7 +297,7 @@
                 <a href="<?php echo base_url('payment/add-payment'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'add-payment'){
                 echo "active";
             }?>">
-                  <i class="nav-icon fas fa-upload"></i>
+                  <i class="nav-icon fas fa-money-check"></i>
                   <p>
                     Add Payment
                   </p>
@@ -305,7 +307,7 @@
                 <a href="<?php echo base_url('payment/payment-detail'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'payment/payment-detail'){
                     echo " active";
                 }?>">
-                  <i class="nav-icon fas fa-upload"></i>
+                  <i class="nav-icon fas fa-file-invoice"></i>
                   <p>
                     Payments Detail
                   </p>

@@ -8,7 +8,7 @@
           		<h5 class="text-primary" id="page-heading">Assign User</h5>
           		<hr/>
           		<?php echo $this->session->flashdata('msg'); ?>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>Assign-meter">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>assign-meter">
           		
                     <div class="form-group row">
                     	<div class="col row">
