@@ -255,14 +255,14 @@ class Meter_ctrl extends CI_Controller {
   function bill_list(){
       $this->db->select('b.*,mm.bpno,cm.name as companyName,costc.name as costcenterName,lm.name as locationName');
       if($this->session->userdata('role') != 'super_admin'){
-        $this->db->where('b.created_by',$this->session->userdata('userid'));
+        $this->db->where('b.created_by',$this->session->userdata('user_id'));
       }
       $this->db->join('meter_master mm','mm.mid = b.sno_id');
       $this->db->join('company_master cm','cm.cid = mm.cid');
       $this->db->join('cost_center_master costc','costc.costc_id = mm.costc_id');
       $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
       $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
-      
+      //print_r($this->db->last_query()); die;
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }

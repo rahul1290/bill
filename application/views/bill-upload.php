@@ -432,7 +432,7 @@
                     </div>
                     <div class="form-group row mt-3">
                     	<div class="row">
-                            <label for="inputEmail3" class="col-sm-5 col-form-label text-xs">Image<label class="text-danger">*</label></label>
+                            <label for="inputEmail3" class="col-sm-5 col-form-label text-xs">Image</label>
                             <div class="col-sm-7">
                               <input type="file" name="userfile" id="userfile"  class="form-control"/>
                               <?php echo form_error('userfile'); ?>
