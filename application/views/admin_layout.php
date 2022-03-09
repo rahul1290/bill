@@ -62,11 +62,11 @@
             <i class="fas fa-user mr-2"></i> <?php echo $this->session->userdata('name'); ?>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="<?php echo base_url('Forgot-Password'); ?>" class="dropdown-item">
-            <i class="fas fa-power-off mr-2"></i> Change Password
+          <a href="<?php echo base_url('forgot-password'); ?>" class="dropdown-item">
+            <i class="fas fa-key mr-2"></i> Change Password
           </a>
           <div class="dropdown-divider"></div>
-          <a href="<?php echo base_url('Log-Out'); ?>" class="dropdown-item">
+          <a href="<?php echo base_url('log-out'); ?>" class="dropdown-item">
             <i class="fas fa-power-off mr-2"></i> LogOut
           </a>
           <!-- <div class="dropdown-divider"></div>
@@ -153,7 +153,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
+                <a href="<?php echo base_url('master/location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
                         echo 'active';
                     }?>">
                   <i class="far fa-map nav-icon"></i>
@@ -161,7 +161,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/Meter')?>" class="nav-link <?php if($this->uri->segment('2') == 'Meter'){
+                <a href="<?php echo base_url('master/meter')?>" class="nav-link <?php if($this->uri->segment('2') == 'Meter'){
                         echo 'active';
                     }?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -170,7 +170,7 @@
               </li>
               <?php if($this->session->userdata('role') == 'super_admin'){ ?>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/User')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
+                <a href="<?php echo base_url('master/user')?>" class="nav-link <?php if($this->uri->segment('2') == 'User'){
                         echo 'active';
                     }?>">
                   <i class="far fa-user nav-icon"></i>
@@ -183,7 +183,7 @@
           <?php } ?>
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
           <li class="nav-item">
-            <a href="<?php echo base_url('Assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Assign-meter'){
+            <a href="<?php echo base_url('assign-meter'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'assign-meter'){
                     echo 'active';
                 }?>">
               <i class="nav-icon fas fa-user"></i>

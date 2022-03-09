@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Meter</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Meter">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/meter">
           		
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Company<label class="text-danger">*</label></label>
