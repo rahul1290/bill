@@ -8,7 +8,7 @@
           		<hr/>
           		<?php echo $this->session->flashdata('msg'); ?>
           		<div class="table-responsive">
-          		<table class="table table-striped table-sm text-sm border" >
+          		<table class="table table-bordered table-striped table-sm text-sm border" >
           			<thead class="bg-light ">
           				<tr>
           					<th>S.No.</th>

@@ -132,7 +132,7 @@
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Meter List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered" id="meterTable">
+                    <table class="table table-bordered text-sm" id="meterTable">
                           <thead class="bg-info">
                               <tr>
                                 <th class="text-center uppercase">S.No.</th>
@@ -152,17 +152,17 @@
                                     <td class="text-center"><?= $c++; ?></td>
                                     <td class="text-center"><?= $meter['bpno']; ?></td>
                                     <td class="text-center"><?= $meter['mtype']; ?></td>
-                                    <td class="text-center"><?= $meter['company_name']; ?></td>
+                                    <td class="text-left"><?= $meter['company_name']; ?></td>
                                     <td class="text-center"><?= $meter['cost_center']; ?></td>
                                     <td class="text-center"><?= $meter['location_name']; ?></td>
                                     <td class="text-center"><?= $meter['created_at']; ?></td>
                                     <td class="text-center"><?= $meter['fname'].' '.$meter['lname']; ?></td>
-                                    <td class="text-center">
-                                        <a href="javascript:void(0);" class="meter_edit" data-id="<?= $meter['mid']; ?>"><i class="fas fa-edit"></i></a>
-                                        <a href="javascript:void(0);" class="meter_delete" data-id="<?= $meter['mid']; ?>"><i class="fas fa-trash"></i></a>
+                                    <td style="width:70px;" class="text-center">
+                                        <a title="Edit" href="javascript:void(0);" class="meter_edit mr-1" data-id="<?= $meter['mid']; ?>"><i class="fas fa-edit"></i></a> | 
+                                        <a title="Delete" href="javascript:void(0);" class="meter_delete ml-1" data-id="<?= $meter['mid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                     </td>
                                 </tr>
-                            <?php } } else {  echo "<tr><td class='text-center' colspan='9'>No record found.</td></tr>"; } ?>
+                            <?php } } else {  echo "<tr><td class='text-center' colspan='9'>Record Not Found.</td></tr>"; } ?>
                           </tbody>
                       </table>
                   </div>

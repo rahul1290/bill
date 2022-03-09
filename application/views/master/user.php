@@ -85,7 +85,7 @@
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered text-sm">
                           <thead class="bg-light">
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
@@ -106,12 +106,12 @@
                                         <td class="text-center"><?= $user['contact_no']; ?></td>
                                         <td class="text-center"><?= $user['sex']; ?></td>
                                         <td class="text-center"><?= $user['role']; ?></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="user_edit" data-id="<?= $user['uid']; ?>"><i class="fas fa-edit"></i></a>
-                                            <a href="javascript:void(0);" class="user_delete" data-id="<?= $user['uid']; ?>"><i class="fas fa-trash"></i></a>
+                                        <td style="width:70px;" class="text-center">
+                                            <a title="Edit" href="javascript:void(0);" class="user_edit mr-1" data-id="<?= $user['uid']; ?>"><i class="fas fa-edit"></i></a> | 
+                                            <a title="Dlete" href="javascript:void(0);" class="user_delete ml-1" data-id="<?= $user['uid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                         </td>
                                     </tr>
-                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>No record found.</td></tr>"; } ?>
+                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>Record Not Found.</td></tr>"; } ?>
                               </tbody>
                           </table>
                   </div>

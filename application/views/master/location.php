@@ -65,7 +65,7 @@
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Location List</p>
           		<div class="table-responsive">
-                    <table class="table table-bordered" id="locationListTable">
+                    <table class="table table-bordered text-sm" id="locationListTable">
                               <thead class="bg-info">
                                   <tr>
                                     <th class="text-center align-middle uppercase">S.No.</th>
@@ -84,12 +84,12 @@
                                         <td class="text-center"><?= $location['cost_center']; ?> / <?php echo $location['company_name']; ?></td>
                                         <td class="text-center"><?= $location['created_at']; ?></td>
                                         <td class="text-center"><?= $location['fname'].' '.$location['lname']; ?></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="location_edit" data-id="<?= $location['loc_id']; ?>"><i class="fas fa-edit"></i></a>
-                                            <a href="javascript:void(0);" class="location_delete" data-id="<?= $location['loc_id']; ?>"><i class="fas fa-trash"></i></a>
+                                        <td style="width:70px;" class="text-center">
+                                            <a title="Edit" href="javascript:void(0);" class="location_edit mr-1" data-id="<?= $location['loc_id']; ?>"><i class="fas fa-edit"></i></a> | 
+                                            <a title="Delete" href="javascript:void(0);" class="location_delete ml-1" data-id="<?= $location['loc_id']; ?>"><i class="fas fa-trash text-red"></i></a>
                                         </td>
                                     </tr>
-                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>No record found.</td></tr>"; } ?>
+                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>Record Not Found.</td></tr>"; } ?>
                               </tbody>
                           </table>
                   </div>
