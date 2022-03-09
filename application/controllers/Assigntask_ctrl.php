@@ -112,10 +112,98 @@ class Assigntask_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+  
+  function assign_user_remove(){
+      $meter = $this->input->post('meter') == '0' ? $this->input->post('sub-meter') : $this->input->post('meter');
+      
+      $this->db->query("UPDATE task_assign set status = 0 where sub_meter_id =". $this->input->post('sub-meter')." AND sno_id =". $meter);
+      echo json_encode(array('msg'=>'Remove permissions.','status'=>200));       
+  }
 
+  function assign_user_list_submit(){
+      $meter = $this->input->post('meter') == '0' ? $this->input->post('sub-meter') : $this->input->post('meter');
+      
+      $this->db->select('task_id');
+      $result = $this->db->get_where('task_assign',array(
+          'sno_id' => $meter,
+          'sub_meter_id' => $this->input->post('sub-meter'),
+          'status' => 1
+      ))->result_array();
+      
+      if(count($result)>0){
+          $taskIds = '';
+          foreach($result as $r){
+              $taskIds .= $r['task_id'].',';
+          }
+          $taskIds = rtrim($taskIds, ", ");
+          
+          $this->db->query("UPDATE `task_assign` SET `status` = 0
+          WHERE `task_id` IN($taskIds)");
+      }
+      
+      
+          if($this->input->post('reading-user') == $this->input->post('billupload-user')){
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $this->input->post('sub-meter'),
+                  'user_id' => $this->input->post('reading-user'),
+                  'meter_reading' => $this->input->post('meter_reading'),
+                  'reading_frq' => $this->input->post('reading_frq'),
+                  'bill_upload' => $this->input->post('bill_upload'),
+                  'upload_frq' => $this->input->post('upload_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              ));
+          } else {
+    //           $submit_data = array(
+    //               array(
+    //               'sno_id' => $meter,
+    //               'sub_meter_id' => $this->input->post('sub-meter'),
+    //               'user_id' => $this->input->post('reading-user'),
+    //               'meter_reading' => $this->input->post('meter_reading'),
+    //               'reading_frq' => $this->input->post('reading_frq'),
+    //               'created_by' => $this->session->userdata('user_id'),
+    //               'created_at' => date('Y-m-d')
+    //               ), 
+    //               array(
+    //                   'sno_id' => $meter,
+    //                   'sub_meter_id' => $this->input->post('sub-meter'),
+    //                   'user_id' => $this->input->post('billupload-user'),
+    //                   'bill_upload' => $this->input->post('bill_upload'),
+    //                   'upload_frq' => $this->input->post('upload_frq'),
+    //                   'created_by' => $this->session->userdata('user_id'),
+    //                   'created_at' => date('Y-m-d')
+    //               ));
+              
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $this->input->post('sub-meter'),
+                  'user_id' => $this->input->post('reading-user'),
+                  'meter_reading' => $this->input->post('meter_reading'),
+                  'reading_frq' => $this->input->post('reading_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              )); 
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $this->input->post('sub-meter'),
+                  'user_id' => $this->input->post('billupload-user'),
+                  'bill_upload' => $this->input->post('bill_upload'),
+                  'upload_frq' => $this->input->post('upload_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              ));
+              
+              //$this->db->insert_batch('task_assign',$submit_data);
+          }
+      
+      
+      echo json_encode(array('msg'=>'User Assign successfully.','status'=>200));
+      
+  }
   function assign_user_list(){
 	$data['records'] = $this->db->query("SELECT mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
-								cm.name as company,ccm.name as cost_center_name,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
+								cm.cid,cm.name as company,ccm.costc_id,ccm.name as cost_center_name,lm.loc_id,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
 								ta.bill_upload,ta.upload_frq
 								FROM meter_master mm
 								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid
@@ -125,7 +213,7 @@ class Assigntask_ctrl extends CI_Controller {
 								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
 								group by mm.bpno
 								order by mm.mid")->result_array();
-	
+    //print_r($data['records']); die; 
 	$this->db->select('*');
 	$data['users'] = $this->db->get_where('users',array('status'=>1))->result_array();
 	

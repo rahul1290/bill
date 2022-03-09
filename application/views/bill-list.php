@@ -6,6 +6,7 @@
           	<div class="col-sm-12">
           		<h5 class="text-primary" id="page-heading">My Bill Entries</h5>
           		<hr/>
+          		<?php echo $this->session->flashdata('msg'); ?>
           		<div class="table-responsive">
           		<table border="1">
           			<thead>
