@@ -1,3 +1,7 @@
+<style>
+  .dataTables_length{font-size:13px;}
+  .dataTables_filter, .dataTables_info, .dataTables_paginate{font-size:13px;}
+</style>
     <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
@@ -8,7 +12,7 @@
               </span> -->
           		<hr/>
               <div class="row">
-                <div class="col-5">
+                <div class="col-4">
                 <?php echo $this->session->flashdata('msg'); ?>
                 <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Meter-Reading">
                     <div class="form-group row">
@@ -28,7 +32,7 @@
                         <label for="inputEmail3" class="col-sm-3 col-form-label ">Service No.</label>
                         <div class="col-sm-9">
                           <select id="serviceno" name="serviceno" class="form-control">
-                            <option value="">Select Service No</option>
+                            <option value="">Select Service No.</option>
                             <?php foreach($service_no as $sno){ ?>
                               <option value="<?php echo $sno['mid']; ?>"><?php echo $sno['bpno']; ?></option>
                             <?php }?>
@@ -91,12 +95,12 @@
                   </form>
                 </div>
 
-                <div class="col-7">
+                <div class="col-8">
                   <p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Your Pending Readings</p>
-                  <div class="table-responsive">
-                  <table id="pending-readings" class="table table-bordered table-striped">
-                    <thead class="bg-light">
-                      <tr class="bg-info text-center">
+                  <div class="table-responsive mt-3 mb-3 p-2">
+                  <table id="pending-readings" class="table table-bordered table-striped text-sm">
+                    <thead class="bg-info">
+                      <tr class="text-center">
                         <th>S.No.</th>
                         <th>Cost Center</th>
                         <th>Location</th>

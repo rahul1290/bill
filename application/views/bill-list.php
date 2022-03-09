@@ -8,10 +8,10 @@
           		<hr/>
           		<?php echo $this->session->flashdata('msg'); ?>
           		<div class="table-responsive">
-          		<table border="1">
-          			<thead>
-          				<tr class="bg-info">
-          					<th>Sno.</th>
+          		<table class="table table-striped table-sm text-sm border" >
+          			<thead class="bg-light ">
+          				<tr>
+          					<th>S.No.</th>
           					<th>Company</th>
           					<th>Cost-Center</th>
           					<th>Location</th>
@@ -55,7 +55,7 @@
 								<td><?php echo $bill['gross_amount']; ?></td>
           					</tr>
           				<?php }} else { ?>
-          					<tr><td colspan="18" class="text-center">No Entries found.</td></tr>
+          					<tr><td colspan="18" class="text-center">No Record Found.</td></tr>
           				<?php } ?>
           			</tbody>
           		</table>

@@ -16,7 +16,7 @@
           	<div class="table-responsive">
           		<span class="text-primary" id="page-heading">Assigned Users</span>
           		
-              <table class="table table-bordered">
+              <table class="table table-bordered text-sm">
                 <thead class="bg-light">
                   <tr>
                     <th>Id</th>
@@ -236,8 +236,8 @@
                         	<table width="100%" class="m-0 p-0">
                         		<tr>
                         			<td>
-                        				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Assign" />
-                        				<input class="btn btn-sm btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Reset" />
+                        				<input class="btn btn-xs btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Assign" />
+                        				<input class="btn btn-xs btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $record['mid'].'_0'; ?>" type="button" value="Reset" />
                         			</td>
                         		</tr>
                         	</table>
@@ -246,8 +246,8 @@
                         	    <table width="100%" class="m-0 p-0">
                             		<tr>
                             			<td>
-                            				<input class="btn btn-sm btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Assign" />
-                            				<input class="btn btn-sm btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Reset" />
+                            				<input class="btn btn-xs btn-info assign_btn" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Assign" />
+                            				<input class="btn btn-xs btn-default assign_btn_reset" data-id="assign_<?php echo $r['cid'].'_'.$r['costc_id'].'_'.$r['loc_id'].'_'. $r['mid'].'_'.$record['mid']; ?>" type="button" value="Reset" />
                             			</td>
                             		</tr>
                             	</table>

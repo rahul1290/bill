@@ -2,7 +2,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-          		<span class="text-primary" id="page-heading">Bill Payment</span>
+          		<span class="text-primary" id="page-heading">Add Bill Payment</span>
               <!-- <span class="pull-right" style="float: right;">
                 <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Your Pending Readings</a>
               </span> -->
@@ -67,7 +67,7 @@
                           	 <div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Bill No.</label>
                                   <div class="col-sm-9">
-                                    <input type="text" name="bill_no" id="bill_no" class="form-control" placeholder="Bill no"/>
+                                    <input type="text" name="bill_no" id="bill_no" class="form-control" placeholder="Bill No."/>
                                   <?php echo form_error('bill_no'); ?>
                                   </div>
                               </div>
@@ -76,7 +76,7 @@
                               <div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Date of Bill</label>
                                   <div class="col-sm-9">
-                                    <input type="text" name="bill_date" id="bill_date" class="form-control" />
+                                    <input type="date" name="bill_date" id="bill_date" class="form-control" />
                                   <?php echo form_error('bill_date'); ?>
                                   </div>
                               </div>
@@ -98,7 +98,7 @@
                       		<div class="form-group row">
                                   <label for="inputEmail3" class="col-sm-3 col-form-label">Due Date</label>
                                   <div class="col-sm-9">
-                                    <input type="text" name="due_date" id="due_date" class="form-control" />
+                                    <input type="date" name="due_date" id="due_date" class="form-control" />
                                   <?php echo form_error('due_date'); ?>
                                   </div>
                               </div>
@@ -129,7 +129,7 @@
                           <label for="inputEmail3" class="col-sm-3 col-form-label">Payment Type</label>
                           <div class="col-sm-9">
                             <select id="p_type" name="p_type" class="form-control">
-                            	<option value="check">Check</option>
+                            	<option value="check">Cheque</option>
                             	<option value="cash">Cash</option>
                             </select>
                           </div>
@@ -137,9 +137,9 @@
                             </div>
                             <div class="col-md-6">
                       <div class="form-group row">
-                          <label for="inputEmail3" class="col-sm-3 col-form-label">Check No.</label>
+                          <label for="inputEmail3" class="col-sm-3 col-form-label">Cheque No.</label>
                           <div class="col-sm-9">
-                            <input type="text" id="checkno" name="checkno" class="form-control" placeholder="Check no" />
+                            <input type="text" id="checkno" name="checkno" class="form-control" placeholder="Cheque no." />
                           </div>
                       </div>
                             </div>

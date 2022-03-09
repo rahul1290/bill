@@ -2,7 +2,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-          		<span class="text-primary" id="page-heading">Bill Payment</span>
+          		<span class="text-primary" id="page-heading">Bill Payment Details</span>
               <!-- <span class="pull-right" style="float: right;">
                 <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Your Pending Readings</a>
               </span> -->
@@ -51,15 +51,15 @@
                     </div>
                   	
                   	<div class="table-responsive">
-                  		<table class="table table-bordered">
-                  			<thead>
+                  		<table class="table table-bordered table-striped ">
+                  			<thead class="bg-light">
                   				<tr>
-                  					<th>Sno.</th>
+                  					<th>S.No.</th>
                   					<th>Bill Date</th>
                   					<th>Bill No.</th>
                   					<th>Service No.</th>
                   					<th>Location</th>
-                  					<th>Cost-center</th>
+                  					<th>Cost-Center</th>
                   					<th>Company</th>
                   					<th>Gross Payment</th>
                   					<th>Due Date</th>
@@ -111,6 +111,7 @@
                 	
                 	$('#meter-paymets').html(x);
                 }
+                
             }
         });
    }
