@@ -16,7 +16,12 @@ $route['assign-meter-show/(:any)/(:any)'] = 'Assigntask_ctrl/assign_user_list/$1
 $route['assign-meter-show/(:any)/(:any)/(:any)'] = 'Assigntask_ctrl/assign_user_list/$1/$2/$3';
 
 $route['bill-upload'] = 'Meter_ctrl/bill_upload';
+$route['bill-upload/(:any)'] = 'Meter_ctrl/bill_upload/$1';
 $route['bill-list'] = 'Meter_ctrl/bill_list';
+$route['bill-list/(:any)'] = 'Meter_ctrl/bill_list/$1';
+$route['bill-list/(:any)/(:any)'] = 'Meter_ctrl/bill_list/$1/$2';
+$route['bill-list/(:any)/(:any)/(:any)'] = 'Meter_ctrl/bill_list/$1/$2/$3';
+$route['bill-list/(:any)/(:any)/(:any)/(:any)'] = 'Meter_ctrl/bill_list/$1/$2/$3/$4';
 //$route['pending-bill'] = 'Meter_ctrl/bill_pending';
 
 $route['payment/add-payment'] = 'Payment_ctrl/payment';

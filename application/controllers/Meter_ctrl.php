@@ -136,13 +136,16 @@ class Meter_ctrl extends CI_Controller {
   }
   
   
-  function bill_upload(){
+  function bill_upload($sno_id=null){
+      if(!is_null($sno_id)){
+           $data['selected_service_no'] = $sno_id;        
+      }
       if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
           $data['service_no'] = $this->Meter_model->meterlistUserWise();
       } else {
           $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
       }
-//      print_r($data['service_no']); die;
+      
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -230,9 +233,11 @@ class Meter_ctrl extends CI_Controller {
               $db_data['image'] = '';
               $db_data['created_at'] = date('Y-m-d');
               $db_data['created_by'] = $this->session->userdata('user_id');
-              $result = $this->Meter_model->bill_entry($db_data);
               
-              if(!is_null($result)){
+              if(is_null($this->input->post('selected_service_no'))){
+                $result = $this->Meter_model->bill_entry($db_data);
+              
+                if(!is_null($result)){
                   $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
                         Bill entry successfully.
                       </div>');
@@ -243,6 +248,21 @@ class Meter_ctrl extends CI_Controller {
                           </div>');
                       redirect(current_url());
                   }
+              } else {
+                  $result = $this->Meter_model->bill_entry($db_data,$this->input->post('selected_service_no'));
+                  
+                  if(!is_null($result)){
+                      $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                        Bill updated successfully.
+                      </div>');
+                      redirect('/bill-list');
+                  } else {
+                      $this->session->set_flashdata('msg','<div class="alert alert-warning" role="alert">
+                            something went wrong.
+                          </div>');
+                      redirect(current_url());
+                  }
+              }
               
           } else {
               $data['main_content'] = $this->load->view('bill-upload',$data,true);
@@ -252,19 +272,13 @@ class Meter_ctrl extends CI_Controller {
   }
   
   
-  function bill_list(){
-//       $this->db->select('b.*,mm.bpno,cm.name as companyName,costc.name as costcenterName,lm.name as locationName');
-//       if($this->session->userdata('role') != 'super_admin'){
-//         $this->db->where('b.created_by',$this->session->userdata('user_id'));
-//       }
-//       $this->db->join('meter_master mm','mm.mid = b.sno_id');
-//       $this->db->join('company_master cm','cm.cid = mm.cid');
-//       $this->db->join('cost_center_master costc','costc.costc_id = mm.costc_id');
-//       $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
-//       $data['bills'] = $this->db->get_where('bill b',array('b.status'=>1))->result_array();
-
+  function bill_list($companyId=null,$costCenterId=null,$location=null){
+      $data['companies'] = $this->Company_model->company_list();
+      $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
+      $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
+      $status = $this->input->get('status');
       if($this->session->userdata('role') == 'super_admin'){
-      $bills =  $this->db->query("select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+          $query = "select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
                     LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
@@ -272,12 +286,22 @@ class Meter_ctrl extends CI_Controller {
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
                     JOIN location_master lm on lm.loc_id = t1.loc_id
                     LEFT JOIN (SELECT *,if(isnull(sub_meter_id),sno_id,sub_meter_id) as snoid FROM task_assign
-                    WHERE user_id = 2 and status = 1) t3 on t3.snoid = t1.mid
-                    WHERE t1.mid = t2.mid")->result_array();
+                    WHERE 1=1 and status = 1) t3 on t3.snoid = t1.mid
+                    WHERE t1.mid = t2.mid";
+          if(!is_null($companyId)){
+              $query .= " AND cm.cid=".$companyId;
+          }
+          if(!is_null($costCenterId)){
+              $query .= " AND ccm.costc_id=".$costCenterId;
+          }
+          if(!is_null($location)){
+              $query .= " AND lm.loc_id=".$location;
+          }
+          $bills =  $this->db->query($query)->result_array();
       } else{ 
-      $bills = $this->db->query("SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq 
+          $query = "SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
                     FROM task_assign ta
-                    join (select t1.mid,t1.bpno,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+                    join (select t1.mid,t1.bpno,b1.*,cm.cid,ccm.costc_id,lm.loc_id,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
                     LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
@@ -285,7 +309,17 @@ class Meter_ctrl extends CI_Controller {
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
                     JOIN location_master lm on lm.loc_id = t1.loc_id
                     WHERE t1.mid = t2.mid) as t3 on t3.mid = ta.sno_id
-                    WHERE ta.user_id = 2 and ta.status = 1")->result_array();
+                    WHERE ta.user_id = ".$this->session->userdata('user_id')." and ta.status = 1";
+          if(!is_null($companyId)){
+              $query .= " AND t3.cid=".$companyId;
+          }
+          if(!is_null($costCenterId)){
+              $query .= " AND t3.costc_id=".$costCenterId;
+          }
+          if(!is_null($location)){
+              $query .= " AND t3.loc_id=".$location;
+          }
+          $bills = $this->db->query($query)->result_array();
       }
       
       $final_array = array();
@@ -310,8 +344,33 @@ class Meter_ctrl extends CI_Controller {
               $temp['status'] = 'Date passed';
           }
           
+          
+//           if(isset($status)){
+//               if($temp['status'] == 'Date passed' && $status == 'date_passed'){
+//                   $final_array[] = $temp;
+//               }
+              
+//               if($temp['status'] == 'Today' && $status == 'today'){
+//                   $final_array[] = $temp;
+//               }
+              
+//               if (strpos($temp['status'], 'Days left') !== false && $status =='date_remaining') {
+//                   $final_array[] = $temp;
+//               }
+              
+//               if($temp['status'] == '' && $status == 'not_filled'){
+//                   $final_array[] = $temp;
+//               }
+//           } else {
+//               $final_array[] = $temp;
+//           }
+          
+          
           $final_array[] = $temp;
+          
       }
+      
+      //print_r($final_array); die;
       $data['bills'] = $final_array;
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);

@@ -4,7 +4,13 @@ class Location_model extends CI_Model {
 
 	function create_location($data){
 
-		$result = $this->db->insert('location_master',$data);
+	    $this->db->select('*');
+	    $result = $this->db->get_where('location_master',array('cost_center_id'=>$data['cost_center_id'],'lc_id'=>$data['lc_id'],'status'=>1))->result_array();
+	    if(count($result)>0){
+	        $result = true;
+	    } else { 
+		  $result = $this->db->insert('location_master',$data);
+	    }
 		if($result){
 			return true;
 		} else {

@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Company</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/company">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">

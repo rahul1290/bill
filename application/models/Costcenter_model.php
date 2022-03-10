@@ -4,7 +4,13 @@ class Costcenter_model extends CI_Model {
 
 	function create_costcenter($data){
 
-		$result = $this->db->insert('cost_center_master',$data);
+	    $this->db->select('*');
+	    $result = $this->db->get_where('cost_center_master',array('company_id'=>$data['company_id'],'cc_id'=>$data['cc_id'],'status'=>1))->result_array();
+	    if(count($result)>0){
+	        $result = true;
+	    } else {
+		  $result = $this->db->insert('cost_center_master',$data);
+	    }
 
 		if($result){
 			return true;
