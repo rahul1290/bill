@@ -59,7 +59,7 @@
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
-                    <table class="table table-bordered text-sm">
+                    <table class="table table-bordered text-sm" id="companyTable">
                         <thead class="bg-light">
                             <tr>
                             <th class="text-center uppercase">S.No.</th>
@@ -83,7 +83,6 @@
                                         <a title="Delete" href="javascript:void(0);" class="company_delete ml-1" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                     </td>
                                 </tr>
-                            
                             <?php } ?>
                         </tbody>
                     </table>
@@ -195,6 +194,16 @@
             }
         });
       }
+      
+      
+      $('#companyTable').DataTable({
+//        	"searching": false,
+//         "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 
 
     </script>

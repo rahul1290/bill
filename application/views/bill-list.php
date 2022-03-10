@@ -7,17 +7,19 @@
           		<h5 class="text-primary" id="page-heading">My Bill Entries</h5>
           		<hr/>
           		
-          		<div class="row">
-        		<div class="col">
+          		<div class="row mb-3">
+        		<div class="col-sm-3">
         			<label>Company</label>
         			<select id="com_filter">
         				<option value="">Select Company</option>
         				<?php foreach($companies as $company) { ?>
-        					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>><?php echo $company['name']; ?></option>
+        					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>>
+        						<?php echo substr($company['name'],0,25); ?>
+        					</option>
         				<?php } ?>
         			</select>
         		</div>
-        		<div class="col">
+        		<div class="col-sm-2">
         			<label>Cost-center</label>
         			<select id="costc_filter">
         				<option value="">Select Costcenter</option>
@@ -26,7 +28,7 @@
         				<?php } ?>
         			</select>
         		</div>
-        		<div class="col">
+        		<div class="col-sm-2">
         			<label>Location</label>
         			<select id="location_filter">
         				<option value="">Select Location</option>
@@ -35,7 +37,7 @@
         				<?php } ?>
         			</select>
         		</div>
-        		<div class="col">
+        		<div class="col-sm-2">
         			<label>Status</label>
         			<select id="status_filter">
         				<option value="">select Status</option>
@@ -45,7 +47,7 @@
         				<option value="not_filled" <?php if('not_filled' == $this->input->get('status',true)){ echo 'selected'; }?>>Not Filled</option>
         			</select>
         		</div>
-        		<div class="col">
+        		<div class="col-sm-1 mt-4">
         			<input type="button" id="filter" value="Search" />
         		</div>
         	</div>
@@ -79,7 +81,7 @@
           			</thead>
           			<tbody>
           			
-          				<?php if(count($bills)>0){ $c=1; foreach($bills as $bill){ ?>
+          				<?php if(count($bills)>0){ $c=0; foreach($bills as $bill){ ?>
           					<tr >
           						<td><?php echo ++$c; ?></td>
           						<td><?php echo $bill['companyName']; ?></td>
@@ -87,7 +89,7 @@
           						<td><?php echo $bill['locationName']; ?></td>
           						<td>
           							<?php if($bill['sno_id'] != ''){ ?>
-          								<a target="_blank" href="bill-upload/<?php echo $bill['sno_id']; ?>"><?php echo $bill['bpno']; ?></a>
+          								<a target="_blank" href="<?php echo base_url(); ?>bill-upload/<?php echo $bill['sno_id']; ?>"><?php echo $bill['bpno']; ?></a>
           							<?php } else { ?>
           								<?php echo $bill['bpno']; ?>
           							<?php } ?>
@@ -141,25 +143,7 @@
 									   echo date('d/m/Y',strtotime($bill['next_ittration'])); 
 								    ?>
 								</td>
-								<td class="<?php
-                  					if($bill['date_of_bill'] != ''){
-                  					    if($bill['status'] == 'Date passed'){
-                  					         echo 'bg-danger';
-                  					    } else if($bill['status'] == 'Today'){
-                  					        echo 'bg-success';
-                  					    } else {
-                  					        echo 'bg-warning';
-                  					    }
-                  					} else{
-                  					    echo 'bg-secondary';
-                  					}
-                  					?>"><?php
-								    if($bill['date_of_bill'] != ''){
-								        echo $bill['status'];
-								    } else{
-								        echo '-';
-								    }
-								    ?></td>
+								<td><?php echo $bill['status']; ?></td>
           					</tr>
           					
           				<?php }} else { ?>

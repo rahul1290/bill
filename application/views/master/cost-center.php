@@ -53,7 +53,18 @@
                 </form>
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
-          		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Cost-Center List</p>
+          		<p class="text-lg text-bold text-info bg-secondary p-2 mb-0 text-left">
+          			Cost-Center List
+          			<select class="float-right">
+          				<option value="">Select Costcenter</option>
+          			</select>
+          			<select class="float-right">
+          				<option value="">Select Company</option>
+          				<?php foreach($companies as $company){ ?>
+          					<option value="<?php echo $company['cid']; ?>"><?php echo substr($company['name'],0,10); ?></option>
+          				<?php } ?>
+          			</select>
+          		</p>
           		<div class="table-responsive">
                     <table class="table table-bordered text-sm" id="cost-centerTable">
                           <thead class="bg-info">
@@ -205,6 +216,34 @@
 		let costcenter = $('#cost_center option:selected').text();
 		$('#cname').val(costcenter);
 	});	
+	
+	
+	$(document).on('change','#com_filter',function(){
+    	const comId = $(this).val();
+    	if(comId){
+        	$.ajax({
+                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
+                method: "GET",
+                dataType: "json",
+                beforeSend(){},
+                success(response){
+                	var x = '<option value="">Select Cost-center</option>';
+                    if(response.status == 200){
+                    	$.each(response.data,function(key,value){
+                    		x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+                    	});
+                    	$('#costc_filter').html(x);
+                    } else {
+                    	$('#costc_filter').html('<option value="">Select Cost-center</option>');
+                    }
+                    $('#location_filter').html('<option value="">Select Location</option>');
+                }
+            });
+        } else {
+        	$('#costc_filter').html('<option value="">Select Cost-center</option>');
+        	$('#location_filter').html('<option value="">Select Location</option>');
+        }
+    });
 
 	$('#cost-centerTable').DataTable({
        	"searching": false,
