@@ -319,7 +319,7 @@
           
           
           <li class="nav-item">
-            <a href="<?php echo base_url('Meter-Reading'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'Meter-Reading'){
+            <a href="<?php echo base_url('meter-reading'); ?>" class="nav-link <?php if($this->uri->segment('1') == 'meter-reading'){
                     echo ' active';
                 }?>">
               
@@ -342,19 +342,19 @@
             </a>
             <ul class="nav nav-treeview ml-3">
               <li class="nav-item">
-                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                <a href="<?php echo base_url()?>master/company" class="nav-link">
                   <i class="far fa-building nav-icon"></i>
                   <p>User Assign Reports</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                <a href="<?php echo base_url()?>master/company" class="nav-link">
                   <i class="far fa-building nav-icon"></i>
                   <p>Meter Reading Reports</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url()?>master/Company" class="nav-link">
+                <a href="<?php echo base_url()?>master/company" class="nav-link">
                   <i class="far fa-building nav-icon"></i>
                   <p>Bill Upload Reports</p>
                 </a>

@@ -27,7 +27,7 @@ $route['bill-list/(:any)/(:any)/(:any)/(:any)'] = 'Meter_ctrl/bill_list/$1/$2/$3
 $route['payment/add-payment'] = 'Payment_ctrl/payment';
 $route['payment/payment-detail'] = 'Payment_ctrl/payment_detail';
 
-$route['Meter-Reading'] = 'Meter_ctrl/meter_reading';
+$route['meter-reading'] = 'Meter_ctrl/meter_reading';
 $route['Show-Meter-Reading'] = 'Meter_ctrl/show_meter_readings';
 $route['dashboard'] = 'Dashboard_ctrl';
 $route['forgot-password'] = 'User_ctrl/change_password';
