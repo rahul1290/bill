@@ -16,7 +16,6 @@ $db['default'] = array(
 //     'username' => 'root',
 //     'password' => '',
 //     'database' => 'bill_record',
-    
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
