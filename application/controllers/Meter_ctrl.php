@@ -277,6 +277,7 @@ class Meter_ctrl extends CI_Controller {
       $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
       $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
       $status = $this->input->get('status');
+      
       if($this->session->userdata('role') == 'super_admin'){
           $query = "select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
@@ -323,55 +324,54 @@ class Meter_ctrl extends CI_Controller {
       }
       
       $final_array = array();
+      
       foreach($bills as $bill){
           $temp = array();
           $temp = $bill;
-          $temp['next_ittration'] = date('Y-m-d', strtotime($bill['date_of_bill'].'+1 month'));
           
-          $date1 = date('Y-m-d', strtotime($bill['date_of_bill'].'+1 month'));
-          $date2 = date('Y-m-d');
-          
-          $date1=date_create($date1);
-          $date2=date_create($date2);
-          $diff=date_diff($date2,$date1);
-          if($diff->format("%R") == '+'){
-              if($diff->format("%a")){
-                  $temp['status'] = $diff->format("%a").' Days left';
+          if($bill['date_of_bill'] != ''){
+              $temp['next_ittration'] = date('Y-m-d', strtotime($bill['date_of_bill'].'+'.$bill['upload_frq'].' month'));
+              
+              $date1 = date('Y-m-d', strtotime($bill['date_of_bill'].'+'.$bill['upload_frq'].' month'));
+              $date2 = date('Y-m-d');
+              
+              $date1=date_create($date1);
+              $date2=date_create($date2);
+              $diff=date_diff($date2,$date1);
+              if($diff->format("%R") == '+'){
+                  if($diff->format("%a")){
+                      $temp['status'] = $diff->format("%a").' Days left';
+                  } else {
+                      $temp['status'] = 'Today';
+                  }
               } else {
-                  $temp['status'] = 'Today';
+                  $temp['status'] = 'Date passed';
               }
           } else {
-              $temp['status'] = 'Date passed';
+              $temp['status'] = 'Not Filled';
           }
-          
-          
-//           if(isset($status)){
-//               if($temp['status'] == 'Date passed' && $status == 'date_passed'){
-//                   $final_array[] = $temp;
-//               }
-              
-//               if($temp['status'] == 'Today' && $status == 'today'){
-//                   $final_array[] = $temp;
-//               }
-              
-//               if (strpos($temp['status'], 'Days left') !== false && $status =='date_remaining') {
-//                   $final_array[] = $temp;
-//               }
-              
-//               if($temp['status'] == '' && $status == 'not_filled'){
-//                   $final_array[] = $temp;
-//               }
-//           } else {
-//               $final_array[] = $temp;
-//           }
-          
-          
           $final_array[] = $temp;
-          
+      }
+      $data['bills'] = $final_array;
+      
+      if(isset($status)){
+          $final_array = array();
+          foreach($data['bills'] as $bill){
+              if($status == 'date_passed' && $bill['status'] =='Date passed'){
+                  $final_array[] = $bill;
+              }
+              else if($status == 'today' && $bill['status'] =='Today'){
+                  $final_array[] = $bill;
+              }
+              else if($status == 'not_filled' && $bill['status'] =='Not Filled'){
+                  $final_array[] = $bill;
+              } else if($bill['status'] =='date_remaining'){
+                  $final_array[] = $bill;
+              }
+          }
+          $data['bills'] = $final_array;
       }
       
-      //print_r($final_array); die;
-      $data['bills'] = $final_array;
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }
