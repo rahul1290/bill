@@ -7,10 +7,10 @@
           		<h5 class="text-primary" id="page-heading">My Bill Entries</h5>
           		<hr/>
           		
-          		<div class="row mb-3">
-        		<div class="col-sm-3">
+          		<div class="row mb-4">
+        		<div class="col">
         			<label>Company</label>
-        			<select id="com_filter">
+        			<select id="com_filter" class="form-control">
         				<option value="">Select Company</option>
         				<?php foreach($companies as $company) { ?>
         					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>>
@@ -21,7 +21,7 @@
         		</div>
         		<div class="col-sm-2">
         			<label>Cost-center</label>
-        			<select id="costc_filter">
+        			<select id="costc_filter" class="form-control">
         				<option value="">Select Costcenter</option>
         				<?php foreach ($cost_centers as $cost_center){ ?>
         					<option value="<?php echo $cost_center['costc_id']; ?>" <?php if($cost_center['costc_id'] == $this->uri->segment('3')){ echo 'selected'; }?>><?php echo $cost_center['name']; ?></option>
@@ -30,7 +30,7 @@
         		</div>
         		<div class="col-sm-2">
         			<label>Location</label>
-        			<select id="location_filter">
+        			<select id="location_filter" class="form-control">
         				<option value="">Select Location</option>
         				<?php foreach ($locations as $location){ ?>
         					<option value="<?php echo $location['loc_id']; ?>" <?php if($location['loc_id'] == $this->uri->segment('4')){ echo 'selected'; }?>><?php echo $location['name']; ?></option>
@@ -39,16 +39,16 @@
         		</div>
         		<div class="col-sm-2">
         			<label>Status</label>
-        			<select id="status_filter">
-        				<option value="">select Status</option>
+        			<select id="status_filter" class="form-control">
+        				<option value="">Select Status</option>
         				<option value="date_passed" <?php if('date_passed' == $this->input->get('status',true)){ echo 'selected'; }?>>Date Passed</option>
         				<option value="today" <?php if('today' == $this->input->get('status',true)){ echo 'selected'; }?>>Today</option>
         				<option value="date_remaining" <?php if('date_remaining' == $this->input->get('status',true)){ echo 'selected'; }?>>Date Remaining</option>
         				<option value="not_filled" <?php if('not_filled' == $this->input->get('status',true)){ echo 'selected'; }?>>Not Filled</option>
         			</select>
         		</div>
-        		<div class="col-sm-1 mt-4">
-        			<input type="button" id="filter" value="Search" />
+        		<div class="col mt-4">
+        			<input class="btn btn-success mt-2" type="button" id="filter" value="Search" />
         		</div>
         	</div>
           		

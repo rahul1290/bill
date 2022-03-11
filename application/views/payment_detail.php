@@ -51,7 +51,7 @@
                     </div>
                   	
                   	<div class="table-responsive">
-                  		<table class="table table-bordered table-striped ">
+                  		<table class="table table-bordered table-striped text-sm">
                   			<thead class="bg-light">
                   				<tr>
                   					<th>S.No.</th>

@@ -14,7 +14,7 @@
               <div class="row">
                 <div class="col-4">
                 <?php echo $this->session->flashdata('msg'); ?>
-                <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Meter-Reading">
+                <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>meter-reading">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-3 col-form-label">Company</label>
                         <div class="col-sm-9">
