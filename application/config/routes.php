@@ -29,7 +29,7 @@ $route['payment/payment-detail'] = 'Payment_ctrl/payment_detail';
 
 $route['Meter-Reading'] = 'Meter_ctrl/meter_reading';
 $route['Show-Meter-Reading'] = 'Meter_ctrl/show_meter_readings';
-$route['Dashboard'] = 'Dashboard_ctrl';
+$route['dashboard'] = 'Dashboard_ctrl';
 $route['forgot-password'] = 'User_ctrl/change_password';
 $route['log-out'] = 'Company_ctrl/logout';
 $route['404_override'] = '';

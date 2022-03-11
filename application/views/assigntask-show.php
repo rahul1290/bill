@@ -12,9 +12,14 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
-        	<div class="row">
+        <div class="table-responsive mt-3">
+          		<span class="text-primary" id="page-heading">Assigned Users</span>
+          		<hr>
+        	<div class="row mb-4">
+            
         		<div class="col">
-        			<select id="com_filter">
+            <label>Company</label>
+        			<select id="com_filter" class="form-control">
         				<option value="">Select Company</option>
         				<?php foreach($companies as $company) { ?>
         					<option value="<?php echo $company['cid']; ?>" <?php if($company['cid'] == $this->uri->segment('2')){ echo 'selected'; }?>><?php echo $company['name']; ?></option>
@@ -22,7 +27,8 @@
         			</select>
         		</div>
         		<div class="col">
-        			<select id="costc_filter">
+            <label>Select Costcenter</label>
+        			<select id="costc_filter" class="form-control">
         				<option value="">Select Costcenter</option>
         				<?php foreach ($cost_centers as $cost_center){ ?>
         					<option value="<?php echo $cost_center['costc_id']; ?>" <?php if($cost_center['costc_id'] == $this->uri->segment('3')){ echo 'selected'; }?>><?php echo $cost_center['name']; ?></option>
@@ -30,15 +36,16 @@
         			</select>
         		</div>
         		<div class="col">
-        			<select id="location_filter">
+            <label>Select Location</label>
+        			<select id="location_filter" class="form-control">
         				<option value="">Select Location</option>
         				<?php foreach ($locations as $location){ ?>
         					<option value="<?php echo $location['loc_id']; ?>" <?php if($location['loc_id'] == $this->uri->segment('4')){ echo 'selected'; }?>><?php echo $location['name']; ?></option>
         				<?php } ?>
         			</select>
         		</div>
-        		<div class="col">
-        			<input type="button" id="filter" value="Search" />
+        		<div class="col mt-4">
+        			<input class="btn btn-success mt-2" type="button" id="filter" value="Search" />
         		</div>
         	</div>
 			
@@ -48,9 +55,7 @@
 			
 			
 				
-          	<div class="table-responsive">
-          		<span class="text-primary" id="page-heading">Assigned Users</span>
-          		
+          	
               <table class="table table-bordered text-sm">
                 <thead class="bg-light">
                   <tr>
