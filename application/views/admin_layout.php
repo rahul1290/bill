@@ -366,7 +366,7 @@
 
           
           <li class="nav-item">
-            <a href="<?php echo base_url('Log-Out'); ?>" class="nav-link">
+            <a href="<?php echo base_url('log-out'); ?>" class="nav-link">
               <i class="nav-icon fas fa-power-off"></i>
         
               <p>

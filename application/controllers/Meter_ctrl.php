@@ -234,7 +234,8 @@ class Meter_ctrl extends CI_Controller {
               $db_data['created_at'] = date('Y-m-d');
               $db_data['created_by'] = $this->session->userdata('user_id');
               
-              if(is_null($this->input->post('selected_service_no'))){
+              if(is_null($this->input->post('selected_service_no')) || $this->input->post('selected_service_no') == ''){
+                  
                 $result = $this->Meter_model->bill_entry($db_data);
               
                 if(!is_null($result)){
@@ -250,7 +251,6 @@ class Meter_ctrl extends CI_Controller {
                   }
               } else {
                   $result = $this->Meter_model->bill_entry($db_data,$this->input->post('selected_service_no'));
-                  
                   if(!is_null($result)){
                       $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
                         Bill updated successfully.
@@ -300,7 +300,7 @@ class Meter_ctrl extends CI_Controller {
           }
           $bills =  $this->db->query($query)->result_array();
       } else{ 
-          $query = "SELECT t3.*,if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id) as sno_id,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
+          $query = "SELECT t3.*,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
                     FROM task_assign ta
                     join (select t1.mid,t1.bpno,b1.*,cm.cid,ccm.costc_id,lm.loc_id,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
@@ -309,7 +309,7 @@ class Meter_ctrl extends CI_Controller {
                     JOIN company_master cm on cm.cid = t1.cid
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
                     JOIN location_master lm on lm.loc_id = t1.loc_id
-                    WHERE t1.mid = t2.mid) as t3 on t3.mid = ta.sno_id
+                    WHERE t1.mid = t2.mid) as t3 on t3.mid = if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id)
                     WHERE ta.user_id = ".$this->session->userdata('user_id')." and ta.status = 1";
           if(!is_null($companyId)){
               $query .= " AND t3.cid=".$companyId;
