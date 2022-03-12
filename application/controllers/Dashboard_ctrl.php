@@ -82,8 +82,46 @@ class Dashboard_ctrl extends CI_Controller {
   }
   
   
+  function bill_payments(){
+      $company = $this->input->post('company');
+      if($this->input->post('month') != ''){
+        $month = $this->input->post('month');
+      } else {
+          $month = date('m');
+      }
+      if($this->input->post('year') != ''){
+        $year = $this->input->post('year');
+      } else {
+          $year = date('Y');
+      }
+      
+      $fromdate = $year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT).'-'.'01';
+      //echo $fromdate;
+      $last_date = cal_days_in_month(CAL_GREGORIAN,$month,$year);
+      $todate = $year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT).'-'.$last_date;
+      
+      $query = "select mm.cid,cm.name as company_name,sum(b.gross_amount) as total_bill from meter_master mm
+                        JOIN bill b on b.sno_id = mm.mid AND b.from_date BETWEEN '".$fromdate."' AND '".$todate."'
+                        JOIN company_master cm on cm.cid = mm.cid";
+      if($company != ''){
+          $query .= " AND cm.cid = ".$company;
+      }
+  
+    $query .= " GROUP by cid";
+      
+      
+      $result = $this->db->query($query)->result_array();
+      //print_r($this->db->last_query());  die;
+      if(count($result)>0) {
+          echo json_encode(array('data'=>$result,'status'=>200));
+      } else {
+          echo json_encode(array('msg'=>'no record found.','status'=>500));
+      }
+  }
+  
+  
   function index(){
-    $data['desktop_data'] = json_decode($this->bill_upload_data(),true);
+    $data['companies'] = $this->Company_model->company_list();
     $data['main_content'] = $this->load->view('dashboard',$data,true);
   	$this->load->view('admin_layout',$data);
   }
