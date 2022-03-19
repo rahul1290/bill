@@ -33,6 +33,7 @@ class Dashboard_ctrl extends CI_Controller {
                     WHERE 1=1 and status = 1) t3 on t3.snoid = t1.mid
                     WHERE t1.mid = t2.mid) as tt1
                     GROUP by bill_status";
+          
           $bills =  $this->db->query($query)->result_array();
       } else {
           $query = "select count(*) total,bill_status from (SELECT if(t3.date_of_bill IS NOT NULL,if(ta.bill_upload = 1,

@@ -41,10 +41,10 @@
         			<label>Status</label>
         			<select id="status_filter" class="form-control">
         				<option value="">Select Status</option>
-        				<option value="date_passed" <?php if('date_passed' == $this->input->get('status',true)){ echo 'selected'; }?>>Date Passed</option>
-        				<option value="today" <?php if('today' == $this->input->get('status',true)){ echo 'selected'; }?>>Today</option>
-        				<option value="date_remaining" <?php if('date_remaining' == $this->input->get('status',true)){ echo 'selected'; }?>>Date Remaining</option>
-        				<option value="not_filled" <?php if('not_filled' == $this->input->get('status',true)){ echo 'selected'; }?>>Not Filled</option>
+        				<option value="date_passed" <?php if('date_passed' == $this->input->get('status',true)){ echo 'selected'; }?>>OVER DUE</option>
+        				<option value="today" <?php if('today' == $this->input->get('status',true)){ echo 'selected'; }?>>URGENT</option>
+        				<option value="date_remaining" <?php if('date_remaining' == $this->input->get('status',true)){ echo 'selected'; }?>>DUE</option>
+        				<option value="not_filled" <?php if('not_filled' == $this->input->get('status',true)){ echo 'selected'; }?>>NOT FILLED</option>
         			</select>
         		</div>
         		<div class="col mt-4">

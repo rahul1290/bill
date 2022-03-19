@@ -29,7 +29,7 @@ class Costcenter_ctrl extends CI_Controller {
 		}
 	}
 
-	function getCostcenterByCompnayId($cid){
+	function getCostcenterByCompnayId($cid=null){
 		$result = $this->Costcenter_model->getCostcenterByCompnayId($cid);
 		
 		if(!is_null($result) && count($result)>0){

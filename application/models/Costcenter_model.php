@@ -58,8 +58,13 @@ class Costcenter_model extends CI_Model {
 	}
 
 	function getCostcenterByCompnayId($cid){
-		$this->db->select('*');
-		$result = $this->db->get_where('cost_center_master',array('company_id'=>$cid,'status'=>1))->result_array();
+		$this->db->select('ccm.*,cm.name as companyname,u.fname,u.lname');
+		$this->db->join('company_master cm','cm.cid = ccm.company_id AND cm.status = 1');
+		$this->db->join('users u','u.uid = cm.created_by');
+		if(!is_null($cid)){
+		    $this->db->where('ccm.company_id',$cid);
+		}
+		$result = $this->db->get_where('cost_center_master ccm',array('ccm.status'=>1))->result_array();
 		return $result;
 	}
 }

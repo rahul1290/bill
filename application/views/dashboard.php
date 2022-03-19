@@ -30,7 +30,7 @@
                <div class="small-box bg-success">
                   <div class="inner">
                      <h3><span>00</span></h3>
-                     <p>Last day Bill upload</p>
+                     <p>--</p>
                   </div>
                   <div class="icon">
                      <i class="ion ion-stats-bars"></i>
@@ -42,7 +42,7 @@
                <div class="small-box bg-warning">
                   <div class="inner">
                      <h3><span>00</span></h3>
-                     <p>Meters Reading pending</p>
+                     <p>--</p>
                   </div>
                   <div class="icon">
                      <i class="ion ion-person-add"></i>
@@ -53,8 +53,8 @@
             <div class="col-lg-3 col-6">
                <div class="small-box bg-danger">
                   <div class="inner">
-                     <h3>65</h3>
-                     <p>Last day Meter Reading</p>
+                     <h3>00</h3>
+                     <p>--</p>
                   </div>
                   <div class="icon">
                      <i class="ion ion-pie-graph"></i>

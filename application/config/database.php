@@ -7,15 +7,16 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
     
-// 	'hostname' => '184.168.127.72',
-// 	'username' => 'vnressus_ebill',
-// 	'password' => 'Vnr@ebill',
-// 	'database' => 'vnressus_ebill',
+	'hostname' => '184.168.127.72',
+	'username' => 'vnressus_ebill',
+	'password' => 'Vnr@ebill',
+	'database' => 'vnressus_ebill',
     
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'bill_record',
+//     'hostname' => 'localhost',
+//     'username' => 'root',
+//     'password' => '',
+//     'database' => 'bill_record',
+    
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

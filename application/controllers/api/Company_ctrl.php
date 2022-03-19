@@ -8,6 +8,7 @@ class Company_ctrl extends REST_Controller {
 
 	function __construct() {
     parent::__construct();
+        $this->load->database();
 		$this->load->model('Company_model');
 		$this->jwt = new JWT();
 
@@ -40,7 +41,7 @@ class Company_ctrl extends REST_Controller {
 		else {
 			$result = $this->Company_model->company_list();
 			if($result != null && count($result)>0){
-				$this->response(array('company_list'=>$result,'msg'=>'company	 list','status'=>200),200);
+				$this->response(array('data'=>array('companies'=>$result),'msg'=>'company list','status'=>200),200);
 			} else {
 				$this->response(array('msg'=>'no record found.','status'=>500),500);
 			}

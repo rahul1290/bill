@@ -86,7 +86,7 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           
           <div class="dropdown-divider"></div>
-          <a href="" class="dropdown-item text-capitalize">
+          <a href="<?php echo base_url('dashbaord'); ?>" class="dropdown-item text-capitalize">
             <i class="fas fa-user mr-2"></i> <?php echo $this->session->userdata('name'); ?>
           </a>
           <div class="dropdown-divider"></div>

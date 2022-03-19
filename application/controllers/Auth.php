@@ -11,7 +11,7 @@ class Auth extends CI_Controller {
             if($this->session->userdata('role') == 'admin'){
                 redirect('/bill-upload');
             } else {
-                redirect('/master/company');
+                redirect('dashboard');
             }
         }
     }
@@ -34,11 +34,7 @@ class Auth extends CI_Controller {
                         'name' => $result[0]['fname'].' '.$result[0]['lname'],
                         'role' => $result[0]['type_name'],
                     ));
-                    if($this->session->userdata('role') == 'admin'){
-                        redirect('/bill-upload');
-                    } else {
-                        redirect('/master/company');
-                    }
+                    redirect('dashboard');
                 } else {
                     $this->session->set_flashdata('msg', '<p class="text-danger text-center">Login Failed. Please try again.</p>');
                     $this->load->view('login');

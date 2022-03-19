@@ -55,13 +55,14 @@
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<p class="text-lg text-bold text-info bg-secondary p-2 mb-0 text-left">
           			Cost-Center List
-          			<select class="float-right">
-          				<option value="">Select Costcenter</option>
-          			</select>
-          			<select class="float-right">
+          			
+          			<input type="text" class="float-right" id="search" name="search" placeholder="Search"/>
+          			<select class="float-right" id="company">
           				<option value="">Select Company</option>
           				<?php foreach($companies as $company){ ?>
-          					<option value="<?php echo $company['cid']; ?>"><?php echo substr($company['name'],0,10); ?></option>
+          					<option value="<?php echo $company['cid']; ?>">
+          						<?php echo substr($company['name'],0,15); ?>
+          					</option>
           				<?php } ?>
           			</select>
           		</p>
@@ -218,32 +219,64 @@
 	});	
 	
 	
-	$(document).on('change','#com_filter',function(){
-    	const comId = $(this).val();
-    	if(comId){
+	$(document).on('change','#company',function(){
+    		const comId = $(this).val();
         	$.ajax({
                 url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
                 method: "GET",
                 dataType: "json",
                 beforeSend(){},
                 success(response){
+                	console.log(response); 
                 	var x = '<option value="">Select Cost-center</option>';
+                	var tableData = '';
                     if(response.status == 200){
                     	$.each(response.data,function(key,value){
                     		x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
                     	});
                     	$('#costc_filter').html(x);
+                    	
+                    	$.each(response.data,function(key,value){
+                    		tableData = tableData + '<tr>'+
+                    						'<td>'+ parseInt(key+1) +'</td>'+
+                    						'<td>'+ value.name +'</td>'+
+                    						'<td>'+ value.companyname +'</td>'+
+                    						'<td>'+ value.created_at +'</td>'+
+                    						'<td>'+ value.fname +'</td>'+
+                    						'<td style="width:70px;" class="text-center">'
+                                                '<a title="Edit" href="javascript:void(0);" class="costcenter_edit mr-1" data-id="'+ value.cc_id +'"><i class="fas fa-edit"></i></a> |'+ 
+                                                '<a title="Delete" href="javascript:void(0);" class="costcenter_delete ml-1" data-id="'+ value.cc_id +'"><i class="fas fa-trash text-red"></i></a>'+
+                                    		'</td>'+
+                    					'</tr>';
+                    	});
+                    	
+                    	$('#cost-centerTable').html(tableData);
+                    	
+                    	
+                    	$('#cost-centerTable').dataTable().fnClearTable();
+    					$('#cost-centerTable').dataTable().fnDestroy();
+                        $('#cost-centerTable').DataTable({
+                               	"searching": false,
+                        //         "bPaginate": false,
+                                "bLengthChange": false,
+                                "bFilter": true,
+                                "bInfo": false,
+                                "bAutoWidth": false 
+                            });
+
                     } else {
                     	$('#costc_filter').html('<option value="">Select Cost-center</option>');
                     }
                     $('#location_filter').html('<option value="">Select Location</option>');
                 }
             });
-        } else {
-        	$('#costc_filter').html('<option value="">Select Cost-center</option>');
-        	$('#location_filter').html('<option value="">Select Location</option>');
-        }
     });
+    
+    
+    $(document).on('keyup','#search',function(){
+    
+    });
+    
 
 	$('#cost-centerTable').DataTable({
        	"searching": false,

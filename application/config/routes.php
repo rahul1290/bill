@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 $route['default_controller'] = 'Auth_ctrl/login';
+$route['dashboard'] = 'Dashboard_ctrl';
 $route['master/company'] = 'company_ctrl';
 $route['master/cost-center'] = 'costcenter_ctrl';
 
@@ -34,3 +35,11 @@ $route['forgot-password'] = 'User_ctrl/change_password';
 $route['log-out'] = 'Company_ctrl/logout';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+
+///////////////////////////////////////////////////////////////////////////////////
+////////////////////////// API ROUTES /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+$route['api/auth/login'] = 'api/Auth/login';
+$route['api/company'] = 'api/Company_ctrl';
+$route['api/bill-list'] = 'api/Bill_ctrl';
