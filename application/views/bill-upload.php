@@ -1,4 +1,3 @@
-    
     <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
@@ -29,7 +28,7 @@
                                         	}
                                         	?>
                                         >
-                                        	<?php echo $serviceno['bpno']; ?> <?php echo substr($serviceno['company_name'],0,3); ?>-<?php echo substr($serviceno['location_name'],0,3); ?>-<?php echo substr($serviceno['costcenter_name'],0,3); ?> 
+                                        	<?php echo $serviceno['bpno']; ?> <?php /*echo substr($serviceno['company_name'],0,3); ?>-<?php echo substr($serviceno['location_name'],0,3); ?>-<?php echo substr($serviceno['costcenter_name'],0,3); */ ?> 
                                         </option>
                                     <?php } ?>
                                 </select>
@@ -510,29 +509,9 @@
     <script>
     const baseUrl = $('#base_url').val();
     
-//     function getCostCenter(cid){
-//         $.ajax({
-//             url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${cid}`,
-//             method: "POST",
-//             dataType: "json",
-//             data : {
-//                 cid : $(this).data('id')
-//             },
-//             success(response){
-//                 var x = '<option value="">Select Cost-center</option>';
-//                 if(response.status == 200){
-//                     $.each(response.data,function(key,value){
-//                         x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
-//                     });
-//                     $('#costc_id').html(x);
-//                 }
-//                 $('#costc_id').html(x);
-//             }
-//         });
-// 	}
+    $('#serviceno').select2();
 	
 	fun();
-	
 	function fun(){
 		
 		$('#loaderModal').modal({

@@ -12,21 +12,8 @@
                 <?php echo $this->session->flashdata('msg'); ?>
                 <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>payment/add-paymet">
                 <div class="form-group row">  
-                <div class="col-md-3">
-                        <label for="inputEmail3" class="col-sm-12 col-form-label">Company</label>
-                        <div class="col-sm-12">
-                          <select id="company" name="company" class="form-control">
-                            <option value="">Select Company</option>
-                            <?php foreach($companies as $company){ ?>
-                              <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
-                            <?php } ?>
-                          </select>
-                        <?php echo form_error('company'); ?>
-                        </div>
-                    </div>
-                    
-                            <div class="col-md-3">
-                    
+                
+                    <div class="col-md-3">
                         <label for="inputEmail3" class="col-sm-12 col-form-label ">Service No.</label>
                         <div class="col-sm-12">
                           <select id="serviceno" name="serviceno" class="form-control">
@@ -37,8 +24,20 @@
                           </select>
                         <?php echo form_error('serviceno'); ?>
                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail3" class="col-sm-12 col-form-label">Company</label>
+                        <div class="col-sm-12">
+                          <select id="company" name="company" class="form-control">
+                            <option value="">Select Company</option>
+                            <?php foreach($companies as $company){ ?>
+                              <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
+                            <?php } ?>
+                          </select>
+                        <?php echo form_error('company'); ?>
+                        </div>
+                    </div>		
                     
-                            </div>
                       
                       <div class="col-md-3">
                           <label for="inputEmail3" class="col-sm-12 col-form-label">Cost-Center</label>
@@ -168,6 +167,8 @@
 
     <script>
     const baseUrl = $('#base_url').val();
+    
+    $('#serviceno').select2();
     
    // var disabledDates = ["2022-03-28","2022-03-14","2022-03-20"];
     $( function() {

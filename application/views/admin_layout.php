@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="<?php echo base_url('assets')?>/css/adminlte.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   
   <link rel="icon" type="image/png" href="<?php echo base_url('assets')?>/images/favicon.png">
   
@@ -18,6 +19,7 @@
 <script src="<?php echo base_url('assets')?>/js/demo.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <style>
   .form-control{background-color:#f9f4f4;}
 </style>

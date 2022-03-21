@@ -280,8 +280,8 @@ class Meter_ctrl extends CI_Controller {
       
       if($this->session->userdata('role') == 'super_admin'){
           $query = "select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
-                    join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
-                    LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
+                    join (SELECT b.bill_id,b.date_of_bill as date_of_bill,mm.mid from meter_master mm
+                    LEFT JOIN bill b on b.sno_id = mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
                     JOIN company_master cm on cm.cid = t1.cid
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
@@ -298,13 +298,15 @@ class Meter_ctrl extends CI_Controller {
           if(!is_null($location)){
               $query .= " AND lm.loc_id=".$location;
           }
+          $query .= " order by t2.date_of_bill desc";
+//           print_r($query); die;
           $bills =  $this->db->query($query)->result_array();
       } else{ 
           $query = "SELECT t3.*,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
                     FROM task_assign ta
                     join (select t1.mid,t1.bpno,b1.*,cm.cid,ccm.costc_id,lm.loc_id,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
-                    join (SELECT b.bill_id,max(b.date_of_bill) as date_of_bill,mm.mid from meter_master mm
-                    LEFT JOIN bill b on b.sno_id = mm.mid group by mm.mid) as t2
+                    join (SELECT b.bill_id,b.date_of_bill as date_of_bill,mm.mid from meter_master mm
+                    LEFT JOIN bill b on b.sno_id = mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
                     JOIN company_master cm on cm.cid = t1.cid
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
@@ -320,8 +322,11 @@ class Meter_ctrl extends CI_Controller {
           if(!is_null($location)){
               $query .= " AND t3.loc_id=".$location;
           }
+          
+          $query .= " ORDER by t3.date_of_bill DESC";
           $bills = $this->db->query($query)->result_array();
       }
+//       print_r($this->db->last_query()); die;
       
       $final_array = array();
       
@@ -352,6 +357,7 @@ class Meter_ctrl extends CI_Controller {
           }
           $final_array[] = $temp;
       }
+      
       $data['bills'] = $final_array;
       
       if(isset($status)){
@@ -371,7 +377,6 @@ class Meter_ctrl extends CI_Controller {
           }
           $data['bills'] = $final_array;
       }
-      
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }

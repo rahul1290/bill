@@ -1,3 +1,4 @@
+   <?php print_r($bills); die; ?>
    <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
@@ -54,14 +55,15 @@
           		
           		<?php echo $this->session->flashdata('msg'); ?>
           		<div class="table-responsive">
-          		<table class="table table-bordered table-striped table-sm text-sm border" id="bill_test">
+          		<table class="table table-bordered table-sm text-sm border" id="bill_test">
           			<thead class="bg-light ">
-          				<tr>
+          				<tr class="bg-dark">
           					<th>S.No.</th>
+          					<th>Status</th>
+          					<th>Service No.</th>
           					<th>Company</th>
           					<th>Cost-Center</th>
           					<th>Location</th>
-          					<th>Service No.</th>
           					<th>Billing Period From</th>
           					<th>Billing Period To</th>
           					<th>Bill No.</th>
@@ -76,17 +78,24 @@
           					<th>Payable Amount</th>
           					<th>Gross Payable Amount</th>
           					<th>Next Date</th>
-          					<th>Status</th>
+          					
           				</tr>
           			</thead>
           			<tbody>
           			
-          				<?php if(count($bills)>0){ $c=0; foreach($bills as $bill){ ?>
-          					<tr >
+          				<?php if(count($bills)>0){ 
+          				    $c=0;
+          				    $bgColor = '';
+          				    foreach($bills as $bill){ 
+          				        if($bill['status'] == 'Not Filled'){
+          				            $bgColor = '';
+          				        } else {
+          				            $bgColor = 'bg-success';
+          				        }
+          				?>
+          					<tr <?php echo $bgColor; ?>>
           						<td><?php echo ++$c; ?></td>
-          						<td><?php echo $bill['companyName']; ?></td>
-          						<td><?php echo $bill['costcenterName']; ?></td>
-          						<td><?php echo $bill['locationName']; ?></td>
+          						<td><?php echo $bill['status']; ?></td>
           						<td>
           							<?php if($bill['sno_id'] != ''){ ?>
           								<a target="_blank" href="<?php echo base_url(); ?>bill-upload/<?php echo $bill['sno_id']; ?>"><?php echo $bill['bpno']; ?></a>
@@ -94,6 +103,10 @@
           								<?php echo $bill['bpno']; ?>
           							<?php } ?>
           						</td>
+          						<td><?php echo $bill['companyName']; ?></td>
+          						<td><?php echo $bill['costcenterName']; ?></td>
+          						<td><?php echo $bill['locationName']; ?></td>
+          						
 								<td>
 									<?php
 								        if($bill['from_date'] != '')
@@ -143,7 +156,6 @@
 									   echo date('d/m/Y',strtotime($bill['next_ittration'])); 
 								    ?>
 								</td>
-								<td><?php echo $bill['status']; ?></td>
           					</tr>
           					
           				<?php }} else { ?>
@@ -221,21 +233,6 @@
     	const status = $('#status_filter').val();
     	
     	window.location.href = `${baseUrl}bill-list/${company}/${costcenter}/${location}/?status=${status}`;
-    	
-//     	if(company){
-//     		if(costcenter){
-//     			if(location){
-//     				window.location.href = `${baseUrl}bill-list/${company}/${costcenter}/${location}`;
-//     			}else{
-//     				window.location.href = `${baseUrl}bill-list/${company}/${costcenter}`;
-//     			}
-//     		} else {
-//     			window.location.href = `${baseUrl}bill-list/${company}`;
-//     		}
-    		
-//     	} else {
-//     		window.location.href = `${baseUrl}bill-list`;
-//     	}
     });
     
     
