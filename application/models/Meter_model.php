@@ -165,14 +165,25 @@ class Meter_model extends CI_Model {
 	
 	function bill_entry($data,$sno_id=null){
 	    if(!is_null($sno_id)){
-	        $this->db->select("bill_id,max('date_of_bill')");
-	        $result = $this->db->get_where('bill',array('sno_id'=>$sno_id,'status'=>1))->result_array();
-	        
-	        $this->db->where('bill_id',$result[0]['bill_id']);
-	        $this->db->update('bill',$data);
+            $this->db->where('bill_id',$sno_id);
+            $this->db->update('bill',$data);
+            $result = true;
+	           
 	    } else{ 
-	       $result = $this->db->insert('bill',$data);
+	       $this->db->select('*');
+	       $billResult = $this->db->get_where('bill',array(
+	           'bill_no' => $data['bill_no'],
+	           'status' => 1
+	       ))->result_array();
+	       
+	       if(count($billResult)>0){
+	           $this->db->where('bill_no',$data['bill_no']);
+	           $this->db->update('bill',$data);
+	       } else {
+	           $result = $this->db->insert('bill',$data);
+	       }
 	    }
+	    
 	    if($result){
 	     return $result;   
 	    } else{

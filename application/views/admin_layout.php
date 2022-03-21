@@ -290,7 +290,7 @@
             }?>">
               <i class="nav-icon fas nav-icon fas fa-rupee-sign"></i>
               <p>
-                Payment
+                Payment 
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -301,7 +301,7 @@
             }?>">
                   <i class="nav-icon fas fa-money-check"></i>
                   <p>
-                    Add Payment
+                    Add Payment 
                   </p>
                 </a>
               </li>
@@ -333,7 +333,7 @@
           </li>
 
           
-
+          <?php /* ?>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -363,7 +363,7 @@
               </li>
             </ul>
           </li>
-
+           <?php */ ?>
 
 
           

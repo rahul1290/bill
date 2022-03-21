@@ -38,8 +38,8 @@
                         <div class="col-md-4">
                             <label for="inputEmail3" class="col-form-label text-xs">Cost-Center<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
-                              <select id="costcenter" name="costcenter" class="form-control" disabled>
-                                <option value="" selected>Select Company</option>
+                              <select id="costcenter" name="costcenter" class="form-control">
+                                <option value="" selected>Select Costcenter</option>
                               </select>
                               <?php echo form_error('costcenter'); ?>
                             </div>
@@ -48,7 +48,7 @@
                             <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
                               <select id="location" name="location" class="form-control" disabled>
-                                <option value="" selected>Select Company</option>
+                                <option value="" selected>Select Location</option>
                                 </select>
                               <?php echo form_error('location'); ?>
                             </div>
@@ -56,7 +56,7 @@
                         <div class="col-md-4">
                             <label for="inputEmail3" class="col-form-label text-xs">Company<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
-                              <select id="company" name="company" class="form-control" disabled>
+                              <select id="company" name="company" class="form-control">
                                 <option value="" selected>Select Company</option>
                                     <?php foreach($companies as $company){ ?>
                                         <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
@@ -147,7 +147,7 @@
                         <div class="row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Reading Date<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="previous_reading_date" id="previous_reading_date" class="form-control"/>
+                              <input type="date" name="previous_reading_date" id="previous_reading_date" class="form-control" value="<?php echo set_value('previous_reading_date'); ?>"/>
                             <?php echo form_error('previous_reading_date'); ?>
                             </div>
                         </div>
@@ -443,6 +443,11 @@
                         </div>
                         </div>
                     </div>
+                    
+                    <img id="show_img" src="" width="200" height="190" style="display:none;" />
+                    <object id="show_pdf" width="200" height="190" style="display:none;"></object>
+                    <input type="button" id="remove_img" value="Remove" style="display:none;">
+                    
                     <div class="form-group row mt-3">
                     	<div class="row">
                             <label for="inputEmail3" class="col-sm-5 col-form-label text-xs">Image</label>
@@ -511,38 +516,205 @@
     
     $('#serviceno').select2();
 	
-	fun();
-	function fun(){
-		
+	
+	getServiceNo();
+	
+	function getServiceNo(){
+		var billNo = $('#selected_service_no').val();
 		$('#loaderModal').modal({
    			'show':true,
    			'backdrop' :'static',
    			'keyboard' : false
    		});
-   		
-		var serviceNo = $('#serviceno').val();
-		if(serviceNo){
-    		$.ajax({
-                url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
+		
+		$.ajax({
+            url: `${baseUrl}Meter_ctrl/getbill_detail/${billNo}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	console.log(response);
+            	$('#costcenter').html('<option value="'+ response.data.costc_id +'">'+ response.data.cost_center +'</option>');
+                        $('#location').html('<option value="'+ response.data.loc_id +'">'+ response.data.location_name +'</option>');
+                        $('#company').html('<option value="'+ response.data.cid +'">'+ response.data.company_name +'</option>');
+                        
+                        $('#serviceno').val(response.data.mid);
+                    	$('#billing_period_from').val(response.data.from_date);
+                    	$('#billing_period_to').val(response.data.to_date);
+                    	$('#bill_no').val(response.data.bill_no);
+                    	$('#bill_date').val(response.data.date_of_bill);
+                    	$('#due_date').val(response.data.due_date);
+                    	$('#current_reading').val(response.data.reading);
+                    	$('#current_reading_date').val(response.data.reading_date);
+                    	$('#previous_reading').val(response.data.previous_reading);
+                    	$('#previous_reading_date').val(response.data.previous_reading_date);
+                    	//$('#coefficient').val(response.payment_detail[0].);
+                    	$('#power_consumption').val(response.data.power_consumption);
+                    	$('#power_factor').val(response.data.power_factor);
+                    	$('#total_consumption').val(response.data.total_consumption);
+                    	$('#highest_demand_rating').val(response.data.highest_demand_reading);
+                    	$('#je_ae_name').val(response.data.je_ae_name);
+                    	$('#je_ae_contact').val(response.data.je_ae_contact_no);
+                    	$('#ae_ee_name').val(response.data.ae_ee_name);
+                    	$('#ae_ee_contact').val(response.data.ae_ee_contact_no);
+                    	$('#fix_demand').val(response.data.fixed_demand_charges);
+                    	$('#minimum_charge').val(response.data.minimum_charges);
+                    	$('#energy_charges').val(response.data.energy_charges);
+                    	$('#sum').val(response.data.total_charges);
+                    	$('#electricity_duty').val(response.data.electricity_duty);
+                    	$('#cess').val(response.data.cess);
+                    	$('#capacitor_overload').val(response.data.welding_capacitor_overload);
+                    	$('#meter_fare').val(response.data.meter_fare);
+                    	$('#vca').val(response.data.vca_charge);
+                    	$('#security_deposit').val(response.data.security_deposit);
+                    	$('#concession_amount').val(response.data.concession_amount);
+                    	$('#total_bill').val(response.data.total_bill);
+                    	$('#deviation').val(response.data.deviation_adjustment);
+                    	$('#past_due').val(response.data.past_dues);
+                    	$('#security_fund_outstanding').val(response.data.security_fund_outstanding);
+                    	$('#payable_amount').val(response.data.payable_amount);
+                    	$('#extra').val(response.data.extra);
+                    	$('#surcharge').val(response.data.gross_amount);
+                    	$('#overload').val(response.data.overload);
+                    	
+                    	var x = response.data.image.split('.');
+                    	console.log(`length ${x.length}`)
+                    	if(x.length > 1){
+                        	if(x[length+1] == 'pdf' || x[length+1] == 'PDF'){
+                        		$('#show_pdf').show().attr('data',`${baseUrl}upload/bills/${response.data.image}`);
+                        	} else {
+                        		$('#show_img').show().attr('src',`${baseUrl}upload/bills/${response.data.image}`);
+                        	}
+                        	
+                        	$('#remove_img').show();
+                    	}
+                    	
+                    	$('#assign-update').show();
+                    	$('#assign-create').hide();
+                    
+            }
+        });
+        $('#loaderModal').modal('toggle');
+	}
+	
+	
+	$(document).on('click','#remove_img',function(){
+		var billNo = $('#selected_service_no').val();
+		$.ajax({
+                url: `${baseUrl}Meter_ctrl/remove_Meter_bill/${billNo}`,
                 method: "GET",
                 dataType: "json",
                 success(response){
-                    if(response.status == 200){
-                        $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
-                        $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
-                        $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
+                	if(response.status == 200){
+                		$('#show_img').hide();
+                		$('#show_pdf').hide();
+                		$('#remove_img').hide();
+                		alert('Image removed.');
+                	}
+                }
+       	});
+	});
+	
+// 	function fun(){
+// 		$('#loaderModal').modal({
+//    			'show':true,
+//    			'backdrop' :'static',
+//    			'keyboard' : false
+//    		});
+   		
+// 		var serviceNo = $('#serviceno').val();
+// 		if(serviceNo){
+//     		$.ajax({
+//                 url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
+//                 method: "GET",
+//                 dataType: "json",
+//                 success(response){
+//                     if(response.status == 200){
+//                         $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
+//                         $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
+//                         $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
                         
-                        if($('#selected_service_no').val()){
-                    	$('#billing_period_from').val(response.payment_detail[0].from_date);
+//                         if($('#selected_service_no').val()){
+//                     	$('#billing_period_from').val(response.payment_detail[0].from_date);
+//                     	$('#billing_period_to').val(response.payment_detail[0].to_date);
+//                     	$('#bill_no').val(response.payment_detail[0].bill_no);
+//                     	$('#bill_date').val(response.payment_detail[0].date_of_bill);
+//                     	$('#due_date').val(response.payment_detail[0].due_date);
+//                     	$('#current_reading').val(response.payment_detail[0].reading);
+//                     	$('#current_reading_date').val(response.payment_detail[0].reading_date);
+//                     	$('#previous_reading').val(response.payment_detail[0].previous_reading);
+//                     	$('#previous_reading_date').val(response.payment_detail[0].previous_reading_date);
+//                     	//$('#coefficient').val(response.payment_detail[0].);
+//                     	$('#power_consumption').val(response.payment_detail[0].power_consumption);
+//                     	$('#power_factor').val(response.payment_detail[0].power_factor);
+//                     	$('#total_consumption').val(response.payment_detail[0].total_consumption);
+//                     	$('#highest_demand_rating').val(response.payment_detail[0].highest_demand_reading);
+//                     	$('#je_ae_name').val(response.payment_detail[0].je_ae_name);
+//                     	$('#je_ae_contact').val(response.payment_detail[0].je_ae_contact_no);
+//                     	$('#ae_ee_name').val(response.payment_detail[0].ae_ee_name);
+//                     	$('#ae_ee_contact').val(response.payment_detail[0].ae_ee_contact_no);
+//                     	$('#fix_demand').val(response.payment_detail[0].fixed_demand_charges);
+//                     	$('#minimum_charge').val(response.payment_detail[0].minimum_charges);
+//                     	$('#energy_charges').val(response.payment_detail[0].energy_charges);
+//                     	$('#sum').val(response.payment_detail[0].total_charges);
+//                     	$('#electricity_duty').val(response.payment_detail[0].electricity_duty);
+//                     	$('#cess').val(response.payment_detail[0].cess);
+//                     	$('#capacitor_overload').val(response.payment_detail[0].welding_capacitor_overload);
+//                     	$('#meter_fare').val(response.payment_detail[0].meter_fare);
+//                     	$('#vca').val(response.payment_detail[0].vca_charge);
+//                     	$('#security_deposit').val(response.payment_detail[0].security_deposit);
+//                     	$('#concession_amount').val(response.payment_detail[0].concession_amount);
+//                     	$('#total_bill').val(response.payment_detail[0].total_bill);
+//                     	$('#deviation').val(response.payment_detail[0].deviation_adjustment);
+//                     	$('#past_due').val(response.payment_detail[0].past_dues);
+//                     	$('#security_fund_outstanding').val(response.payment_detail[0].security_fund_outstanding);
+//                     	$('#payable_amount').val(response.payment_detail[0].payable_amount);
+//                     	$('#extra').val(response.payment_detail[0].extra);
+//                     	$('#surcharge').val(response.payment_detail[0].gross_amount);
+//                     	$('#overload').val(response.payment_detail[0].overload);
+                    	
+                    	
+//                     	$('#assign-update').show();
+//                     	$('#assign-create').hide();
+//                     }
+//                     }
+//                 }
+//             });
+//         }
+        
+//         $('#loaderModal').modal('toggle');
+// 	}
+	
+	
+	
+	
+		
+	$(document).on('change','#serviceno',function(){
+		var serviceNo = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	console.log(response);
+                if(response.status == 200){
+                    $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
+                    $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
+                    $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
+                    
+                    
+                    $('#previous_reading').val(response.payment_detail[0].reading);
+                    $('#previous_reading_date').val(response.payment_detail[0].reading_date);
+                    
+                        $('#billing_period_from').val(response.payment_detail[0].from_date);
                     	$('#billing_period_to').val(response.payment_detail[0].to_date);
-                    	$('#bill_no').val(response.payment_detail[0].bill_no);
-                    	$('#bill_date').val(response.payment_detail[0].date_of_bill);
-                    	$('#due_date').val(response.payment_detail[0].due_date);
-                    	$('#current_reading').val(response.payment_detail[0].reading);
-                    	$('#current_reading_date').val(response.payment_detail[0].reading_date);
+                    	$('#bill_no').val('');
+                    	$('#bill_date').val('');
+                    	$('#due_date').val('');
+                    	$('#current_reading').val('');
+                    	$('#current_reading_date').val('');
                     	$('#previous_reading').val(response.payment_detail[0].previous_reading);
                     	$('#previous_reading_date').val(response.payment_detail[0].previous_reading_date);
-                    	//$('#coefficient').val(response.payment_detail[0].);
+
                     	$('#power_consumption').val(response.payment_detail[0].power_consumption);
                     	$('#power_factor').val(response.payment_detail[0].power_factor);
                     	$('#total_consumption').val(response.payment_detail[0].total_consumption);
@@ -562,84 +734,30 @@
                     	$('#vca').val(response.payment_detail[0].vca_charge);
                     	$('#security_deposit').val(response.payment_detail[0].security_deposit);
                     	$('#concession_amount').val(response.payment_detail[0].concession_amount);
-                    	$('#total_bill').val(response.payment_detail[0].total_bill);
-                    	$('#deviation').val(response.payment_detail[0].deviation_adjustment);
-                    	$('#past_due').val(response.payment_detail[0].past_dues);
-                    	$('#security_fund_outstanding').val(response.payment_detail[0].security_fund_outstanding);
-                    	$('#payable_amount').val(response.payment_detail[0].payable_amount);
-                    	$('#extra').val(response.payment_detail[0].extra);
-                    	$('#surcharge').val(response.payment_detail[0].gross_amount);
-                    	$('#overload').val(response.payment_detail[0].overload);
-                    	
-                    	
-                    	$('#assign-update').show();
-                    	$('#assign-create').hide();
-                    }
-                    }
-                }
-            });
-        }
-        
-        $('#loaderModal').modal('toggle');
-	}
-	
-	
-		
-	$(document).on('change','#serviceno',function(){
-		var serviceNo = $(this).val();
-		$.ajax({
-            url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
-            method: "GET",
-            dataType: "json",
-            success(response){
-            	console.log(response);
-                if(response.status == 200){
-                    $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
-                    $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
-                    $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
-                    
-                    $('#previous_reading').val(response.payment_detail[0].reading);
-                    $('#previous_reading_date').val(response.payment_detail[0].reading_date);
-                    
-                        $('#billing_period_from').val('');
-                    	$('#billing_period_to').val('');
-                    	$('#bill_no').val('');
-                    	$('#bill_date').val('');
-                    	$('#due_date').val('');
-                    	$('#current_reading').val('');
-                    	$('#current_reading_date').val('');
-                    	//$('#coefficient').val(response.payment_detail[0].);
-                    	$('#power_consumption').val('');
-                    	$('#power_factor').val('');
-                    	$('#total_consumption').val('');
-                    	$('#highest_demand_rating').val('');
-                    	$('#je_ae_name').val('');
-                    	$('#je_ae_contact').val('');
-                    	$('#ae_ee_name').val('');
-                    	$('#ae_ee_contact').val('');
-                    	$('#fix_demand').val('');
-                    	$('#minimum_charge').val('');
-                    	$('#energy_charges').val('');
-                    	$('#sum').val('');
-                    	$('#electricity_duty').val('');
-                    	$('#cess').val('');
-                    	$('#capacitor_overload').val('');
-                    	$('#meter_fare').val('');
-                    	$('#vca').val('');
-                    	$('#security_deposit').val('');
-                    	$('#concession_amount').val('');
                     	$('#total_bill').val('');
-                    	$('#deviation').val('');
+                    	$('#deviation').val(response.payment_detail[0].deviation_adjustment);
                     	$('#past_due').val('');
-                    	$('#security_fund_outstanding').val('');
+                    	$('#security_fund_outstanding').val(response.payment_detail[0].security_fund_outstanding);
                     	$('#payable_amount').val('');
-                    	$('#extra').val('');
+                    	$('#extra').val(response.payment_detail[0].extra);
                     	$('#surcharge').val('');
-                    	$('#overload').val('');
+                    	$('#overload').val(response.payment_detail[0].overload);
                 }
             }
         });
 	});
 	
+	
+	$(document).on('change','#company',function(){
+		var company = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${company}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	console.log(response);
+            }
+       });		
+	});
 	
     </script>

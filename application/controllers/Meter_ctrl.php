@@ -26,12 +26,22 @@ class Meter_ctrl extends CI_Controller {
 		$payment_detail = array();
 		
 		if(!is_null($result) && count($result)>0){
-    		$this->db->select('max(bill_id) as bill_id');
-    		$this->db->group_by('sno_id');
-    		$last_bill_entry = $this->db->get_where('bill',array('sno_id'=>$result[0]['mid']))->result_array();
-    		if(count($last_bill_entry)>0){
+    		$last_bill_entry =  $this->db->query("select * FROM bill
+                                WHERE date_of_bill = (select max(date_of_bill) from bill 
+                                WHERE sno_id = ".$result[0]['mid']." AND status = 1)
+                                AND sno_id = ".$result[0]['mid']."
+                                AND status = 1")->result_array();
+    		
+    		if(count($last_bill_entry) > 0) {
         		$this->db->select('*');
         		$payment_detail = $this->db->get_where('bill',array('bill_id'=>$last_bill_entry[0]['bill_id']))->result_array();
+        		
+        		
+        		
+        		$payment_detail[0]['from_date'] = date('Y-m-d', strtotime('+1 day', strtotime($payment_detail[0]['to_date'])));
+        		$no_of_days = date('t',strtotime($payment_detail[0]['from_date']));
+        		
+        		$payment_detail[0]['to_date'] = date('Y-m-d', strtotime('-1 day',strtotime('+'.$no_of_days.' day', strtotime($payment_detail[0]['from_date']))));
     		}
 		}
 		
@@ -146,6 +156,9 @@ class Meter_ctrl extends CI_Controller {
           $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
       }
       
+      
+      $data['companies'] = $this->Company_model->get_my_companies();
+      
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);
@@ -177,7 +190,7 @@ class Meter_ctrl extends CI_Controller {
           if ($this->form_validation->run()){
             $config = array(
               'upload_path' => APPPATH."../upload/bills/",
-              'allowed_types' => "gif|jpg|png|jpeg|pdf",
+              'allowed_types' => "gif|jpg|png|jpeg|PDF|pdf",
               'encrypt_name' => TRUE,
               // 'overwrite' => TRUE,
               // 'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
@@ -230,13 +243,13 @@ class Meter_ctrl extends CI_Controller {
               $db_data['extra'] = $this->input->post('extra');
               $db_data['gross_amount'] = $this->input->post('surcharge');
               $db_data['overload'] = $this->input->post('overload');
-              $db_data['image'] = '';
               $db_data['created_at'] = date('Y-m-d');
               $db_data['created_by'] = $this->session->userdata('user_id');
               
               if(is_null($this->input->post('selected_service_no')) || $this->input->post('selected_service_no') == ''){
                   
                 $result = $this->Meter_model->bill_entry($db_data);
+                
               
                 if(!is_null($result)){
                   $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
@@ -326,7 +339,6 @@ class Meter_ctrl extends CI_Controller {
           $query .= " ORDER by t3.date_of_bill DESC";
           $bills = $this->db->query($query)->result_array();
       }
-//       print_r($this->db->last_query()); die;
       
       $final_array = array();
       
@@ -528,6 +540,17 @@ class Meter_ctrl extends CI_Controller {
           }
       }
   }
+  
+  
+  function getbill_detail($bill_no){
+      $this->db->select('b.*,mm.mid,ccm.costc_id,ccm.name as cost_center,lm.loc_id,lm.name as location_name,cm.cid,cm.name as company_name');
+      $this->db->join('meter_master mm','mm.mid = b.sno_id');
+      $this->db->join('cost_center_master ccm','ccm.costc_id = mm.costc_id');
+      $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
+      $this->db->join('company_master cm','cm.cid = mm.cid');
+      $result = $this->db->get_where('bill b',array('b.bill_id'=>$bill_no,'b.status'=>1))->result_array();
+      echo json_encode(array('data'=>$result[0],'status'=>200));
+  }
 
   function show_meter_readings(){
       $user_id = $this->session->userdata('user_id');
@@ -539,5 +562,12 @@ class Meter_ctrl extends CI_Controller {
       print_r($this->db->last_query()); die;
       $data['main_content'] = $this->load->view('meter-reading-show',$data,true);
       $this->load->view('admin_layout',$data);
+  }
+  
+  
+  function remove_Meter_bill($bill_no){
+      $this->db->where('bill_id',$bill_no);
+      $this->db->update('bill',array('image'=>Null));
+      echo json_encode(array('status'=>200));
   }
 }

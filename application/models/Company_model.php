@@ -51,4 +51,18 @@ class Company_model extends CI_Model {
 			return null;
 		}
 	}
+	
+	
+	function get_my_companies(){
+	    if($this->session->userdata('role')== 'super_admin'){
+	       $result = $this->db->query("select * from company_master where status = 1")->result_array();
+	    } else {
+	       $result = $this->db->query("select mm.cid,cm.name from meter_master mm
+                        JOIN company_master cm on cm.cid = mm.cid
+                        WHERE mid in (SELECT if(ISNULL(sub_meter_id),sno_id,sub_meter_id) as meters FROM `task_assign` WHERE user_id = 2 AND status = 1)
+                        GROUP by mm.cid")->result_array();
+	    }
+	    
+	    return $result;
+	}
 }

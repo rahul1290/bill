@@ -1,4 +1,4 @@
-   <?php print_r($bills); die; ?>
+   
    <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
@@ -96,13 +96,7 @@
           					<tr <?php echo $bgColor; ?>>
           						<td><?php echo ++$c; ?></td>
           						<td><?php echo $bill['status']; ?></td>
-          						<td>
-          							<?php if($bill['sno_id'] != ''){ ?>
-          								<a target="_blank" href="<?php echo base_url(); ?>bill-upload/<?php echo $bill['sno_id']; ?>"><?php echo $bill['bpno']; ?></a>
-          							<?php } else { ?>
-          								<?php echo $bill['bpno']; ?>
-          							<?php } ?>
-          						</td>
+          						<td><?php echo $bill['bpno']; ?></td>
           						<td><?php echo $bill['companyName']; ?></td>
           						<td><?php echo $bill['costcenterName']; ?></td>
           						<td><?php echo $bill['locationName']; ?></td>
@@ -119,7 +113,7 @@
 									       echo date('d/m/Y',strtotime($bill['to_date'])); 
 									?>
 								</td>
-								<td><?php echo $bill['bill_no']; ?></td>
+								<td><a href="<?php echo base_url(); ?>bill-upload/<?php echo $bill['bill_id']; ?>"><?php echo $bill['bill_no']; ?></a></td>
           						<td>
           							<?php
           						        if($bill['date_of_bill'] != '')
