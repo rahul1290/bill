@@ -801,7 +801,7 @@
             dataType: "json",
             success(response){
             	if(response.status == 200){
-            		var x = '<option value="">Select Service No</option>';
+            		var x = '<option value="">Select Service No.</option>';
             		$.each(response.data,function(key,value){
             			x = x + '<option value="'+ value.mid +'">'+ value.bpno +'</option>';
             		});

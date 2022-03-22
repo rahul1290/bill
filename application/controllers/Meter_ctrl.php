@@ -159,6 +159,7 @@ class Meter_ctrl extends CI_Controller {
       
       $data['companies'] = $this->Company_model->get_my_companies();
       
+      
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('bill-upload',$data,true);
           $this->load->view('admin_layout',$data);

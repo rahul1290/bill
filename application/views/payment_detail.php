@@ -260,7 +260,7 @@
     		'show':true
     	});
     	
-    	$('#meterEdit > .modal-body').html('welcome');
+    	//$('#meterEdit' > .modal-body').html('welcome');
     });
 	
     </script>
