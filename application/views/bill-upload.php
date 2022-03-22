@@ -47,7 +47,7 @@
                         <div class="col-md-4">
                             <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
-                              <select id="location" name="location" class="form-control" disabled>
+                              <select id="location" name="location" class="form-control">
                                 <option value="" selected>Select Location</option>
                                 </select>
                               <?php echo form_error('location'); ?>
@@ -755,7 +755,60 @@
             method: "GET",
             dataType: "json",
             success(response){
-            	console.log(response);
+            	if(response.status == 200){
+            		var x = '<option value="">Select Cost-center</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+            		});
+            		$('#costcenter').html(x);
+            	} else {
+            		$('#costcenter').html('<option value="">Select Cost-center</option>');
+            	}
+            	$('#location').html('<option value="">Select Location</option>');
+            }
+       });		
+	});
+	
+	$(document).on('change','#costcenter',function(){
+		var company = $('#company').val();
+		var costcenter = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Location_ctrl/get_my_location/${company}/${costcenter}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	if(response.status == 200){
+            		var x = '<option value="">Select Location</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
+            		});
+            		$('#location').html(x);
+            	} else {
+            		$('#location').html('<option value="">Select Location</option>');
+            	}
+            }
+       });		
+	});
+	
+	
+	$(document).on('change','#location',function(){
+		var company = $('#company').val();
+		var costcenter = $('#costcenter').val();
+		var location = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Meter_ctrl/get_my_meters/${company}/${costcenter}/${location}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	if(response.status == 200){
+            		var x = '<option value="">Select Service No</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.mid +'">'+ value.bpno +'</option>';
+            		});
+            		$('#serviceno').html(x);
+            	} else {
+            		$('#serviceno').html('<option value="">Select Service No</option>');
+            	}
             }
        });		
 	});

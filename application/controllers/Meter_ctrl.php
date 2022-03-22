@@ -150,7 +150,7 @@ class Meter_ctrl extends CI_Controller {
       if(!is_null($sno_id)){
            $data['selected_service_no'] = $sno_id;        
       }
-      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
+      if($this->session->userdata('role') == 'super_admin'){
           $data['service_no'] = $this->Meter_model->meterlistUserWise();
       } else {
           $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
@@ -286,7 +286,7 @@ class Meter_ctrl extends CI_Controller {
   
   
   function bill_list($companyId=null,$costCenterId=null,$location=null){
-      $data['companies'] = $this->Company_model->company_list();
+      $data['companies'] = $this->Company_model->get_my_companies();
       $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
       $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
       $status = $this->input->get('status');
@@ -312,7 +312,7 @@ class Meter_ctrl extends CI_Controller {
               $query .= " AND lm.loc_id=".$location;
           }
           $query .= " order by t2.date_of_bill desc";
-//           print_r($query); die;
+          
           $bills =  $this->db->query($query)->result_array();
       } else{ 
           $query = "SELECT t3.*,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
@@ -349,7 +349,7 @@ class Meter_ctrl extends CI_Controller {
           if($bill['date_of_bill'] != ''){
               $temp['next_ittration'] = date('Y-m-d', strtotime($bill['date_of_bill'].'+'.$bill['upload_frq'].' month'));
               
-              $date1 = date('Y-m-d', strtotime($bill['date_of_bill'].'+'.$bill['upload_frq'].' month'));
+              $date1 = date('Y-m-d', strtotime('+7 days',strtotime($bill['date_of_bill'].'+'.$bill['upload_frq'].' month')));
               $date2 = date('Y-m-d');
               
               $date1=date_create($date1);
@@ -372,7 +372,7 @@ class Meter_ctrl extends CI_Controller {
       
       $data['bills'] = $final_array;
       
-      if(isset($status)){
+      if(isset($status) && $status != ''){
           $final_array = array();
           foreach($data['bills'] as $bill){
               if($status == 'date_passed' && $bill['status'] =='Date passed'){
@@ -389,6 +389,7 @@ class Meter_ctrl extends CI_Controller {
           }
           $data['bills'] = $final_array;
       }
+      
       $data['main_content'] = $this->load->view('bill-list',$data,true);
       $this->load->view('admin_layout',$data);
   }
@@ -570,4 +571,25 @@ class Meter_ctrl extends CI_Controller {
       $this->db->update('bill',array('image'=>Null));
       echo json_encode(array('status'=>200));
   }
+  
+  
+  function get_my_meters($com_id,$costc_id,$loc_id){
+      if($this->session->userdata('role') != 'super_admin'){
+      $query = "select * from meter_master where mid in (SELECT if(ISNULL(sub_meter_id),sno_id,sub_meter_id) as meters FROM `task_assign` WHERE user_id = ".$this->session->userdata('user_id')." AND status = 1)
+          AND cid = ".$com_id."
+          AND costc_id = ".$costc_id."
+          AND loc_id = ".$loc_id;
+      } else {
+      $query = "select * from meter_master where cid = ".$com_id."
+          AND costc_id = ".$costc_id."
+          AND loc_id = ".$loc_id;
+      }
+      $result = $this->db->query($query)->result_array();
+      if(count($result)>0){
+          echo json_encode(array('data'=>$result,'status'=>200));
+      } else {
+          echo json_encode(array('status'=>500));
+      }
+  }
+  
 }

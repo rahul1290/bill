@@ -172,52 +172,69 @@
     const baseUrl = $('#base_url').val();
     
     $(document).on('change','#com_filter',function(){
-    	const comId = $(this).val();
-    	if(comId){
-        	$.ajax({
-                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
-                method: "GET",
-                dataType: "json",
-                beforeSend(){},
-                success(response){
-                	var x = '<option value="">Select Cost-center</option>';
-                    if(response.status == 200){
-                    	$.each(response.data,function(key,value){
-                    		x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
-                    	});
-                    	$('#costc_filter').html(x);
-                    } else {
-                    	$('#costc_filter').html('<option value="">Select Cost-center</option>');
-                    }
-                    $('#location_filter').html('<option value="">Select Location</option>');
-                }
-            });
-        } else {
-        	$('#costc_filter').html('<option value="">Select Cost-center</option>');
-        	$('#location_filter').html('<option value="">Select Location</option>');
-        }
-    });
-    
-    $(document).on('change','#costc_filter',function(){
-    	const costId = $(this).val();
-    	$.ajax({
-            url: `${baseUrl}Location_ctrl/getLocationByCostcenterId/${costId}`,
+		var company = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${company}`,
             method: "GET",
             dataType: "json",
-            beforeSend(){},
             success(response){
-            	var x = '<option value="">Select Location</option>';
-                if(response.status == 200){
-                	$.each(response.data,function(key,value){
-                		x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
-                	});
-                	$('#location_filter').html(x);
-                } else {
-                	$('#location_filter').html('<option value="">Select Location</option>');
-                }
+            	if(response.status == 200){
+            		var x = '<option value="">Select Cost-center</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+            		});
+            		$('#costc_filter').html(x);
+            	} else {
+            		$('#costc_filter').html('<option value="">Select Cost-center</option>');
+            	}
+            	$('#location_filter').html('<option value="">Select Location</option>');
             }
-        });
-    });
+       });		
+	});
+	
+	$(document).on('change','#costc_filter',function(){
+		var company = $('#com_filter').val();
+		var costcenter = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Location_ctrl/get_my_location/${company}/${costcenter}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	if(response.status == 200){
+            		var x = '<option value="">Select Location</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.loc_id +'">'+ value.name +'</option>';
+            		});
+            		$('#location_filter').html(x);
+            	} else {
+            		$('#location_filter').html('<option value="">Select Location</option>');
+            	}
+            }
+       });		
+	});
+	
+	
+	$(document).on('change','#location_filter',function(){
+		var company = $('#com_filter').val();
+		var costcenter = $('#costc_filter').val();
+		var location = $(this).val();
+		$.ajax({
+            url: `${baseUrl}Meter_ctrl/get_my_meters/${company}/${costcenter}/${location}`,
+            method: "GET",
+            dataType: "json",
+            success(response){
+            	if(response.status == 200){
+            		var x = '<option value="">Select Service No</option>';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.mid +'">'+ value.bpno +'</option>';
+            		});
+            		$('#serviceno').html(x);
+            	} else {
+            		$('#serviceno').html('<option value="">Select Service No</option>');
+            	}
+            }
+       });		
+	});
     
     
     $(document).on('click','#filter',function(){

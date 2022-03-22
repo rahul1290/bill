@@ -97,4 +97,26 @@ class Location_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+  
+  function get_my_location($com_id,$costc_id){
+      if($this->session->userdata('role') != 'super_admin'){
+          $query = "select * from location_master WHERE 
+                    cost_center_id in (SELECT costc_id FROM cost_center_master WHERE 
+                        company_id in (select mm.cid from meter_master mm JOIN company_master cm on cm.cid = mm.cid AND cm.cid = ".$com_id." WHERE 
+                            mid in (SELECT if(ISNULL(sub_meter_id),sno_id,sub_meter_id) as meters FROM `task_assign` 
+                                WHERE user_id = ".$this->session->userdata('user_id')." AND status = 1) GROUP by mm.cid)
+                    )";
+         $result = $this->db->query($query)->result_array();
+         
+      } else {
+          $result = $this->Location_model->getLocationByCostcenterId($costc_id);
+      }
+      
+      
+      if(!is_null($result) && count($result)>0){
+          echo json_encode(array('data'=>$result,'status'=>200));
+      } else {
+          echo json_encode(array('msg'=>'No record found.','status'=>500));
+      }
+  }
 }
