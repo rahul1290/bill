@@ -573,6 +573,20 @@ class Meter_ctrl extends CI_Controller {
   }
   
   
+  function get_bill_nos($mid){
+      $query = "SELECT bill_id,bill_no FROM bill
+          JOIN meter_master mm on mm.mid = ".$mid."
+          WHERE payment_amount is NULL order by bill_no asc";
+      
+      $result = $this->db->query($query)->result_array();
+      
+      if(count($result)>0){
+          echo json_encode(array('data'=>$result,'status'=>200));
+      } else {
+          echo json_encode(array('status'=>500));
+      }
+  }
+  
   function get_my_meters($com_id,$costc_id,$loc_id){
       if($this->session->userdata('role') != 'super_admin'){
       $query = "select * from meter_master where mid in (SELECT if(ISNULL(sub_meter_id),sno_id,sub_meter_id) as meters FROM `task_assign` WHERE user_id = ".$this->session->userdata('user_id')." AND status = 1)

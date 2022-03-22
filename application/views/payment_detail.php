@@ -48,21 +48,29 @@
                                   </div>
                               </div>
                     	</div>
+                    	<div class="col">
+                    		<div class="row">
+                        		<input type="text" name="search" id="search" placeholder="search by Bill No" />
+                        		<input type="button" name="" value="Search" id="search_btn" />
+                    		</div>
+                    	</div>
                     </div>
                   	
                   	<div class="table-responsive">
-                  		<table class="table table-bordered table-striped text-sm">
+                  		<table class="table table-bordered table-striped text-sm" id="billTable">
                   			<thead class="bg-light">
                   				<tr>
                   					<th>S.No.</th>
-                  					<th>Bill Date</th>
                   					<th>Bill No.</th>
                   					<th>Service No.</th>
-                  					<th>Location</th>
-                  					<th>Cost-Center</th>
                   					<th>Company</th>
+                  					<th>Cost-Center</th>
+                  					<th>Location</th>
+                  					<th>Total Bill</th>
                   					<th>Gross Payment</th>
+                  					<th>Bill Date</th>
                   					<th>Due Date</th>
+                  					<th>Payment Date</th>
                   				</tr>
                   			</thead>
                   			<tbody id="meter-paymets">
@@ -82,34 +90,69 @@
       <!-- /.card -->
     </section>
     
+    
+    <div class="modal" id="meterEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            Loading...
+          </div>
+        </div>
+      </div>
+    </div>
+    
 
     <script>
     const baseUrl = $('#base_url').val();
     
     pyment_detail();
+    
+    $(document).on('click','#search_btn',function(){
+    	pyment_detail();	
+    });
+    
    	function pyment_detail(){
    		$.ajax({
             url: `${baseUrl}Payment_ctrl/paymentDetails`,
-            method: "GET",
+            method: "POST",
             dataType: "json",
+            data : {
+            	'company' : $('#company').val(),
+           		'costcenter' : $('#costcenter').val(),
+           		'location' : $('#location').val(),
+           		'search' : $('#search').val()
+            },
             success(response){
                 if(response.status == 200){
                 	var x = '';
                 	$.each(response.data,function(key,value){
                 		x = x + '<tr>'+
                 					'<td>'+ parseInt(key + 1) +'</td>'+
-                					'<td>'+ value.date_of_bill +'</td>'+
-                  					'<td>'+ value.bill_no +'</td>'+
+                  					'<td><a href="javascript:void(0);" data-id="'+ value.bill_no +'" class="bill_edit">'+ value.bill_no +'</a></td>'+
                   					'<td>'+ value.bpno +'</td>'+
-                  					'<td>'+ value.location_name +'</td>'+	
-                  					'<td>'+ value.cost_center +'</td>'+
                   					'<td>'+ value.company_name +'</td>'+
+                  					'<td>'+ value.cost_center +'</td>'+
+                  					'<td>'+ value.location_name +'</td>'+
+                  					'<td>'+ value.gross_amount +'</td>'+
                   					'<td>'+ value.total_bill +'</td>'+
+                  					'<td>'+ value.date_of_bill +'</td>'+
                   					'<td>'+ value.due_date +'</td>'+
+                  					'<td>'+ value.payment_date +'</td>'+
                 				'</tr>'; 
                 	});
                 	
+                	$('#billTable').dataTable().fnClearTable();
+    				$('#billTable').dataTable().fnDestroy();
                 	$('#meter-paymets').html(x);
+                	
+                	$('#billTable').DataTable({
+                       	"searching": false,
+                //         "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": true,
+                        "bInfo": false,
+                        "bAutoWidth": false 
+                    });
                 }
                 
             }
@@ -210,6 +253,16 @@
         $('#serviceno').html('<option value="">Select Service No</option>');
       }
     });
-
+    
+    
+    $(document).on('click','.bill_edit',function(){
+    	$('#meterEdit').modal({
+    		'show':true
+    	});
+    	
+    	$('#meterEdit > .modal-body').html('welcome');
+    });
 	
     </script>
+
+    

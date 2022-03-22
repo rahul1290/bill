@@ -20,8 +20,13 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 <style>
   .form-control{background-color:#f9f4f4;}
+  .select2-container .select2-selection--single{
+    	height:38px;
+    }
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -285,7 +290,7 @@
            
            
            <li class="nav-item <?php if($this->uri->segment(1) == 'payment'){ echo 'menu-is-opening menu-open'; }?>">
-            <a href="#" class="nav-link <?php if($this->uri->segment(2) == 'bill-upload'){
+            <a href="#" class="nav-link <?php if($this->uri->segment(1) == 'payment'){
                 echo "active";
             }?>">
               <i class="nav-icon fas nav-icon fas fa-rupee-sign"></i>
@@ -306,7 +311,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('payment/payment-detail'); ?>" class="nav-link<?php if($this->uri->segment(1) == 'payment/payment-detail'){
+                <a href="<?php echo base_url('payment/payment-detail'); ?>" class="nav-link<?php if($this->uri->segment(2) == 'payment-detail'){
                     echo " active";
                 }?>">
                   <i class="nav-icon fas fa-file-invoice"></i>

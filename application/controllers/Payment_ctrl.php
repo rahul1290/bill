@@ -12,16 +12,11 @@ class Payment_ctrl extends CI_Controller {
   
   function payment(){
       $uid = $this->session->userdata('user_id');
-      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
+      if($this->session->userdata('role') == 'super_admin'){
           $data['service_no'] = $this->Meter_model->meterlistUserWise();
-          $data['companies'] = $this->db->query("select * from company_master where status = 1")->result_array();
           $data['readings'] = $this->Meter_model->show_meter_readings();
       }  else {
           $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
-          $data['companies'] = $this->db->query("select * from company_master where cid in (
-          select cid from meter_master
-          WHERE mid in(SELECT if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter FROM task_assign WHERE user_id = $uid)
-          GROUP by cid)")->result_array();
           $data['readings'] = $this->Meter_model->show_meter_readings($this->session->userdata('user_id'));
           
           $finalarray = array();
@@ -36,6 +31,7 @@ class Payment_ctrl extends CI_Controller {
           }
           $data['readings'] = $finalarray;
       }
+      $data['companies'] = $this->Company_model->get_my_companies();
       
       if ($this->input->server('REQUEST_METHOD') === 'GET') {
           $data['main_content'] = $this->load->view('payment',$data,true);
@@ -52,12 +48,14 @@ class Payment_ctrl extends CI_Controller {
           $this->form_validation->set_rules('payment_amount', 'Payment Amount', 'required|trim');
           $this->form_validation->set_rules('payment_date', 'Payment Date', 'required|trim');
           $this->form_validation->set_rules('p_type', 'Payment Type', 'required|trim');
-          $this->form_validation->set_rules('checkno', 'Check No', 'trim');
+          if($this->input->post('p_type') == 'cheque'){
+            $this->form_validation->set_rules('checkno', 'Cheque No', 'trim|required');
+          }
           
           $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
           if ($this->form_validation->run()){
               
-              $this->db->where('bill_no',$this->input->post('bill_no'));
+              $this->db->where('bill_id',$this->input->post('bill_no'));
               $this->db->update('bill',array(
                  'payment_amount' => $this->input->post('payment_amount'),
                   'payment_date' => $this->input->post('payment_date'),
@@ -65,8 +63,6 @@ class Payment_ctrl extends CI_Controller {
                   'payment_type' => $this->input->post('p_type'),
                   'check_no' => $this->input->post('checkno'),
               ));
-              
-              
                $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
                 payment successfull.
               </div>');
@@ -81,19 +77,74 @@ class Payment_ctrl extends CI_Controller {
   
   
   function payment_detail(){
-      $data['main_content'] = $this->load->view('payment_detail','',true);
+      $data['companies'] = $this->Company_model->get_my_companies();
+      $data['main_content'] = $this->load->view('payment_detail',$data,true);
       $this->load->view('admin_layout',$data);
   }
   
   function paymentDetails(){
-      $result = $this->db->query("select b.*,mm.bpno,mm.cid,mm.costc_id,mm.loc_id,cm.name as company_name,ccm.name as cost_center,lm.name as location_name
-        from bill b
-        JOIN meter_master mm on mm.mid = b.sno_id and mm.status = 1
-        JOIN company_master cm on cm.cid = mm.cid AND cm.status = 1
-        JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id and ccm.status = 1
-        JOIN location_master lm on lm.loc_id = mm.loc_id AND lm.status = 1
-        where b.bill_id in (SELECT max(bill_id) FROM bill WHERE status = 1 group by sno_id)")->result_array();
+      $company = $this->input->post('company');
+      $costcenter = $this->input->post('costcenter');
+      $location = $this->input->post('location');
+      $search = $this->input->post('search');
       
-      echo json_encode(array('data'=>$result,'status'=>200));
+      if($this->session->userdata('role') != 'super_admin'){
+        $query = "select mm.bpno,cm.cid,cm.name as company_name,ccm.costc_id,ccm.name as cost_center,lm.loc_id,lm.name as location_name,b.*,DATE_FORMAT(b.date_of_bill,'%d/%m/%Y') as date_of_bill,DATE_FORMAT(b.due_date,'%d/%m/%Y') as due_date,IFNULL(DATE_FORMAT(b.payment_date,'%d/%m/%Y'),'') as payment_date from bill b 
+                	JOIN meter_master mm on mm.mid = b.sno_id AND mm.status = 1
+                    JOIN company_master cm on cm.cid = mm.cid";
+                    
+        if($company != ''){
+            $query .= " AND cm.cid = ".$company; 
+        }
+        $query .= " AND cm.status = 1
+                    JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id";
+        if($costcenter != ''){
+            $query .= " AND ccm.costc_id =".$costcenter;
+        }
+       $query .= " AND ccm.status = 1
+                    JOIN location_master lm on lm.loc_id = mm.loc_id";
+       if($location != ''){
+           $query .= " AND lm.loc_id =".$location;
+       }
+       $query .= " AND lm.status = 1
+                	WHERE sno_id in (SELECT if(ISNULL(sub_meter_id),sno_id,sub_meter_id) as meters FROM `task_assign` 
+                                    	WHERE user_id = ".$this->session->userdata('user_id')." AND status = 1)
+                	AND b.status = 1";
+       if($search != ''){
+           $query .= " AND b.bill_no like '%".$search."%'";
+       }
+        $query .= " order by b.bill_id desc"; 
+      }
+      else {
+        $query = "select mm.bpno,cm.cid,cm.name as company_name,ccm.costc_id,ccm.name as cost_center,lm.loc_id,lm.name as location_name,b.*,DATE_FORMAT(b.date_of_bill,'%d/%m/%Y') as date_of_bill,DATE_FORMAT(b.due_date,'%d/%m/%Y') as due_date,IFNULL(DATE_FORMAT(b.payment_date,'%d/%m/%Y'),'') as payment_date from bill b 
+                    JOIN meter_master mm on mm.mid = b.sno_id AND mm.status = 1
+                    JOIN company_master cm on cm.cid = mm.cid";
+        if($company != ''){
+            $query .= " AND cm.cid = ".$company;
+        }
+        $query .= " AND cm.status = 1
+                    JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id";
+        if($costcenter != ''){
+            $query .= " AND ccm.costc_id =".$costcenter;
+        }
+        $query .= " AND ccm.status = 1
+                    JOIN location_master lm on lm.loc_id = mm.loc_id";
+        if($location != ''){
+            $query .= " AND lm.loc_id =".$location;
+        }
+        $query .= " AND lm.status = 1
+                    where b.status = 1";
+        if($search != ''){
+            $query .= " AND b.bill_no like '%".$search."%'";
+        }
+        $query .= " order by b.bill_id desc";   
+      }
+      $result = $this->db->query($query)->result_array();
+      
+      if(count($result)>0){
+        echo json_encode(array('data'=>$result,'status'=>200));
+      } else {
+          echo json_encode(array('status'=>500));
+      }
   }
 }
