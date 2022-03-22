@@ -61,7 +61,7 @@ class Payment_ctrl extends CI_Controller {
                   'payment_date' => $this->input->post('payment_date'),
                   'payment_by' => $this->session->userdata('user_id'),
                   'payment_type' => $this->input->post('p_type'),
-                  'check_no' => $this->input->post('checkno'),
+                  'cheque_no' => $this->input->post('checkno'),
               ));
                $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
                 payment successfull.
@@ -146,5 +146,18 @@ class Payment_ctrl extends CI_Controller {
       } else {
           echo json_encode(array('status'=>500));
       }
+  }
+  
+  function payment_submit(){
+      $this->db->where('bill_no',$this->input->post('bill_no'));
+      $this->db->update('bill',array(
+          'payment_amount' => trim($this->input->post('payment_amount')),
+          'payment_date' => trim($this->input->post('payment_date')),
+          'payment_by' => $this->session->userdata('user_id'),
+          'payment_type' => trim($this->input->post('payment_type')),
+          'cheque_no' => trim($this->input->post('cheque_no'))
+      ));
+      print_r($this->db->last_query()); die;
+      echo json_encode(array('status'=>200));
   }
 }
