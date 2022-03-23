@@ -206,16 +206,16 @@ class Meter_ctrl extends CI_Controller {
             }
 
               $db_data['sno_id'] = $this->input->post('serviceno');
-              $db_data['from_date'] = $this->input->post('billing_period_from');
-              $db_data['to_date'] = $this->input->post('billing_period_to');
+              $db_data['from_date'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('billing_period_from'))));
+              $db_data['to_date'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('billing_period_to'))));
               $db_data['bill_no'] = $this->input->post('bill_no');
-              $db_data['date_of_bill'] = $this->input->post('bill_date');
-              $db_data['due_date'] = $this->input->post('due_date');
+              $db_data['date_of_bill'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('bill_date'))));
+              $db_data['due_date'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('due_date'))));
               $db_data['reading'] = $this->input->post('current_reading');
-              $db_data['reading_date'] = $this->input->post('current_reading_date');
+              $db_data['reading_date'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('current_reading_date'))));
               
               $db_data['previous_reading'] = $this->input->post('previous_reading');
-              $db_data['previous_reading_date'] = $this->input->post('previous_reading_date');
+              $db_data['previous_reading_date'] = date('Y-m-d',strtotime(str_replace('/', '-', $this->input->post('previous_reading_date'))));
               
               $db_data['power_consumption'] = $this->input->post('power_consumption');
               $db_data['power_factor'] =   $this->input->post('power_factor');
@@ -288,9 +288,18 @@ class Meter_ctrl extends CI_Controller {
   
   function bill_list($companyId=null,$costCenterId=null,$location=null){
       $data['companies'] = $this->Company_model->get_my_companies();
+      
       $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
       $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
       $status = $this->input->get('status');
+      $sno = $this->input->get('sno');
+      
+      
+      if($this->session->userdata('role') == 'super_admin'){
+          $data['service_no'] = $this->Meter_model->meterlistUserWise();
+      } else {
+          $data['service_no'] = $this->Meter_model->meterlistUserWise($this->session->userdata('user_id'));
+      }
       
       if($this->session->userdata('role') == 'super_admin'){
           $query = "select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
@@ -311,6 +320,9 @@ class Meter_ctrl extends CI_Controller {
           }
           if(!is_null($location)){
               $query .= " AND lm.loc_id=".$location;
+          }
+          if($sno != ''){
+              $query .= " AND t1.bpno = ".$sno;
           }
           $query .= " order by t2.date_of_bill desc";
           
@@ -336,8 +348,11 @@ class Meter_ctrl extends CI_Controller {
           if(!is_null($location)){
               $query .= " AND t3.loc_id=".$location;
           }
-          
+          if($sno != ''){
+              $query .= " AND t1.bpno1 = '".$sno."'";
+          } 
           $query .= " ORDER by t3.date_of_bill DESC";
+          
           $bills = $this->db->query($query)->result_array();
       }
       
@@ -561,7 +576,6 @@ class Meter_ctrl extends CI_Controller {
       } else {
         $data['readings'] = $this->Meter_model->show_meter_readings($user_id);
       }
-      print_r($this->db->last_query()); die;
       $data['main_content'] = $this->load->view('meter-reading-show',$data,true);
       $this->load->view('admin_layout',$data);
   }

@@ -17,20 +17,21 @@
             <div class="col-lg-3 col-6">
                <div class="small-box bg-info">
                   <div class="inner">
-                     <h3><span id="over_due">00</span>/<span id="total_meter">00</span></h3>
-                     <p>Bills upload pending</p>
+                     <h3><span id="over_due">00</span></h3>
+                     <p>Bills Over Due</p>
                   </div>
                   <div class="icon">
                      <i class="ion ion-bag"></i>
                   </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" class="small-box-footer">Total No of Meters :<span id="total_meter">00</span> 
+                  <i class="fas fa-arrow-circle-right"></i></a>
                </div>
             </div>
             <div class="col-lg-3 col-6">
                <div class="small-box bg-success">
                   <div class="inner">
-                     <h3><span>00</span></h3>
-                     <p>--</p>
+                     <h3><span id="urgent_bill">00</span></h3>
+                     <p>Bills need to upload Today</p>
                   </div>
                   <div class="icon">
                      <i class="ion ion-stats-bars"></i>
@@ -111,7 +112,8 @@
                   </div>
                   <div class="card-body">
                      <div id="piechart" style="height: 400px;">
-                     	<div id="piechart2" style="height: 400px;"></div>
+                     	<!-- <div id="piechart2" style="height: 400px;"></div> -->
+                     	<div id="columnchart_values" style="height: 400px;"></div>
                      </div>
                   </div>
                </div>
@@ -128,7 +130,7 @@
     	const baseUrl = $('#base_url').val();
     	chartData = [];
     	chartData2 = [];
-    	
+    	barChartData = [];
     	
     	
     	function drawchart(){	
@@ -147,7 +149,7 @@
                     'legend' : {position: 'left', textStyle: {color: 'blue', fontSize: 16}},
                     'legend' : {alignment: 'center'},
                     'titleTextStyle' : { color: 'red',bold:true},
-                     //pieHole: 0.4,
+                     pieHole: 0.3,
                     //'width':screen.width/2,
                     //'height':screen.height/2
                 };
@@ -171,7 +173,6 @@
     	
     	
     	function drawchart2(){	
-    			console.log(chartData2);
               google.charts.load('current', {'packages':['corechart']});
               google.charts.setOnLoadCallback(drawChart3);
               
@@ -207,14 +208,54 @@
         
               }
          }
-    	
+         
+         
+         function drawBarChart(){
+         	 google.charts.load("current", {packages:['corechart']});
+    		 google.charts.setOnLoadCallback(drawbarChart);
+    		 
+             function drawbarChart() {
+//              		var data = new google.visualization.DataTable();
+//                     data.addColumn('string', 'Topping');
+//                     data.addColumn('number', 'Slices');
+//                     data.addColumn('string', '{role: "style"}');
+//                     data.addRows(barChartData);
+                    
+                  var data = google.visualization.arrayToDataTable([
+                    ["Element", "Total Bill", { role: "style" } ],
+                    ["RAIPUR AGRI RESEARCH PRIVATE LIMITED", 2500.00, "#b87333"],
+                    ["Silver", 10.49, "silver"],
+                    ["Gold", 19.30, "gold"]
+                  ]);
+            
+            	console.log('sdfsd');
+            	console.log(data);
+                  var view = new google.visualization.DataView(data);
+                  view.setColumns([0, 1,
+                                   { calc: "stringify",
+                                     sourceColumn: 1,
+                                     type: "string",
+                                     role: "annotation" },
+                                   2]);
+            
+                  var options = {
+                    title: "Density of Precious Metals, in g/cm^3",
+                    width: 600,
+                    height: 400,
+                    bar: {groupWidth: "95%"},
+                    legend: { position: "none" },
+                  };
+                  var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+                  chart.draw(view, options);
+              }
+    	}
     	///bill upload detail///////////////
     	//////////////////////////////////////
     	fetch(`${baseUrl}Dashboard_ctrl/bill_upload_data`)
       		.then(response => response.json())
-      		.then(response => {
-      		
+      		.then(response => {      		
       			$('#over_due').html(response.data1['OVER DUE']);
+      			$('#urgent_bill').html(response.data1['URGENT']);
       			$('#total_meter').html(response.data1['total_meters']);
       			
       			var l = response.data.length;
@@ -232,7 +273,7 @@
       		bill_payment_chart();
       	});
       		
-      	///////////////bill payments//////////////////
+      	/////////////// bill payments //////////////////
       	//////////////////////////////////////////////
       	bill_payment_chart();
       	function bill_payment_chart(){
@@ -247,11 +288,14 @@
       			},
                 success(response){
                 	chartData2 = [];
+                	barChartData = [];
                     if(response.status == 200){
                     	$.each(response.data,function(key,value){
-                    		chartData2.push([value.company_name, parseInt(value.total_bill)]);
+                    		//chartData2.push([value.company_name, parseInt(value.total_bill)]);
+                    		barChartData.push(["Silver", 10.49, "silver"]);
                     	});
-                    	drawchart2();
+                    	//drawchart2();
+                    	drawBarChart();
                     } else {
                     	console.log('No record found.');
                     }

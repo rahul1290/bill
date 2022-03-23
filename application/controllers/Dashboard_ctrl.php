@@ -18,8 +18,8 @@ class Dashboard_ctrl extends CI_Controller {
                     if(t2.date_of_bill IS NOT NULL,
                     if(t3.bill_upload = 1,
                     (CASE
-                        WHEN (t2.date_of_bill + INTERVAL t3.upload_frq MONTH) > CURRENT_DATE() THEN 'DUE'
-                        WHEN (t2.date_of_bill + INTERVAL t3.upload_frq MONTH) = CURRENT_DATE() THEN 'URGENT'
+                        WHEN (t2.date_of_bill + INTERVAL t3.upload_frq MONTH + INTERVAL 7 DAY) > CURRENT_DATE() THEN 'DUE'
+                        WHEN (t2.date_of_bill + INTERVAL t3.upload_frq MONTH + INTERVAL 7 DAY) = CURRENT_DATE() THEN 'URGENT'
                         ELSE 'OVER DUE'
                     END),'NOT FILLED'),'NOT FILLED') as bill_status
                     from meter_master as t1
@@ -38,8 +38,8 @@ class Dashboard_ctrl extends CI_Controller {
       } else {
           $query = "select count(*) total,bill_status from (SELECT if(t3.date_of_bill IS NOT NULL,if(ta.bill_upload = 1,
                     (CASE
-                        WHEN (t3.date_of_bill + INTERVAL ta.upload_frq MONTH) > CURRENT_DATE() THEN 'DUE'
-                        WHEN (t3.date_of_bill + INTERVAL ta.upload_frq MONTH) = CURRENT_DATE() THEN 'URGENT'
+                        WHEN (t3.date_of_bill + INTERVAL ta.upload_frq MONTH + INTERVAL 7 DAY) > CURRENT_DATE() THEN 'DUE'
+                        WHEN (t3.date_of_bill + INTERVAL ta.upload_frq MONTH + INTERVAL 7 DAY) = CURRENT_DATE() THEN 'URGENT'
                         ELSE 'OVER DUE'
                     END),'NOT FILLED'),'NOT FILLED') as bill_status,
                     t3.*,ta.meter_reading,ta.reading_frq,ta.bill_upload,ta.upload_frq
@@ -56,7 +56,6 @@ class Dashboard_ctrl extends CI_Controller {
                     GROUP by bill_status";
           $bills = $this->db->query($query)->result_array();
       }
-      
       $finalarray = array();
       $finalarray['OVER DUE'] = '0';
       $finalarray['DUE'] = '0';
@@ -117,7 +116,6 @@ class Dashboard_ctrl extends CI_Controller {
       
       
       $result = $this->db->query($query)->result_array();
-      //print_r($this->db->last_query());  die;
       if(count($result)>0) {
           echo json_encode(array('data'=>$result,'status'=>200));
       } else {

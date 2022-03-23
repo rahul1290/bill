@@ -9,6 +9,7 @@
           		<hr/>
           		
           		<div class="row mb-4">
+          		
         		<div class="col">
         			<label>Company</label>
         			<select id="com_filter" class="form-control">
@@ -35,6 +36,15 @@
         				<option value="">Select Location</option>
         				<?php foreach ($locations as $location){ ?>
         					<option value="<?php echo $location['loc_id']; ?>" <?php if($location['loc_id'] == $this->uri->segment('4')){ echo 'selected'; }?>><?php echo $location['name']; ?></option>
+        				<?php } ?>
+        			</select>
+        		</div>
+        		<div class="col">
+        			<label>Service no.</label>
+        			<select id="serviceno" class="form-control">
+        				<option value="">Select Serviceno</option>
+        				<?php foreach($service_no as $serviceno) { ?>
+        					<option value="<?php echo $serviceno['mid'];?>"><?php echo $serviceno['bpno']; ?></option>
         				<?php } ?>
         			</select>
         		</div>
@@ -170,6 +180,7 @@
 
     <script>
     const baseUrl = $('#base_url').val();
+    $('#serviceno').select2();
     
     $(document).on('change','#com_filter',function(){
 		var company = $(this).val();
@@ -228,7 +239,7 @@
             		$.each(response.data,function(key,value){
             			x = x + '<option value="'+ value.mid +'">'+ value.bpno +'</option>';
             		});
-            		$('#serviceno').html(x);
+            		$('#serviceno').html(x).select2();
             	} else {
             		$('#serviceno').html('<option value="">Select Service No</option>');
             	}
@@ -243,7 +254,14 @@
     	const location = $('#location_filter').val();
     	const status = $('#status_filter').val();
     	
-    	window.location.href = `${baseUrl}bill-list/${company}/${costcenter}/${location}/?status=${status}`;
+    	
+    	if($('#serviceno').val() != ''){
+    		var serviceno = $('#serviceno option:selected').text();
+    	} else {
+    		var serviceno = '';
+    	}
+    	
+    	window.location.href = `${baseUrl}bill-list/${company}/${costcenter}/${location}/?status=${status}&sno=${serviceno}`;
     });
     
     

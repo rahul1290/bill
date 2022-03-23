@@ -179,6 +179,7 @@ class Meter_model extends CI_Model {
 	       if(count($billResult)>0){
 	           $this->db->where('bill_no',$data['bill_no']);
 	           $this->db->update('bill',$data);
+	           $result = true;
 	       } else {
 	           $result = $this->db->insert('bill',$data);
 	       }

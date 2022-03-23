@@ -10,6 +10,37 @@
           			<input type="hidden" name="selected_service_no" id="selected_service_no" value="<?php if(isset($selected_service_no)){ echo $selected_service_no; } ?>">
                     <div class="form-group row">
                     	<div class="col-md-4">
+                            <label for="inputEmail3" class="col-form-label text-xs">Company<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="company" name="company" class="form-control">
+                                <option value="" selected>Select Company</option>
+                                    <?php foreach($companies as $company){ ?>
+                                        <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                              <?php echo form_error('company'); ?>
+                            </div>
+                        </div>
+                    	
+                        <div class="col-md-4">
+                            <label for="inputEmail3" class="col-form-label text-xs">Cost-Center<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="costcenter" name="costcenter" class="form-control">
+                                <option value="" selected>Select Costcenter</option>
+                              </select>
+                              <?php echo form_error('costcenter'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="location" name="location" class="form-control">
+                                <option value="" selected>Select Location</option>
+                                </select>
+                              <?php echo form_error('location'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <label for="inputEmail3" class="col-form-label text-xs">Service No.<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
                               <input id="bid" name="bid" type="hidden" class="form-control" value="<?php echo set_value('bid'); ?>">
@@ -35,36 +66,6 @@
                               <?php echo form_error('serviceno'); ?>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Cost-Center<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="costcenter" name="costcenter" class="form-control">
-                                <option value="" selected>Select Costcenter</option>
-                              </select>
-                              <?php echo form_error('costcenter'); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="location" name="location" class="form-control">
-                                <option value="" selected>Select Location</option>
-                                </select>
-                              <?php echo form_error('location'); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Company<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="company" name="company" class="form-control">
-                                <option value="" selected>Select Company</option>
-                                    <?php foreach($companies as $company){ ?>
-                                        <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                              <?php echo form_error('company'); ?>
-                            </div>
-                        </div>
                     </div>
                     <hr/>
                     
@@ -72,14 +73,14 @@
                     	<div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Billing Period from<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="billing_period_from" id="billing_period_from" value="<?php echo set_value('billing_period_from'); ?>" class="form-control"/>
-                            <?php echo form_error('billing_period_from'); ?>
+                              <input type="text" placeholder="dd/mm/YYYY" name="billing_period_from" id="billing_period_from" value="<?php echo set_value('billing_period_from'); ?>" class="form-control"/>
+                                <?php echo form_error('billing_period_from'); ?>
                             </div>
                         </div>
                         <div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">to<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="billing_period_to" id="billing_period_to" value="<?php echo set_value('billing_period_to'); ?>" class="form-control"/>
+                              <input type="text" placeholder="dd/mm/YYYY" name="billing_period_to" id="billing_period_to" value="<?php echo set_value('billing_period_to'); ?>" class="form-control"/>
                             <?php echo form_error('billing_period_to'); ?>
                             </div>
                         </div>
@@ -97,14 +98,14 @@
                     	<div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Date of Bill<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="bill_date" id="bill_date" class="form-control" value="<?php echo set_value('bill_date'); ?>"/>
+                              <input type="text" placeholder="dd/mm/YYYY" name="bill_date" id="bill_date" class="form-control" value="<?php echo set_value('bill_date'); ?>"/>
                             <?php echo form_error('bill_date'); ?>
                             </div>
                         </div>
                         <div class="col row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Due Date<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="due_date" id="due_date" class="form-control" value="<?php echo set_value('due_date'); ?>"/>
+                              <input type="text" placeholder="dd/mm/YYYY" name="due_date" id="due_date" class="form-control" value="<?php echo set_value('due_date'); ?>"/>
                             <?php echo form_error('due_date'); ?>
                             </div>
                         </div>
@@ -126,7 +127,7 @@
                         <div class="row">
                             <label for="inputEmail3" class="col-sm-12 col-md-4 col-form-label text-xs">Current Reading Date<label class="text-danger">*</label></label>
                             <div class="col-sm-12 col-md-8">
-                              <input type="date" name="current_reading_date" id="current_reading_date" class="form-control" value="<?php echo set_value('current_reading_date'); ?>"/>
+                              <input type="text" placeholder="dd/mm/yyyy" name="current_reading_date" id="current_reading_date" class="form-control" value="<?php echo set_value('current_reading_date'); ?>"/>
                             <?php echo form_error('current_reading_date'); ?>
                             </div>
                         </div>
@@ -147,7 +148,7 @@
                         <div class="row">
                             <label for="inputEmail3" class="col-sm-4 col-form-label text-xs">Reading Date<label class="text-danger">*</label></label>
                             <div class="col-sm-8">
-                              <input type="date" name="previous_reading_date" id="previous_reading_date" class="form-control" value="<?php echo set_value('previous_reading_date'); ?>"/>
+                              <input type="text" placeholder="dd/mm/yyyy" name="previous_reading_date" id="previous_reading_date" class="form-control" value="<?php echo set_value('previous_reading_date'); ?>"/>
                             <?php echo form_error('previous_reading_date'); ?>
                             </div>
                         </div>
@@ -516,9 +517,13 @@
     
     $('#serviceno').select2();
 	
+  	$("#billing_period_from,#billing_period_to,#bill_date,#due_date").datepicker({ 
+       dateFormat: 'dd/mm/yy',
+    });
+                              
+	
 	
 	getServiceNo();
-	
 	function getServiceNo(){
 		var billNo = $('#selected_service_no').val();
 		$('#loaderModal').modal({
@@ -537,8 +542,8 @@
                         $('#location').html('<option value="'+ response.data.loc_id +'">'+ response.data.location_name +'</option>');
                         $('#company').html('<option value="'+ response.data.cid +'">'+ response.data.company_name +'</option>');
                         
-                        $('#serviceno').val(response.data.mid);
-                    	$('#billing_period_from').val(response.data.from_date);
+                        $('#serviceno').val(response.data.mid).select2();
+                        $('#billing_period_from').val(response.data.from_date);
                     	$('#billing_period_to').val(response.data.to_date);
                     	$('#bill_no').val(response.data.bill_no);
                     	$('#bill_date').val(response.data.date_of_bill);
@@ -613,80 +618,7 @@
                 }
        	});
 	});
-	
-// 	function fun(){
-// 		$('#loaderModal').modal({
-//    			'show':true,
-//    			'backdrop' :'static',
-//    			'keyboard' : false
-//    		});
-   		
-// 		var serviceNo = $('#serviceno').val();
-// 		if(serviceNo){
-//     		$.ajax({
-//                 url: `${baseUrl}Meter_ctrl/getMeters/${serviceNo}`,
-//                 method: "GET",
-//                 dataType: "json",
-//                 success(response){
-//                     if(response.status == 200){
-//                         $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
-//                         $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
-//                         $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');
-                        
-//                         if($('#selected_service_no').val()){
-//                     	$('#billing_period_from').val(response.payment_detail[0].from_date);
-//                     	$('#billing_period_to').val(response.payment_detail[0].to_date);
-//                     	$('#bill_no').val(response.payment_detail[0].bill_no);
-//                     	$('#bill_date').val(response.payment_detail[0].date_of_bill);
-//                     	$('#due_date').val(response.payment_detail[0].due_date);
-//                     	$('#current_reading').val(response.payment_detail[0].reading);
-//                     	$('#current_reading_date').val(response.payment_detail[0].reading_date);
-//                     	$('#previous_reading').val(response.payment_detail[0].previous_reading);
-//                     	$('#previous_reading_date').val(response.payment_detail[0].previous_reading_date);
-//                     	//$('#coefficient').val(response.payment_detail[0].);
-//                     	$('#power_consumption').val(response.payment_detail[0].power_consumption);
-//                     	$('#power_factor').val(response.payment_detail[0].power_factor);
-//                     	$('#total_consumption').val(response.payment_detail[0].total_consumption);
-//                     	$('#highest_demand_rating').val(response.payment_detail[0].highest_demand_reading);
-//                     	$('#je_ae_name').val(response.payment_detail[0].je_ae_name);
-//                     	$('#je_ae_contact').val(response.payment_detail[0].je_ae_contact_no);
-//                     	$('#ae_ee_name').val(response.payment_detail[0].ae_ee_name);
-//                     	$('#ae_ee_contact').val(response.payment_detail[0].ae_ee_contact_no);
-//                     	$('#fix_demand').val(response.payment_detail[0].fixed_demand_charges);
-//                     	$('#minimum_charge').val(response.payment_detail[0].minimum_charges);
-//                     	$('#energy_charges').val(response.payment_detail[0].energy_charges);
-//                     	$('#sum').val(response.payment_detail[0].total_charges);
-//                     	$('#electricity_duty').val(response.payment_detail[0].electricity_duty);
-//                     	$('#cess').val(response.payment_detail[0].cess);
-//                     	$('#capacitor_overload').val(response.payment_detail[0].welding_capacitor_overload);
-//                     	$('#meter_fare').val(response.payment_detail[0].meter_fare);
-//                     	$('#vca').val(response.payment_detail[0].vca_charge);
-//                     	$('#security_deposit').val(response.payment_detail[0].security_deposit);
-//                     	$('#concession_amount').val(response.payment_detail[0].concession_amount);
-//                     	$('#total_bill').val(response.payment_detail[0].total_bill);
-//                     	$('#deviation').val(response.payment_detail[0].deviation_adjustment);
-//                     	$('#past_due').val(response.payment_detail[0].past_dues);
-//                     	$('#security_fund_outstanding').val(response.payment_detail[0].security_fund_outstanding);
-//                     	$('#payable_amount').val(response.payment_detail[0].payable_amount);
-//                     	$('#extra').val(response.payment_detail[0].extra);
-//                     	$('#surcharge').val(response.payment_detail[0].gross_amount);
-//                     	$('#overload').val(response.payment_detail[0].overload);
-                    	
-                    	
-//                     	$('#assign-update').show();
-//                     	$('#assign-create').hide();
-//                     }
-//                     }
-//                 }
-//             });
-//         }
-        
-//         $('#loaderModal').modal('toggle');
-// 	}
-	
-	
-	
-	
+
 		
 	$(document).on('change','#serviceno',function(){
 		var serviceNo = $(this).val();
