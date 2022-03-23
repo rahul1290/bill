@@ -3,44 +3,13 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-          	<div class="offset-sm-1 col-md-10 col-sm-12">
+          	<div class="col-md-12 col-sm-12">
           		<h5 class="text-primary" id="page-heading">Meter Data Entry</h5>
           		<hr/>
           		<form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>bill-upload">
           			<input type="hidden" name="selected_service_no" id="selected_service_no" value="<?php if(isset($selected_service_no)){ echo $selected_service_no; } ?>">
                     <div class="form-group row">
-                    	<div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Company<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="company" name="company" class="form-control">
-                                <option value="" selected>Select Company</option>
-                                    <?php foreach($companies as $company){ ?>
-                                        <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                              <?php echo form_error('company'); ?>
-                            </div>
-                        </div>
-                    	
-                        <div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Cost-Center<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="costcenter" name="costcenter" class="form-control">
-                                <option value="" selected>Select Costcenter</option>
-                              </select>
-                              <?php echo form_error('costcenter'); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
-                            <div class="col-sm-12">
-                              <select id="location" name="location" class="form-control">
-                                <option value="" selected>Select Location</option>
-                                </select>
-                              <?php echo form_error('location'); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                    	<div class="col-md-3">
                             <label for="inputEmail3" class="col-form-label text-xs">Service No.<label class="text-danger">*</label></label>
                             <div class="col-sm-12">
                               <input id="bid" name="bid" type="hidden" class="form-control" value="<?php echo set_value('bid'); ?>">
@@ -64,6 +33,37 @@
                                     <?php } ?>
                                 </select>
                               <?php echo form_error('serviceno'); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="inputEmail3" class="col-form-label text-xs">Company<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="company" name="company" class="form-control">
+                                <option value="" selected>Select Company</option>
+                                    <?php foreach($companies as $company){ ?>
+                                        <option value="<?php echo $company['cid']; ?>"><?php echo $company['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                              <?php echo form_error('company'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="inputEmail3" class="col-form-label text-xs">Cost-Center<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="costcenter" name="costcenter" class="form-control">
+                                <option value="" selected>Select Costcenter</option>
+                              </select>
+                              <?php echo form_error('costcenter'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="inputEmail3" class="col-form-label text-xs">Location<label class="text-danger">*</label></label>
+                            <div class="col-sm-12">
+                              <select id="location" name="location" class="form-control">
+                                <option value="" selected>Select Location</option>
+                                </select>
+                              <?php echo form_error('location'); ?>
                             </div>
                         </div>
                     </div>

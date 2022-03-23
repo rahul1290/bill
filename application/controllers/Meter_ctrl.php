@@ -288,9 +288,6 @@ class Meter_ctrl extends CI_Controller {
   
   function bill_list($companyId=null,$costCenterId=null,$location=null){
       $data['companies'] = $this->Company_model->get_my_companies();
-      
-      $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
-      $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
       $status = $this->input->get('status');
       $sno = $this->input->get('sno');
       
@@ -560,7 +557,7 @@ class Meter_ctrl extends CI_Controller {
   
   
   function getbill_detail($bill_no){
-      $this->db->select('b.*,mm.mid,ccm.costc_id,ccm.name as cost_center,lm.loc_id,lm.name as location_name,cm.cid,cm.name as company_name');
+      $this->db->select('b.*,mm.mid,ccm.costc_id,ccm.name as cost_center,lm.loc_id,lm.name as location_name,cm.cid,cm.name as company_name,mm.bpno');
       $this->db->join('meter_master mm','mm.mid = b.sno_id');
       $this->db->join('cost_center_master ccm','ccm.costc_id = mm.costc_id');
       $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
