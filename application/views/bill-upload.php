@@ -517,7 +517,7 @@
     
     $('#serviceno').select2();
 	
-  	$("#billing_period_from,#billing_period_to,#bill_date,#due_date").datepicker({ 
+  	$("#billing_period_from,#current_reading_date,#billing_period_to,#bill_date,#due_date").datepicker({ 
        dateFormat: 'dd/mm/yy',
     });
                               

@@ -65,7 +65,7 @@
             </div>
          </div>
          <div class="row">
-            <section class="col-lg-7 connectedSortable">
+            <section class="col-lg-5 connectedSortable">
                <div class="card">
 <!--                   <div class="card-header"> -->
 <!--                      <h3 class="card-title"> -->
@@ -83,7 +83,7 @@
                </div>
             </section>
             
-            <section class="col-lg-5 connectedSortable">
+            <section class="col-lg-7 connectedSortable">
                <div class="card bg-gradient-default">
                   <div class="card-header border-0">
                      <h3 class="card-title">
@@ -112,7 +112,7 @@
                   </div>
                   <div class="card-body">
                      <div id="piechart" style="height: 400px;">
-                     	<!-- <div id="piechart2" style="height: 400px;"></div> -->
+                     	<!--<div id="piechart2" style="height: 400px;"></div>-->
                      	<div id="columnchart_values" style="height: 400px;"></div>
                      </div>
                   </div>
@@ -144,6 +144,8 @@
                 data.addColumn('number', 'Slices');
                 data.addRows(chartData);
         
+        		console.log(chartData);
+        		console.log('pie');
                 var options = {
                     'title':'Meter Bill Upload Detail',
                     'legend' : {position: 'left', textStyle: {color: 'blue', fontSize: 16}},
@@ -215,38 +217,21 @@
     		 google.charts.setOnLoadCallback(drawbarChart);
     		 
              function drawbarChart() {
-//              		var data = new google.visualization.DataTable();
-//                     data.addColumn('string', 'Topping');
-//                     data.addColumn('number', 'Slices');
-//                     data.addColumn('string', '{role: "style"}');
-//                     data.addRows(barChartData);
-                    
-                  var data = google.visualization.arrayToDataTable([
-                    ["Element", "Total Bill", { role: "style" } ],
-                    ["RAIPUR AGRI RESEARCH PRIVATE LIMITED", 2500.00, "#b87333"],
-                    ["Silver", 10.49, "silver"],
-                    ["Gold", 19.30, "gold"]
-                  ]);
-            
-            	console.log('sdfsd');
-            	console.log(data);
-                  var view = new google.visualization.DataView(data);
-                  view.setColumns([0, 1,
-                                   { calc: "stringify",
-                                     sourceColumn: 1,
-                                     type: "string",
-                                     role: "annotation" },
-                                   2]);
-            
+             		var data = new google.visualization.DataTable();
+             		data.addColumn('string', 'company');
+                    data.addColumn('number', 'bill');
+                    data.addColumn({type: 'string', role: 'style'});
+                    data.addRows(barChartData);
+
                   var options = {
-                    title: "Density of Precious Metals, in g/cm^3",
+                    title: "Corresponding month bill",
                     width: 600,
                     height: 400,
                     bar: {groupWidth: "95%"},
                     legend: { position: "none" },
                   };
                   var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-                  chart.draw(view, options);
+                  chart.draw(data, options);
               }
     	}
     	///bill upload detail///////////////
@@ -277,6 +262,7 @@
       	//////////////////////////////////////////////
       	bill_payment_chart();
       	function bill_payment_chart(){
+      		let myColor = ['#FF5733 ','#E9D47C','#C3E97C','#90BAAB','#149065','#38B8C1','#0B9EA7','#0B2CA7','#6A7396'];
           	$.ajax({
                 url: `${baseUrl}Dashboard_ctrl/bill_payments`,
                 method: "POST",
@@ -291,12 +277,14 @@
                 	barChartData = [];
                     if(response.status == 200){
                     	$.each(response.data,function(key,value){
-                    		//chartData2.push([value.company_name, parseInt(value.total_bill)]);
-                    		barChartData.push(["Silver", 10.49, "silver"]);
+//                     		chartData2.push([value.company_name, parseInt(value.total_bill)]);
+                    		barChartData.push([value.company_name, parseInt(value.total_bill),myColor[Math.floor((Math.random() * 10) + 1)]]);
                     	});
-                    	//drawchart2();
+//                     	drawchart2();
                     	drawBarChart();
                     } else {
+                    	barChartData = [];
+                    	drawBarChart();
                     	console.log('No record found.');
                     }
                 }

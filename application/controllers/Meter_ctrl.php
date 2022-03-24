@@ -36,8 +36,6 @@ class Meter_ctrl extends CI_Controller {
         		$this->db->select('*');
         		$payment_detail = $this->db->get_where('bill',array('bill_id'=>$last_bill_entry[0]['bill_id']))->result_array();
         		
-        		
-        		
         		$payment_detail[0]['from_date'] = date('Y-m-d', strtotime('+1 day', strtotime($payment_detail[0]['to_date'])));
         		$no_of_days = date('t',strtotime($payment_detail[0]['from_date']));
         		
@@ -46,6 +44,15 @@ class Meter_ctrl extends CI_Controller {
 		}
 		
 		if(!is_null($result) && count($result)>0){
+		    if(count($payment_detail)>0){
+    		    $payment_detail[0]['from_date'] = date('d/m/Y',strtotime($payment_detail[0]['from_date']));
+    		    $payment_detail[0]['to_date'] = date('d/m/Y',strtotime($payment_detail[0]['to_date']));
+    		    $payment_detail[0]['date_of_bill'] = date('d/m/Y',strtotime($payment_detail[0]['date_of_bill']));
+    		    $payment_detail[0]['due_date'] = date('d/m/Y',strtotime($payment_detail[0]['due_date']));
+    		    $payment_detail[0]['reading_date'] = date('d/m/Y',strtotime($payment_detail[0]['reading_date']));
+    		    $payment_detail[0]['previous_reading_date'] = date('d/m/Y',strtotime($payment_detail[0]['previous_reading_date']));
+		    }
+		    
 		    echo json_encode(array('data'=>$result,'last_bill_entry'=>$last_bill_entry,'payment_detail'=>$payment_detail,'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));
@@ -189,20 +196,26 @@ class Meter_ctrl extends CI_Controller {
           
           $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
           if ($this->form_validation->run()){
+              
             $config = array(
               'upload_path' => APPPATH."../upload/bills/",
               'allowed_types' => "gif|jpg|png|jpeg|PDF|pdf",
-              'encrypt_name' => TRUE,
+              //'encrypt_name' => TRUE,
+                'file_name' => $this->input->post('bill_no').'_'.date('m_Y',strtotime(str_replace('/', '-', $this->input->post('bill_date')))).'.'.pathinfo($_FILES["userfile"]["name"], PATHINFO_EXTENSION)
               // 'overwrite' => TRUE,
               // 'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
               // 'max_height' => "768",
               // 'max_width' => "1024"
             );
+            
             $this->upload->initialize($config);
             $this->load->library('upload', $config);
             if($this->upload->do_upload('userfile')){
               $fdata = array('upload_data' => $this->upload->data());
-              $db_data['image'] = $fdata['upload_data']['file_name'];
+              //$db_data['image'] = $fdata['upload_data']['file_name'];
+              $db_data['image'] = $this->input->post('bill_no').'_'.date('m_Y',strtotime(str_replace('/', '-', $this->input->post('bill_date')))).$fdata['upload_data']['file_ext'];
+              
+              //$this->input->post('bill_no').'_'.date('m_Y',strtotime(str_replace('/', '-', $this->input->post('bill_date'))))
             }
 
               $db_data['sno_id'] = $this->input->post('serviceno');
@@ -299,7 +312,7 @@ class Meter_ctrl extends CI_Controller {
       }
       
       if($this->session->userdata('role') == 'super_admin'){
-          $query = "select t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
+          $query = "select u.fname,u.lname,t3.*,t1.mid,t1.bpno,t2.bill_id,t2.date_of_bill,b1.*,cm.name as companyName,ccm.name as costcenterName,lm.name as locationName from meter_master as t1
                     join (SELECT b.bill_id,b.date_of_bill as date_of_bill,mm.mid from meter_master mm
                     LEFT JOIN bill b on b.sno_id = mm.mid) as t2
                     LEFT JOIN bill b1 on b1.bill_id = t2.bill_id
@@ -308,6 +321,7 @@ class Meter_ctrl extends CI_Controller {
                     JOIN location_master lm on lm.loc_id = t1.loc_id
                     LEFT JOIN (SELECT *,if(isnull(sub_meter_id),sno_id,sub_meter_id) as snoid FROM task_assign
                     WHERE 1=1 and status = 1) t3 on t3.snoid = t1.mid
+                    JOIN users u on u.uid = t3.user_id
                     WHERE t1.mid = t2.mid";
           if(!is_null($companyId)){
               $query .= " AND cm.cid=".$companyId;
@@ -563,6 +577,14 @@ class Meter_ctrl extends CI_Controller {
       $this->db->join('location_master lm','lm.loc_id = mm.loc_id');
       $this->db->join('company_master cm','cm.cid = mm.cid');
       $result = $this->db->get_where('bill b',array('b.bill_id'=>$bill_no,'b.status'=>1))->result_array();
+      
+      $result[0]['from_date'] = date('d/m/Y',strtotime($result[0]['from_date']));
+      $result[0]['to_date'] = date('d/m/Y',strtotime($result[0]['to_date']));
+      $result[0]['date_of_bill'] = date('d/m/Y',strtotime($result[0]['date_of_bill']));
+      $result[0]['due_date'] = date('d/m/Y',strtotime($result[0]['due_date']));
+      $result[0]['reading_date'] = date('d/m/Y',strtotime($result[0]['reading_date']));
+      $result[0]['previous_reading_date'] = date('d/m/Y',strtotime($result[0]['previous_reading_date']));
+      
       echo json_encode(array('data'=>$result[0],'status'=>200));
   }
 

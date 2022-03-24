@@ -1,5 +1,4 @@
-   
-   <section class="content mt-2">
+      <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
@@ -88,6 +87,9 @@
           					<th>Payable Amount</th>
           					<th>Gross Payable Amount</th>
           					<th>Next Date</th>
+          					<?php if($this->session->userdata('role')=='super_admin'){?>
+          					<th>Uploaded By</th>
+          					<?php } ?>
           					
           				</tr>
           			</thead>
@@ -160,6 +162,11 @@
 									   echo date('d/m/Y',strtotime($bill['next_ittration'])); 
 								    ?>
 								</td>
+								<?php if($this->session->userdata('role') == 'super_admin'){ ?>
+									<td>
+										<?php echo $bill['fname'].' '.$bill['lname']; ?>
+									</td>
+								<?php }?>
           					</tr>
           					
           				<?php }} else { ?>
