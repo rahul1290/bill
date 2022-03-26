@@ -64,6 +64,21 @@
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Location List</p>
+          		<div class="row">
+          			<select class="form-control col-3" id="company_filter">
+              			<option value="">Select Company</option>
+              			<?php foreach($companies as $company){ ?>
+              				<option value="<?php echo $company['cid']?>"><?php echo $company['name']; ?></option>
+              			<?php } ?>
+              		</select>
+              		<select class="form-control col-3" id="costcenter_filter">
+              			<option value="">Select Cost-Center</option>
+              		</select>
+              		<select class="form-control col-3" id="location_filter">
+              			<option value="">Select Location</option>
+              		</select>
+          		</div>
+          		
           		<div class="table-responsive">
                     <table class="table table-bordered text-sm" id="locationListTable">
                               <thead class="bg-info">
@@ -270,6 +285,28 @@
       
       $(document).on('change','#location',function(){
       	$('#lname').val($('#location option:selected').text());
+      });
+      
+      $(document).on('change','#company_filter',function(){
+        var comId = $(this).val();
+      	$.ajax({
+            url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
+            method: "GET",
+            dataType: "json",
+            beforeSend(){
+                $('#costcenter_filter').html('<option value="">Select Costcenter</option>');
+                $('#location_filter').html('<option value="">Select Location</option>');
+            },
+            success(response){
+            	if(response.satus == 200){
+            		var x='';
+            		$.each(response.data,function(key,value){
+            			x = x + '<option value="'+ value.costc_id +'">'+ value.name +'</option>';
+            		});
+            		$('#costcenter_filter').val(x);
+            	}
+            }
+        });
       });
 
 

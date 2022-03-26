@@ -57,7 +57,7 @@
           			Cost-Center List
           			
           			<input type="text" class="float-right" id="search" name="search" placeholder="Search"/>
-          			<select class="float-right" id="company">
+          			<select class="float-right" id="company_filter">
           				<option value="">Select Company</option>
           				<?php foreach($companies as $company){ ?>
           					<option value="<?php echo $company['cid']; ?>">
@@ -219,10 +219,12 @@
 	});	
 	
 	
-	$(document).on('change','#company',function(){
-    		const comId = $(this).val();
+	function filter(){
+			var comId = $('#company_filter').val();
+    		var searchText = $('#search').val();
+    		console.log(`${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}?search=${searchText}`);
         	$.ajax({
-                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}`,
+                url: `${baseUrl}Costcenter_ctrl/getCostcenterByCompnayId/${comId}?search=${searchText}`,
                 method: "GET",
                 dataType: "json",
                 beforeSend(){},
@@ -270,11 +272,15 @@
                     $('#location_filter').html('<option value="">Select Location</option>');
                 }
             });
+	}
+	
+	$(document).on('change','#company_filter',function(){
+    	filter();	
     });
     
     
     $(document).on('keyup','#search',function(){
-    
+		filter();
     });
     
 

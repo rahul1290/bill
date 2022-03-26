@@ -348,7 +348,7 @@ class Meter_ctrl extends CI_Controller {
                     JOIN company_master cm on cm.cid = t1.cid
                     JOIN cost_center_master ccm on ccm.costc_id = t1.costc_id
                     JOIN location_master lm on lm.loc_id = t1.loc_id
-                    WHERE t1.mid = t2.mid) as t3 on t3.mid = if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id)
+                    WHERE t1.mid = t2.mid and t1.status = 1) as t3 on t3.mid = if(isnull(ta.sub_meter_id),ta.sno_id,ta.sub_meter_id)
                     WHERE ta.user_id = ".$this->session->userdata('user_id')." and ta.status = 1";
           if(!is_null($companyId)){
               $query .= " AND t3.cid=".$companyId;
@@ -360,7 +360,7 @@ class Meter_ctrl extends CI_Controller {
               $query .= " AND t3.loc_id=".$location;
           }
           if($sno != ''){
-              $query .= " AND t1.bpno1 = '".$sno."'";
+              $query .= " AND t3.bpno = '".$sno."'";
           } 
           $query .= " ORDER by t3.date_of_bill DESC";
           

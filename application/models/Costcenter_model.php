@@ -57,7 +57,7 @@ class Costcenter_model extends CI_Model {
 		}
 	}
 
-	function getCostcenterByCompnayId($cid){
+	function getCostcenterByCompnayId($cid,$search){
 	    if($this->session->userdata('role') != 'super_admin'){
 	        $query = "SELECT * FROM cost_center_master WHERE company_id in (select mm.cid from meter_master mm
                         								JOIN company_master cm on cm.cid = mm.cid";

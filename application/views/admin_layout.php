@@ -159,10 +159,12 @@
             </a>
           </li>     
           <?php if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){ ?>
-            <li class="nav-item <?php if($this->uri->segment('1') == 'master' || $this->uri->segment('1') == 'assign-meter-show'){
+            <li class="nav-item <?php if($this->uri->segment('1') == 'master'){
               echo "menu-is-opening menu-open";
           }?>">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link <?php if($this->uri->segment('1') == 'master'){
+              echo "active";
+          }?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Master
@@ -188,7 +190,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('master/location')?>" class="nav-link <?php if($this->uri->segment('2') == 'Location'){
+                <a href="<?php echo base_url('master/location')?>" class="nav-link <?php if($this->uri->segment('2') == 'location'){
                         echo 'active';
                     }?>">
                   <i class="far fa-map nav-icon"></i>

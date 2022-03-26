@@ -30,7 +30,7 @@ class Costcenter_ctrl extends CI_Controller {
 	}
 
 	function getCostcenterByCompnayId($cid=null){
-		$result = $this->Costcenter_model->getCostcenterByCompnayId($cid);
+	    $result = $this->Costcenter_model->getCostcenterByCompnayId($cid);
 		
 		if(!is_null($result) && count($result)>0){
 			echo json_encode(array('data'=>$result,'status'=>200));
