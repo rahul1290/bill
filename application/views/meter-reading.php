@@ -1,16 +1,20 @@
+<style>
+  .dataTables_length{font-size:13px;}
+  .dataTables_filter, .dataTables_info, .dataTables_paginate{font-size:13px;}
+</style>
     <section class="content mt-2">
       <!-- Default box -->
       <div class="card">
         <div class="card-body">
           		<span class="text-primary" id="page-heading">Meter Reading</span>
-              <span class="pull-right" style="float: right;">
-                <a class="btn btn-sm btn-primary" href="<?php echo base_url('Show-Meter-Reading'); ?>">Pending Readings</a>
-              </span>
+              <!-- <span class="pull-right" style="float: right;">
+                <a class="btn btn-sm btn-primary" href="<?php //echo base_url('Show-Meter-Reading'); ?>">Your Pending Readings</a>
+              </span> -->
           		<hr/>
               <div class="row">
-                <div class="col-5">
+                <div class="col-4">
                 <?php echo $this->session->flashdata('msg'); ?>
-                <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>Meter-Reading">
+                <form name="f1" method="POST" enctype='multipart/form-data' action="<?php echo base_url();?>meter-reading">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-3 col-form-label">Company</label>
                         <div class="col-sm-9">
@@ -28,7 +32,7 @@
                         <label for="inputEmail3" class="col-sm-3 col-form-label ">Service No.</label>
                         <div class="col-sm-9">
                           <select id="serviceno" name="serviceno" class="form-control">
-                            <option value="">Select Service No</option>
+                            <option value="">Select Service No.</option>
                             <?php foreach($service_no as $sno){ ?>
                               <option value="<?php echo $sno['mid']; ?>"><?php echo $sno['bpno']; ?></option>
                             <?php }?>
@@ -91,25 +95,29 @@
                   </form>
                 </div>
 
-                <div class="col-7">
-                  <p class="text-lg text-bold text-info bg-success pl-2 mb-0">Pending Readings</p>
-                  <table class="table table-bordered">
-                    <thead class="bg-light">
-                      <tr>
+                <div class="col-8">
+                  <p class="text-lg text-bold text-info bg-secondary mb-0 text-center">Your Pending Readings</p>
+                  <div class="table-responsive mt-3 mb-3 p-2">
+                  <table id="pending-readings" class="table table-bordered table-striped text-sm">
+                    <thead class="bg-info">
+                      <tr class="text-center">
                         <th>S.No.</th>
                         <th>Cost Center</th>
                         <th>Location</th>
                         <th>Service No.</th>
                         <th>Submeter No.</th>
+                        <?php if($this->session->userdata('role') == 'admin' || $this->session->userdata('role') == 'super_admin'){ ?>
+                        <th>Assign User</th>
+                        <?php } ?>
                         <th>Last Reading Date</th>
                       </tr>
                     </thead>
                     <tbody>
-                        <?php $c=1; foreach($readings as $reading){ ?>
+                        <?php if(count($readings)>0){ $c=1; foreach($readings as $reading){ ?>
                           <tr>
                             <td><?php echo $c++; ?></td>
-                            <td><?php echo $reading['cost_center']; ?></td>
-                            <td><?php echo $reading['location_name']; ?></td>
+                            <td><?php echo ucfirst($reading['cost_center']); ?></td>
+                            <td><?php echo ucfirst($reading['location_name']); ?></td>
                             <td>
                               <?php if($reading['mtype'] == 'sub-meter'){ ?>
                                 <?php echo $reading['parent_meter'];
@@ -124,11 +132,21 @@
                                 <?php echo $reading['bpno']; ?>
                               <?php } ?>
                             </td>
+                            <?php if($this->session->userdata('role') == 'admin' || $this->session->userdata('role') == 'super_admin'){ ?>
+                                <td>
+                                	<?php if(isset($reading['fname'])){ echo $reading['fname'].' '.$reading['lname']; } ?>
+                                </td>
+                            <?php } ?>
                             <td><?php echo $reading['last_reading_date']; ?></td>
                           </tr>
+                        <?php } } else { ?>
+                        	<tr>
+                        		<td colspan="6" class="text-center">No Pending Readings.</td>
+                        	</tr>
                         <?php } ?>
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
           	
@@ -143,12 +161,20 @@
 
     <script>
     const baseUrl = $('#base_url').val();
-
+    
+   // var disabledDates = ["2022-03-28","2022-03-14","2022-03-20"];
     $( function() {
+      
       $("#reading_date").datepicker({ 
-        dateFormat: 'dd/mm/yy' 
+        dateFormat: 'dd/mm/yy',
+//         beforeShowDay: function(date){
+//             var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+//             return [ disabledDates.indexOf(string) == -1 ]
+//         }
       });
     });
+    
+    $('#pending-readings').DataTable();
     
     $(document).on('change','#serviceno',function(){
     	var serviceNo = $(this).val();
@@ -158,6 +184,7 @@
             dataType: "json",
             success(response){
                 if(response.status == 200){
+                	
                     $('#costcenter').html('<option value="'+ response.data[0]['costc_id'] +'">'+ response.data[0]['cost_center'] +'</option>');
                     $('#location').html('<option value="'+ response.data[0]['loc_id'] +'">'+ response.data[0]['location_name'] +'</option>');
                     $('#company').html('<option value="'+ response.data[0]['cid'] +'">'+ response.data[0]['company_name'] +'</option>');

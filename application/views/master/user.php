@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create User</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/User">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/user">
           		
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">First Name<label class="text-danger">*</label></label>
@@ -40,6 +40,14 @@
                           <?php echo form_error('contact'); ?>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Password<label class="text-danger">*</label></label>
+                        <div class="col-sm-8">
+                          <input id="password" name="password" type="text" class="form-control" value="<?php echo set_value('password'); ?>">
+                          <?php echo form_error('password'); ?>
+                        </div>
+                    </div>
                    
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Gender<label class="text-danger">*</label></label>
@@ -58,7 +66,7 @@
                         <div class="col-sm-8">
                           <select name="utype" id="utype" class="form-control">
                                 <option value="">Select User Role</option>
-                                <?php foreach($user_types as $user_type){ ?>
+                                  <?php foreach($user_types as $user_type){ ?>
                                 <option value="<?php echo $user_type['utype_id']; ?>"><?php echo $user_type['type_name']?></option>
                                 <?php } ?>
                           </select>
@@ -77,7 +85,7 @@
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered text-sm">
                           <thead class="bg-light">
                                   <tr>
                                     <th class="text-center uppercase">S.No.</th>
@@ -98,12 +106,12 @@
                                         <td class="text-center"><?= $user['contact_no']; ?></td>
                                         <td class="text-center"><?= $user['sex']; ?></td>
                                         <td class="text-center"><?= $user['role']; ?></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="user_edit" data-id="<?= $user['uid']; ?>"><i class="fas fa-edit"></i></a>
-                                            <a href="javascript:void(0);" class="user_delete" data-id="<?= $user['uid']; ?>"><i class="fas fa-trash"></i></a>
+                                        <td style="width:70px;" class="text-center">
+                                            <a title="Edit" href="javascript:void(0);" class="user_edit mr-1" data-id="<?= $user['uid']; ?>"><i class="fas fa-edit"></i></a> | 
+                                            <a title="Dlete" href="javascript:void(0);" class="user_delete ml-1" data-id="<?= $user['uid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                         </td>
                                     </tr>
-                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>No record found.</td></tr>"; } ?>
+                                <?php } } else {  echo "<tr><td class='text-center' colspan='6'>Record Not Found.</td></tr>"; } ?>
                               </tbody>
                           </table>
                   </div>
@@ -155,6 +163,11 @@
             $('#user-create').show();
             $('#reset-btn').show();
       });
+
+
+      $(document).on('keyup','#contact',function(){
+        $('#password').val($(this).val());
+      })
 
 
       $(document).on('click','.user_delete',function(){

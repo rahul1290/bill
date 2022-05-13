@@ -4,7 +4,13 @@ class Location_model extends CI_Model {
 
 	function create_location($data){
 
-		$result = $this->db->insert('location_master',$data);
+	    $this->db->select('*');
+	    $result = $this->db->get_where('location_master',array('cost_center_id'=>$data['cost_center_id'],'lc_id'=>$data['lc_id'],'status'=>1))->result_array();
+	    if(count($result)>0){
+	        $result = true;
+	    } else { 
+		  $result = $this->db->insert('location_master',$data);
+	    }
 		if($result){
 			return true;
 		} else {
@@ -21,6 +27,22 @@ class Location_model extends CI_Model {
 		} else {
 			return null;
 		}
+	}
+	
+	function LocationFilter($text){
+	    $this->db->select('l.*,ccm.name as cost_center,ccm.costc_id,cm.cid,cm.name as company_name,u.uid,u.fname,u.lname');
+	    $this->db->join('cost_center_master ccm','ccm.costc_id = l.cost_center_id AND ccm.status = 1');
+	       $this->db->join('company_master cm','cm.cid = ccm.company_id AND cm.status = 1');
+	    $this->db->join('users u','u.uid = l.created_by');
+	    $this->db->like('l.name',$text,'after');
+	    $result = $this->db->get_where('location_master l',array('l.status'=>1))->result_array();
+	    
+	    
+	    if(count($result)>0){
+	        return  $result;
+	    } else {
+	        return  null;
+	    }
 	}
 
 	function location_list($lid=null){

@@ -7,13 +7,15 @@ header('Content-Type: application/json; charset=utf-8');
 class Company_ctrl extends REST_Controller {
 
 	function __construct() {
+	   
     parent::__construct();
+ 
+        $this->load->database();
 		$this->load->model('Company_model');
 		$this->jwt = new JWT();
-
 		$this->header = ($this->input->request_headers());
-		if(isset($this->header['token']) &&  $this->header['token'] != null){
-			$this->user_data = $this->my_lib->is_valid($this->header['token']);
+		if(isset($this->header['Token']) &&  $this->header['Token'] != null){
+			$this->user_data = $this->my_lib->is_valid($this->header['Token']);
 			if(is_null($this->user_data)){
 				http_response_code(401);
 				echo json_encode(array('msg'=>'Invalid token.','status'=>'401'));
@@ -40,7 +42,7 @@ class Company_ctrl extends REST_Controller {
 		else {
 			$result = $this->Company_model->company_list();
 			if($result != null && count($result)>0){
-				$this->response(array('company_list'=>$result,'msg'=>'company	 list','status'=>200),200);
+				$this->response(array('data'=>array('companies'=>$result),'msg'=>'company list','status'=>200),200);
 			} else {
 				$this->response(array('msg'=>'no record found.','status'=>500),500);
 			}

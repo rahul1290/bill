@@ -8,11 +8,7 @@ class Auth_ctrl extends CI_Controller {
 		$this->load->database();
     $this->load->model('Auth_model');
     if($this->session->userdata('user_id') != null){
-      if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
-        redirect('/Company_ctrl');
-      } else {
-        redirect('/Bill-upload');
-      }
+        redirect('dashboard');
     } 
   }
 
@@ -34,14 +30,10 @@ class Auth_ctrl extends CI_Controller {
             'name' => $result[0]['fname'].' '.$result[0]['lname'],
             'role' => $result[0]['type_name'],
           ));
-          if($this->session->userdata('role') == 'super_admin' || $this->session->userdata('role') == 'admin'){
-            redirect('/Company_ctrl');
-          } else {
-            redirect('/Bill-upload');
-          }
+          redirect('/Bill-upload');
         }
       } else {
-        $this->form_validation->set_error_delimiters('<div class="invalid-feedback">', '</div>');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->load->view('login');
       }
     }

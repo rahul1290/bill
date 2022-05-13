@@ -6,7 +6,7 @@
           	<div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
           		<h5 class="text-primary" id="page-heading">Create Company</h5>
           		<hr/>
-          		<form name="f1" method="POST" action="<?php echo base_url();?>master/Company">
+          		<form name="f1" method="POST" action="<?php echo base_url();?>master/company">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-4 col-form-label">Name<label class="text-danger">*</label></label>
                         <div class="col-sm-8">
@@ -59,7 +59,7 @@
           	</div>
           	<div class="col-12 col-sm-6 col-md-8 col-lg-8 col-xl-8">
           		<div class="table-responsive">
-                    <table class="table table-bordered ">
+                    <table class="table table-bordered text-sm" id="companyTable">
                         <thead class="bg-light">
                             <tr>
                             <th class="text-center uppercase">S.No.</th>
@@ -74,13 +74,13 @@
                             <?php $c=1; foreach($companies as $company){ ?>
                                 <tr>
                                     <td class="text-center"><?= $c++; ?></td>
-                                    <td class="text-center"><?= $company['name']; ?></td>
+                                    <td class="text-left"><?= $company['name']; ?></td>
                                     <td class="text-center"><?= $company['contact_no']; ?></td>
                                     <td class="text-center"><?= $company['alternet_no']; ?></td>
                                     <td class="text-center"><?= $company['email']; ?></td>
-                                    <td class="text-center">
-                                        <a href="javascript:void(0);" class="company_edit" data-id="<?= $company['cid']; ?>"><i class="fas fa-edit"></i></a>
-                                        <a href="javascript:void(0);" class="company_delete ml-2" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash"></i></a>
+                                    <td style="width:70px;" class="text-center">
+                                        <a title="Edit" href="javascript:void(0);" class="company_edit mr-1" data-id="<?= $company['cid']; ?>"><i class="fas fa-edit"></i></a> | 
+                                        <a title="Delete" href="javascript:void(0);" class="company_delete ml-1" data-id="<?= $company['cid']; ?>"><i class="fas fa-trash text-red"></i></a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -91,7 +91,6 @@
           </div>
           
         </div>
-        
       </div>
       <!-- /.card -->
     </section>
@@ -195,6 +194,16 @@
             }
         });
       }
+      
+      
+      $('#companyTable').DataTable({
+//        	"searching": false,
+//         "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 
 
     </script>

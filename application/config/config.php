@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+ini_set('memory_limit', '44M');
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -23,11 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/bill';
+$config['base_url'] = 'https://ebill.maitasty.com/';
 //$config['base_url'] = 'http://10.0.4.194/bill';
 $config['cur_date'] = date('Y-m-d H:i:s');
 $config['project_name'] = 'Electricity Bill';
-
+$config['jwtsecrateKey'] = 'ebill-2022';
 /*
 |--------------------------------------------------------------------------
 | Index File

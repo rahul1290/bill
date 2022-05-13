@@ -12,7 +12,7 @@ class Assigntask_ctrl extends CI_Controller {
 	function getUserById(){
 		$uid = $this->input->post('uid');
 		$result = $this->User_model->user_list($uid);
-		if(count($result)>0){
+		if(count($result)>0) {
 			echo json_encode(array('data'=>$result[0],'status'=>200));
 		} else {
 			echo json_encode(array('msg'=>'No record found.','status'=>500));
@@ -31,15 +31,16 @@ class Assigntask_ctrl extends CI_Controller {
 
 	function getSubMeterDetail($mid){
 		$this->db->select('*');
-		return $result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		$result = $this->db->get_where('meter_master',array('parent_meter'=>$mid,'status'=>1))->result_array();
+		return $result;
 	}
 
   function index(){
 		$data['companies'] = $this->Company_model->Company_list();
 		$data['users'] = $this->User_model->user_list();
-		$data['meters'] = $this->Meter_model->Meter_list();
+		$data['meters'] = $this->Meter_model->Meter_list();   
 	
-		$totalLength = count($data['meters']);
+		$totalLength = is_null($data['meters']) ? null : count($data['meters']);
 
 		$main_meters = array();
 		
@@ -76,13 +77,19 @@ class Assigntask_ctrl extends CI_Controller {
 					$data['users'] = $this->User_model->user_list();
 					$data['tasks'] = $this->Assigntask_model->task_list();
 					if($utid == ''){
-						$this->session->set_flashdata('msg','task created successfully.');
+						$this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">
+                            task created successfully.
+                          </div>');
 					} else {
-						$this->session->set_flashdata('msg','task updated successfully.');
+						$this->session->set_flashdata('msg','<div class="alert alert-warning" role="alert">
+                            task updated successfully.
+                          </div>');
 					}
 					redirect(current_url());
 				} else{
-					$this->session->set_flashdata('msg','Something went wrong.');
+					$this->session->set_flashdata('msg','<div class="alert alert-danger" role="alert">
+                        Something went wrong.
+                      </div>');
 
 					$data['main_content'] = $this->load->view('assigntask',$data,true);
 	  				$this->load->view('admin_layout',$data);
@@ -105,20 +112,114 @@ class Assigntask_ctrl extends CI_Controller {
 		echo json_encode(array('msg'=>'Something went wrong.','status'=>500));
 	  }
   }
+  
+  function assign_user_remove(){
+      $meter = $this->input->post('meter') == '0' ? $this->input->post('sub-meter') : $this->input->post('meter');
+      
+      $this->db->query("UPDATE task_assign set status = 0 where sub_meter_id =". $this->input->post('sub-meter')." AND sno_id =". $meter);
+      echo json_encode(array('msg'=>'Remove permissions.','status'=>200));       
+  }
 
-  function assign_user_list(){
-	$data['records'] = $this->db->query("SELECT mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
-								cm.name as company,ccm.name as cost_center_name,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
+  function assign_user_list_submit(){
+      $meter = $this->input->post('meter') == '0' ? $this->input->post('sub-meter') : $this->input->post('meter');
+      
+      if($this->input->post('meter') == '0'){
+          $sub_meter = NULL;
+      } else {
+          $sub_meter = $this->input->post('sub-meter');
+      }
+      
+      $this->db->select('task_id');
+      $result = $this->db->get_where('task_assign',array(
+          'sno_id' => $meter,
+          'sub_meter_id' => $sub_meter,
+          'status' => 1
+      ))->result_array();
+      
+      if(count($result)>0){
+          $taskIds = '';
+          foreach($result as $r){
+              $taskIds .= $r['task_id'].',';
+          }
+          $taskIds = rtrim($taskIds, ", ");
+          
+          $this->db->query("UPDATE `task_assign` SET `status` = 0
+          WHERE `task_id` IN($taskIds)");
+      }
+      
+      
+          if($this->input->post('reading-user') == $this->input->post('billupload-user')){
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $sub_meter,
+                  'user_id' => $this->input->post('reading-user'),
+                  'meter_reading' => $this->input->post('meter_reading'),
+                  'reading_frq' => $this->input->post('reading_frq'),
+                  'bill_upload' => $this->input->post('bill_upload'),
+                  'upload_frq' => $this->input->post('upload_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              ));
+          } else {
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $sub_meter,
+                  'user_id' => $this->input->post('reading-user'),
+                  'meter_reading' => $this->input->post('meter_reading'),
+                  'reading_frq' => $this->input->post('reading_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              )); 
+              $this->db->insert('task_assign',array(
+                  'sno_id' => $meter,
+                  'sub_meter_id' => $sub_meter,
+                  'user_id' => $this->input->post('billupload-user'),
+                  'bill_upload' => $this->input->post('bill_upload'),
+                  'upload_frq' => $this->input->post('upload_frq'),
+                  'created_by' => $this->session->userdata('user_id'),
+                  'created_at' => date('Y-m-d')
+              ));
+          }
+      echo json_encode(array('msg'=>'User Assign successfully.','status'=>200));
+  }
+  function assign_user_list($companyId=null,$costCenterId=null,$location=null){
+      $data['companies'] = $this->Company_model->company_list();
+      $data['cost_centers'] = $this->Costcenter_model->costcenter_list($companyId);
+      
+      $data['locations'] = $this->Location_model->getLocationByCostcenterId($costCenterId);
+      
+      
+        $query = "SELECT u.fname,u.lname,mm.mid,if(isnull(mm.parent_meter),'main-meter','sub-meter') as mtype,mm.bpno,mm.parent_meter,
+								cm.cid,cm.name as company,ccm.costc_id,ccm.name as cost_center_name,lm.loc_id,lm.name as location,ta.user_id,ta.meter_reading,ta.reading_frq,
 								ta.bill_upload,ta.upload_frq
 								FROM meter_master mm
-								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid
-								JOIN company_master cm on cm.cid = mm.cid
-								JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id
-								JOIN location_master lm on lm.loc_id = mm.loc_id
+								left JOIN meter_master mm2 on mm2.parent_meter = mm.mid";
+                                if(is_null($companyId)){
+								    $query.= " JOIN company_master cm on cm.cid = mm.cid";
+                                } else {
+                                    $query.= " JOIN company_master cm on cm.cid = mm.cid AND cm.cid = ".$companyId;
+                                }
+                                
+                                if(is_null($costCenterId)){
+                                    $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id";
+                                } else {
+                                    $query.= " JOIN cost_center_master ccm on ccm.costc_id = mm.costc_id AND ccm.costc_id = ".$costCenterId;
+                                }
+                                
+                                if(is_null($location)){
+                                    $query.= " JOIN location_master lm on lm.loc_id = mm.loc_id";
+                                } else {
+                                    $query.= " JOIN location_master lm on lm.loc_id = mm.loc_id AND lm.loc_id = ".$location;
+                                }
+                                
+                                $query .= " join users u on u.uid = mm.created_by
 								left JOIN (SELECT task_id,if(isnull(sub_meter_id),sno_id,sub_meter_id) as meter_id,user_id,meter_reading,reading_frq,bill_upload,upload_frq FROM task_assign WHERE status = 1) as ta on ta.meter_id = mm.mid
 								group by mm.bpno
-								order by mm.mid")->result_array();
-	
+								order by mm.mid";
+   // echo $query; die;
+      
+                                $data['records'] = $this->db->query($query)->result_array();
+    //print_r($data['records']); die; 
 	$this->db->select('*');
 	$data['users'] = $this->db->get_where('users',array('status'=>1))->result_array();
 	
