@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -8,9 +7,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'vnressus_ebill',
-	'password' => 'Vnr@ebill',
-	'database' => 'vnressus_ebill',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'bill_record',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -26,61 +25,25 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-$db['demo'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'vnressus_ebill',
-	'password' => 'Vnr@ebill',
-	'database' => 'vnressus_ebill_demo',
-	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
+// $db['demo'] = array(
+	// 'dsn'	=> '',
+	// 'hostname' => 'localhost',
+	// 'username' => 'vnressus_ebill',
+	// 'password' => 'Vnr@ebill',
+	// 'database' => 'vnressus_ebill_demo',
+	// 'dbdriver' => 'mysqli',
+	// 'dbprefix' => '',
+	// 'pconnect' => FALSE,
+	// 'db_debug' => (ENVIRONMENT !== 'production'),
+	// 'cache_on' => FALSE,
+	// 'cachedir' => '',
+	// 'char_set' => 'utf8',
+	// 'dbcollat' => 'utf8_general_ci',
+	// 'swap_pre' => '',
+	// 'encrypt' => FALSE,
+	// 'compress' => FALSE,
+	// 'stricton' => FALSE,
+	// 'failover' => array(),
+	// 'save_queries' => TRUE
+// );
 
-=======
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-$active_group = 'default';
-$query_builder = TRUE;
-
-$db['default'] = array(
-	'dsn'	=> '',
-    
-	'hostname' => '184.168.127.72',
-	'username' => 'vnressus_ebill',
-	'password' => 'Vnr@ebill',
-	'database' => 'vnressus_ebill',
-    
-//     'hostname' => 'localhost',
-//     'username' => 'root',
-//     'password' => '',
-//     'database' => 'bill_record',
-    
-	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
->>>>>>> b8649bfae6c73219475d2f68c496ec4191cab5fc
